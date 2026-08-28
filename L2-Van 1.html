@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Vườn Tri Thức Lớp 2 - Môn Tiếng Việt</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Quicksand & Nunito -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;600;700;800;900&family=Quicksand:wght@600;700;800&display=swap" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Canvas Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <style>
+    :root {
+      --primary: #10B981;
+      --secondary: #059669;
+      --accent: #F59E0B;
+      --dark: #1E293B;
+    }
+    * {
+      box-sizing: border-box;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    body {
+      font-family: 'Nunito', 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #ECFDF5 0%, #E0F2FE 50%, #F3E8FF 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 10px;
+      color: var(--dark);
+    }
+    .font-cute {
+      font-family: 'Quicksand', cursive, sans-serif;
+    }
+    #app-container {
+      background: rgba(255, 255, 255, 0.98);
+      width: 100%;
+      max-width: 1100px;
+      min-height: 760px;
+      border-radius: 36px;
+      box-shadow: 0 24px 60px rgba(16, 185, 129, 0.2);
+      border: 6px solid #FFF;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
+    .card-hover {
+      transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .card-hover:hover {
+      transform: translateY(-5px) scale(1.02);
+    }
+    .btn-bounce:active {
+      transform: scale(0.95);
+    }
+  </style>
+</head>
+<body>
+
+  <div id="app-container">
+
+    <!-- MÀN HÌNH BẮT ĐẦU -->
+    <div id="start-overlay" class="absolute inset-0 bg-gradient-to-br from-emerald-500/95 via-teal-500/95 to-cyan-600/95 z-50 flex flex-col items-center justify-center p-6 text-center text-white">
+      <div class="w-24 h-24 bg-white rounded-3xl flex items-center justify-center text-6xl shadow-2xl mb-4 transform -rotate-6 animate-bounce">
+        📖
+      </div>
+      <h1 class="text-3xl md:text-4xl font-black font-cute mb-3">🌿 TIẾNG VIỆT LỚP 2 VUI NHỘN 🌿</h1>
+      <p class="text-base md:text-lg font-bold max-w-lg mb-6 leading-relaxed text-emerald-100">
+        Bé yêu sẵn sàng rèn luyện từ ngữ, chính tả và các mẫu câu hay cùng Thỏ Trắng chưa nào? ✨
+      </p>
+      <button onclick="initAppAudio()" class="btn-bounce bg-amber-300 hover:bg-amber-200 text-amber-900 text-2xl md:text-3xl font-black px-10 py-4 md:py-5 rounded-full shadow-2xl border-4 border-white transition flex items-center space-x-3">
+        <span>🔊 BẮT ĐẦU HỌC NGAY</span>
+      </button>
+    </div>
+
+    <!-- HEADER -->
+    <header class="bg-white/95 backdrop-blur-md px-5 py-3 flex justify-between items-center border-b-2 border-emerald-100 z-10">
+      <div class="flex items-center space-x-2">
+        <button id="btn-back-menu" onclick="openVietMenu()" class="btn-bounce bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border-2 border-emerald-200 font-extrabold px-3 py-1.5 rounded-2xl text-xs md:text-sm flex items-center space-x-1 shadow-sm hidden">
+          <span>⬅️ Menu Chính</span>
+        </button>
+      </div>
+
+      <div class="flex items-center justify-center">
+        <h1 class="text-lg sm:text-xl md:text-2xl font-black font-cute text-emerald-600 tracking-wide drop-shadow-sm flex items-center gap-1.5 cursor-pointer" onclick="openVietMenu()">
+          <span>📖</span>
+          <span class="bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 bg-clip-text text-transparent">TIẾNG VIỆT LỚP 2</span>
+          <span>📖</span>
+        </h1>
+      </div>
+
+      <div class="flex items-center space-x-2">
+        <div class="flex items-center space-x-1.5 bg-amber-50 border-2 border-amber-300 px-3 py-1 rounded-2xl shadow-inner">
+          <span class="text-xl animate-spin" style="animation-duration: 4s;">⭐</span>
+          <span id="stars-count" class="text-xl font-black text-amber-600">0</span>
+          <span class="text-[11px] font-black text-amber-500 hidden sm:inline">Sao</span>
+        </div>
+        <button onclick="speakMascotCheer()" class="btn-bounce bg-emerald-100 hover:bg-emerald-200 text-emerald-700 border border-emerald-300 px-2.5 py-1.5 rounded-2xl text-xs font-black flex items-center space-x-1 shadow-sm">
+          <span>🐰 Cổ vũ</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- NỘI DUNG CHÍNH -->
+    <main id="main-content" class="flex-1 p-4 md:p-6 flex flex-col items-center justify-center text-center overflow-y-auto">
+      <!-- Dynamic Rendering -->
+    </main>
+
+  </div>
+
+  <script>
+    let stars = parseInt(localStorage.getItem('stars_viet_lop2') || '0');
+    let currentMode = null;
+    let currentAnswer = null;
+    let audioCtx = null;
+    const onlineAudioPlayer = new Audio();
+
+    document.getElementById('stars-count').innerText = stars;
+
+    function initAppAudio() {
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      if (AudioContext) {
+        audioCtx = new AudioContext();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+      }
+      playTone('correct');
+      speakClear("Chào bé yêu! Chúc con học môn Tiếng Việt thật giỏi và rinh nhiều ngôi sao nhé!", "vi");
+      document.getElementById('start-overlay').style.display = 'none';
+      openVietMenu();
+    }
+
+    function playTone(type) {
+      try {
+        if (!audioCtx) {
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          if (AudioContext) audioCtx = new AudioContext();
+        }
+        if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+        if (!audioCtx) return;
+
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        const now = audioCtx.currentTime;
+
+        if (type === 'correct') {
+          osc.frequency.setValueAtTime(523.25, now);
+          osc.frequency.exponentialRampToValueAtTime(783.99, now + 0.15);
+          gain.gain.setValueAtTime(0.3, now);
+          gain.gain.linearRampToValueAtTime(0.01, now + 0.35);
+          osc.start(now);
+          osc.stop(now + 0.35);
+        } else {
+          osc.frequency.setValueAtTime(260, now);
+          osc.frequency.linearRampToValueAtTime(180, now + 0.22);
+          gain.gain.setValueAtTime(0.25, now);
+          gain.gain.linearRampToValueAtTime(0.01, now + 0.25);
+          osc.start(now);
+          osc.stop(now + 0.25);
+        }
+      } catch (e) {}
+    }
+
+    function speakClear(text, lang = 'vi', onEndCallback = null) {
+      try {
+        onlineAudioPlayer.pause();
+        if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+        let cleanText = String(text || '').trim();
+        const encoded = encodeURIComponent(cleanText);
+        const ttsUrl = `https://translate.google.com/translate_tts?ie=UTF-8&tl=vi&client=tw-ob&q=${encoded}`;
+
+        onlineAudioPlayer.src = ttsUrl;
+        onlineAudioPlayer.playbackRate = 0.92;
+        onlineAudioPlayer.onended = () => {
+          if (typeof onEndCallback === 'function') onEndCallback();
+        };
+        const playPromise = onlineAudioPlayer.play();
+        if (playPromise !== undefined) {
+          playPromise.catch(() => {
+            fallbackWebSpeech(cleanText, onEndCallback);
+          });
+        }
+      } catch (err) {
+        fallbackWebSpeech(text, onEndCallback);
+      }
+    }
+
+    function fallbackWebSpeech(text, onEndCallback = null) {
+      if (!('speechSynthesis' in window)) {
+        if (typeof onEndCallback === 'function') onEndCallback();
+        return;
+      }
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.rate = 0.88;
+      utterance.pitch = 1.1;
+      utterance.lang = 'vi-VN';
+      utterance.onend = () => {
+        if (typeof onEndCallback === 'function') onEndCallback();
+      };
+      window.speechSynthesis.speak(utterance);
+    }
+
+    function speakMascotCheer() {
+      const cheers = [
+        "Bé học Tiếng Việt chăm chỉ và giỏi giang quá!",
+        "Cố lên con, mỗi câu trả lời đúng là một ngôi sao sáng!",
+        "Thỏ trắng chúc bé học thật vui và đạt điểm 10 nhé!"
+      ];
+      speakClear(cheers[Math.floor(Math.random() * cheers.length)], "vi");
+    }
+
+    function addStars(num) {
+      stars += num;
+      localStorage.setItem('stars_viet_lop2', stars);
+      document.getElementById('stars-count').innerText = stars;
+      confetti({ particleCount: 60, spread: 80, origin: { y: 0.75 } });
+    }
+
+    const QUEUE_SYSTEM = {};
+    function getNextItemFromPool(poolKey, rawDataArray) {
+      if (!QUEUE_SYSTEM[poolKey] || QUEUE_SYSTEM[poolKey].length === 0) {
+        const shuffled = [...rawDataArray];
+        for (let i = shuffled.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+        }
+        QUEUE_SYSTEM[poolKey] = shuffled;
+      }
+      return QUEUE_SYSTEM[poolKey].pop();
+    }
+
+    const container = document.getElementById('main-content');
+    const btnBackMenu = document.getElementById('btn-back-menu');
+
+    function openVietMenu() {
+      currentMode = null;
+      btnBackMenu.classList.add('hidden');
+      container.innerHTML = `
+        <div class="mb-4">
+          <h2 class="text-2xl md:text-3xl font-black text-emerald-600 font-cute">📖 MÔN TIẾNG VIỆT LỚP 2 - CHƯƠNG TRÌNH ĐỘC LẬP</h2>
+          <p class="text-xs md:text-sm font-bold text-gray-500">Bé chọn chuyên mục bên dưới để luyện tập nhé!</p>
+        </div>
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3.5 w-full max-w-5xl">
+          <div onclick="startVietWordTypesGame('vat')" class="card-hover bg-white border-2 border-emerald-200 hover:border-emerald-400 rounded-3xl p-3.5 text-center cursor-pointer shadow-sm">
+            <div class="text-3xl mb-1">📦</div>
+            <h3 class="text-xs md:text-sm font-black text-emerald-700">1. Từ Chỉ Sự Vật</h3>
+          </div>
+          <div onclick="startVietWordTypesGame('hd')" class="card-hover bg-white border-2 border-teal-200 hover:border-teal-400 rounded-3xl p-3.5 text-center cursor-pointer shadow-sm">
+            <div class="text-3xl mb-1">🏃</div>
+            <h3 class="text-xs md:text-sm font-black text-teal-700">2. Từ Chỉ Hoạt Động</h3>
+          </div>
+          <div onclick="startVietWordTypesGame('dd')" class="card-hover bg-white border-2 border-lime-200 hover:border-lime-400 rounded-3xl p-3.5 text-center cursor-pointer shadow-sm">
+            <div class="text-3xl mb-1">🌸</div>
+            <h3 class="text-xs md:text-sm font-black text-lime-700">3. Từ Chỉ Đặc Điểm</h3>
+          </div>
+          <div onclick="startVietPunctuationGame()" class="card-hover bg-white border-2 border-cyan-200 hover:border-cyan-400 rounded-3xl p-3.5 text-center cursor-pointer shadow-sm">
+            <div class="text-3xl mb-1">❓</div>
+            <h3 class="text-xs md:text-sm font-black text-cyan-700">4. Quy Tắc Dấu Câu</h3>
+          </div>
+          <div onclick="startVietSentenceModelGame('la_gi')" class="card-hover bg-white border-2 border-indigo-200 hover:border-indigo-400 rounded-3xl p-3.5 text-center cursor-pointer shadow-sm">
+            <div class="text-3xl mb-1">👧</div>
+            <h3 class="text-xs md:text-sm font-black text-indigo-700">5. Mẫu Câu "Ai là gì?"</h3>
+          </div>
+          <div onclick="startVietSentenceModelGame('lam_gi')" class="card-hover bg-white border-2 border-purple-200 hover:border-purple-400 rounded-3xl p-3.5 text-center cursor-pointer shadow-sm">
+            <div class="text-3xl mb-1">🧹</div>
+            <h3 class="text-xs md:text-sm font-black text-purple-700">6. Mẫu Câu "Ai làm gì?"</h3>
+          </div>
+          <div onclick="startVietSentenceModelGame('the_nao')" class="card-hover bg-white border-2 border-pink-200 hover:border-pink-400 rounded-3xl p-3.5 text-center cursor-pointer shadow-sm">
+            <div class="text-3xl mb-1">⭐</div>
+            <h3 class="text-xs md:text-sm font-black text-pink-700">7. Mẫu "Ai thế nào?"</h3>
+          </div>
+          <div onclick="startVietSpellingGame()" class="card-hover bg-white border-2 border-green-200 hover:border-green-400 rounded-3xl p-3.5 text-center cursor-pointer shadow-sm">
+            <div class="text-3xl mb-1">✏️</div>
+            <h3 class="text-xs md:text-sm font-black text-green-700">8. Phân Biệt Chính Tả</h3>
+          </div>
+          <div onclick="startVietIdiomGame()" class="card-hover bg-white border-2 border-amber-200 hover:border-amber-400 rounded-3xl p-3.5 text-center cursor-pointer shadow-sm">
+            <div class="text-3xl mb-1">📜</div>
+            <h3 class="text-xs md:text-sm font-black text-amber-700">9. Thành Ngữ Dân Gian</h3>
+          </div>
+          <div onclick="startVietVocabularyGame()" class="card-hover bg-white border-2 border-rose-200 hover:border-rose-400 rounded-3xl p-3.5 text-center cursor-pointer shadow-sm">
+            <div class="text-3xl mb-1">🌳</div>
+            <h3 class="text-xs md:text-sm font-black text-rose-700">10. Mở Rộng Vốn Từ</h3>
+          </div>
+        </div>
+      `;
+    }
+
+    const VIET_WORD_TYPES_MASTER = [
+      { cat: 'vat', question: "Dãy từ nào gồm toàn từ chỉ 'Sự vật'?", choices: ["Cây bàng, quyển sách, cái bàn", "Chạy, nhảy, múa hát", "Ngoan ngoãn, chăm chỉ", "Yêu thương, vui vẻ"], answer: "Cây bàng, quyển sách, cái bàn" },
+      { cat: 'vat', question: "Từ nào là từ chỉ 'Người' (thuộc từ chỉ sự vật)?", choices: ["Cô giáo", "Xinh xắn", "Giảng bài", "Khen ngợi"], answer: "Cô giáo" },
+      { cat: 'hd', question: "Từ nào dưới đây là từ chỉ 'Hoạt động' của học sinh?", choices: ["Viết bài", "Thông minh", "Cặp sách", "Hiền lành"], answer: "Viết bài" },
+      { cat: 'dd', question: "Từ nào là từ chỉ 'Đặc điểm' của bông hoa?", choices: ["Thơm ngát", "Tưới nước", "Trồng cây", "Hái hoa"], answer: "Thơm ngát" }
+    ];
+
+    function startVietWordTypesGame(cat = null) {
+      currentMode = 'vietWordTypes';
+      btnBackMenu.classList.remove('hidden');
+      const filtered = cat ? VIET_WORD_TYPES_MASTER.filter(item => item.cat === cat) : VIET_WORD_TYPES_MASTER;
+      const q = getNextItemFromPool('pool_vietWord_' + (cat || 'all'), filtered);
+      currentAnswer = q.answer;
+
+      container.innerHTML = `
+        <div class="text-xl md:text-2xl font-black text-gray-800 mb-4 flex items-center justify-center gap-3">
+          <span>${q.question}</span>
+          <button class="btn-bounce bg-emerald-100 hover:bg-emerald-200 text-emerald-700 text-sm font-bold px-3 py-1.5 rounded-xl flex items-center gap-1 shadow-sm" onclick="speakClear('${q.question}', 'vi')">🔊 Nghe</button>
+        </div>
+        <div class="bg-emerald-50/50 border-2 border-dashed border-emerald-200 rounded-3xl p-6 w-full max-w-xl mb-6 flex flex-col items-center">
+          <div class="text-6xl">📚 🏃 🌸</div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full max-w-2xl">
+          ${q.choices.map(c => `<button class="btn-bounce bg-white border-4 border-emerald-400 hover:bg-emerald-50 text-emerald-800 font-bold text-base md:text-lg p-3 rounded-2xl shadow-md transition" onclick="checkChoiceAnswer(this, '${c}')">${c}</button>`).join('')}
+        </div>
+      `;
+    }
+
+    const VIET_PUNCTUATION = [
+      { question: "Để kết thúc câu hỏi: 'Bạn có thích học vẽ không', ta dùng dấu gì?", choices: ["Dấu hỏi chấm (?)", "Dấu chấm (.)", "Dấu chấm than (!)", "Dấu phẩy (,)"], answer: "Dấu hỏi chấm (?)" },
+      { question: "Để bộc lộ cảm xúc: 'Ôi, bức tranh đẹp quá', ta dùng dấu gì cuối câu?", choices: ["Dấu chấm than (!)", "Dấu hỏi chấm (?)", "Dấu phẩy (,)", "Dấu hai chấm (:)"], answer: "Dấu chấm than (!)" }
+    ];
+
+    function startVietPunctuationGame() {
+      currentMode = 'vietPunctuation';
+      btnBackMenu.classList.remove('hidden');
+      const q = getNextItemFromPool('pool_vietPunctuation', VIET_PUNCTUATION);
+      currentAnswer = q.answer;
+
+      container.innerHTML = `
+        <div class="text-xl md:text-2xl font-black text-gray-800 mb-4 flex items-center justify-center gap-3">
+          <span>${q.question}</span>
+          <button class="btn-bounce bg-teal-100 hover:bg-teal-200 text-teal-700 text-sm font-bold px-3 py-1.5 rounded-xl flex items-center gap-1 shadow-sm" onclick="speakClear('${q.question}', 'vi')">🔊 Nghe</button>
+        </div>
+        <div class="bg-teal-50/50 border-2 border-dashed border-teal-200 rounded-3xl p-6 w-full max-w-xl mb-6 flex flex-col items-center">
+          <div class="text-5xl font-black text-teal-600 tracking-widest">❓ . ! ,</div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full max-w-2xl">
+          ${q.choices.map(c => `<button class="btn-bounce bg-white border-4 border-teal-400 hover:bg-teal-50 text-teal-800 font-bold text-base md:text-lg p-3 rounded-2xl shadow-md transition" onclick="checkChoiceAnswer(this, '${c}')">${c}</button>`).join('')}
+        </div>
+      `;
+    }
+
+    const VIET_SENTENCE_MASTER = [
+      { type: 'la_gi', question: "Câu nào dưới đây thuộc mẫu câu 'Ai là gì?' dùng để giới thiệu?", choices: ["Bé Mai là học sinh lớp 2A.", "Bé Mai đang đọc sách.", "Bé Mai rất chăm chỉ.", "Bé Mai quét nhà."], answer: "Bé Mai là học sinh lớp 2A." },
+      { type: 'lam_gi', question: "Câu 'Bạn Nam đang quét dọn sân trường' thuộc kiểu câu nào?", choices: ["Ai làm gì?", "Ai là gì?", "Ai thế nào?", "Câu hỏi"], answer: "Ai làm gì?" },
+      { type: 'the_nao', question: "Câu 'Vườn hoa của trường rất rực rỡ và ngát hương' thuộc kiểu câu nào?", choices: ["Ai thế nào?", "Ai làm gì?", "Ai là gì?", "Câu cảm thán"], answer: "Ai thế nào?" }
+    ];
+
+    function startVietSentenceModelGame(type = null) {
+      currentMode = 'vietSentenceModel';
+      btnBackMenu.classList.remove('hidden');
+      const filtered = type ? VIET_SENTENCE_MASTER.filter(item => item.type === type) : VIET_SENTENCE_MASTER;
+      const q = getNextItemFromPool('pool_vietSentence_' + (type || 'all'), filtered);
+      currentAnswer = q.answer;
+
+      container.innerHTML = `
+        <div class="text-xl md:text-2xl font-black text-gray-800 mb-4 flex items-center justify-center gap-3">
+          <span>${q.question}</span>
+          <button class="btn-bounce bg-indigo-100 hover:bg-indigo-200 text-indigo-700 text-sm font-bold px-3 py-1.5 rounded-xl flex items-center gap-1 shadow-sm" onclick="speakClear('${q.question}', 'vi')">🔊 Nghe</button>
+        </div>
+        <div class="bg-indigo-50/50 border-2 border-dashed border-indigo-200 rounded-3xl p-6 w-full max-w-xl mb-6 flex flex-col items-center">
+          <div class="text-5xl">🏫 👧 🧹 🌸</div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full max-w-2xl">
+          ${q.choices.map(c => `<button class="btn-bounce bg-white border-4 border-indigo-400 hover:bg-indigo-50 text-indigo-800 font-bold text-base md:text-lg p-3 rounded-2xl shadow-md transition" onclick="checkChoiceAnswer(this, '${c}')">${c}</button>`).join('')}
+        </div>
+      `;
+    }
+
+    const VIET_SPELLING = [
+      { question: "Điền chữ thích hợp vào chỗ trống: '...ong lanh'", choices: ["L", "N"], answer: "L" },
+      { question: "Điền chữ thích hợp vào chỗ trống: 'con ...ua'", choices: ["c", "k"], answer: "c" },
+      { question: "Điền chữ thích hợp vào chỗ trống: 'cái ...ế'", choices: ["gh", "g"], answer: "gh" },
+      { question: "Từ nào viết ĐÚNG chính tả?", choices: ["Cây kim", "Cây cim", "Cây quim"], answer: "Cây kim" }
+    ];
+
+    function startVietSpellingGame() {
+      currentMode = 'vietSpelling';
+      btnBackMenu.classList.remove('hidden');
+      const q = getNextItemFromPool('pool_vietSpelling', VIET_SPELLING);
+      currentAnswer = q.answer;
+
+      container.innerHTML = `
+        <div class="text-xl md:text-2xl font-black text-gray-800 mb-4 flex items-center justify-center gap-3">
+          <span>${q.question}</span>
+          <button class="btn-bounce bg-green-100 hover:bg-green-200 text-green-700 text-sm font-bold px-3 py-1.5 rounded-xl flex items-center gap-1 shadow-sm" onclick="speakClear('${q.question}', 'vi')">🔊 Nghe</button>
+        </div>
+        <div class="bg-green-50/50 border-2 border-dashed border-green-200 rounded-3xl p-6 w-full max-w-xl mb-6 flex flex-col items-center">
+          <div class="text-5xl font-black text-green-600">✏️ l/n - c/k - g/gh</div>
+        </div>
+        <div class="grid grid-cols-2 gap-4 w-full max-w-md">
+          ${q.choices.map(c => `<button class="btn-bounce bg-white border-4 border-green-400 hover:bg-green-50 text-green-800 font-black text-xl py-3 rounded-2xl shadow-md transition" onclick="checkChoiceAnswer(this, '${c}')">${c}</button>`).join('')}
+        </div>
+      `;
+    }
+
+    const VIET_IDIOMS = [
+      { question: "Thành ngữ nào khuyên chúng ta phải kiên trì, chăm chỉ học tập?", choices: ["Có công mài sắt, có ngày nên kim", "Học một biết mười", "Kính thầy yêu bạn", "Uống nước nhớ nguồn"], answer: "Có công mài sắt, có ngày nên kim" },
+      { question: "Điền từ thích hợp vào câu tục ngữ: 'Lá lành đùm lá ...'", choices: ["rách", "xanh", "vàng", "tươi"], answer: "rách" }
+    ];
+
+    function startVietIdiomGame() {
+      currentMode = 'vietIdiom';
+      btnBackMenu.classList.remove('hidden');
+      const q = getNextItemFromPool('pool_vietIdiom', VIET_IDIOMS);
+      currentAnswer = q.answer;
+
+      container.innerHTML = `
+        <div class="text-xl md:text-2xl font-black text-gray-800 mb-4 flex items-center justify-center gap-3">
+          <span>${q.question}</span>
+          <button class="btn-bounce bg-amber-100 hover:bg-amber-200 text-amber-700 text-sm font-bold px-3 py-1.5 rounded-xl flex items-center gap-1 shadow-sm" onclick="speakClear('${q.question}', 'vi')">🔊 Nghe</button>
+        </div>
+        <div class="bg-amber-50/50 border-2 border-dashed border-amber-200 rounded-3xl p-6 w-full max-w-xl mb-6 flex flex-col items-center">
+          <div class="text-5xl">📜 🐝 💖</div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full max-w-2xl">
+          ${q.choices.map(c => `<button class="btn-bounce bg-white border-4 border-amber-400 hover:bg-amber-50 text-amber-800 font-bold text-base md:text-lg p-3 rounded-2xl shadow-md transition" onclick="checkChoiceAnswer(this, '${c}')">${c}</button>`).join('')}
+        </div>
+      `;
+    }
+
+    const VIET_VOCABULARY = [
+      { question: "Từ nào dưới đây là từ chỉ tình cảm gia đình?", choices: ["Yêu thương", "Bàn ghế", "Chạy nhảy", "Xanh biếc"], answer: "Yêu thương" },
+      { question: "Từ nào chỉ đồ dùng trong lớp học?", choices: ["Bảng đen", "Bếp ga", "Tủ lạnh", "Cái chổi"], answer: "Bảng đen" }
+    ];
+
+    function startVietVocabularyGame() {
+      currentMode = 'vietVocabulary';
+      btnBackMenu.classList.remove('hidden');
+      const q = getNextItemFromPool('pool_vietVocab', VIET_VOCABULARY);
+      currentAnswer = q.answer;
+
+      container.innerHTML = `
+        <div class="text-xl md:text-2xl font-black text-gray-800 mb-4 flex items-center justify-center gap-3">
+          <span>${q.question}</span>
+          <button class="btn-bounce bg-rose-100 hover:bg-rose-200 text-rose-700 text-sm font-bold px-3 py-1.5 rounded-xl flex items-center gap-1 shadow-sm" onclick="speakClear('${q.question}', 'vi')">🔊 Nghe</button>
+        </div>
+        <div class="bg-rose-50/50 border-2 border-dashed border-rose-200 rounded-3xl p-6 w-full max-w-xl mb-6 flex flex-col items-center">
+          <div class="text-5xl">🌳 🏫 👨‍👩‍👧‍👦</div>
+        </div>
+        <div class="grid grid-cols-2 gap-4 w-full max-w-md">
+          ${q.choices.map(c => `<button class="btn-bounce bg-white border-4 border-rose-400 hover:bg-rose-50 text-rose-800 font-bold text-base md:text-lg p-3 rounded-2xl shadow-md transition" onclick="checkChoiceAnswer(this, '${c}')">${c}</button>`).join('')}
+        </div>
+      `;
+    }
+
+    function checkChoiceAnswer(btnElement, selected) {
+      if (selected === currentAnswer) {
+        btnElement.classList.add('!bg-emerald-500', '!text-white', '!border-emerald-600');
+        playTone('correct');
+        addStars(1);
+
+        const allBtns = container.querySelectorAll('button');
+        allBtns.forEach(b => b.disabled = true);
+
+        speakClear("Hoan hô! Đúng rồi!", "vi", () => {
+          setTimeout(nextQuestion, 1100);
+        });
+      } else {
+        btnElement.classList.add('!bg-rose-500', '!text-white', '!border-rose-600');
+        playTone('wrong');
+        speakClear("Chưa đúng rồi!", "vi");
+
+        setTimeout(() => {
+          btnElement.classList.remove('!bg-rose-500', '!text-white', '!border-rose-600');
+        }, 1100);
+      }
+    }
+
+    function nextQuestion() {
+      switch(currentMode) {
+        case 'vietWordTypes': startVietWordTypesGame(); break;
+        case 'vietPunctuation': startVietPunctuationGame(); break;
+        case 'vietSentenceModel': startVietSentenceModelGame(); break;
+        case 'vietSpelling': startVietSpellingGame(); break;
+        case 'vietIdiom': startVietIdiomGame(); break;
+        case 'vietVocabulary': startVietVocabularyGame(); break;
+        default: openVietMenu(); break;
+      }
+    }
+  </script>
+</body>
+</html>
