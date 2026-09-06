@@ -171,8 +171,20 @@ function getStudentFirstName() {
     return parts[parts.length - 1] || "Bé";
 }
 
+function stripOptionPrefix_(s) {
+    // Dữ liệu đôi khi tự nhúng sẵn "A. ", "B) ", "C. "... ngay trong nội dung đáp án — bóc bỏ để
+    // sau khi xáo trộn thứ tự, chữ cái hiển thị (A/B/C/D) luôn khớp đúng với vị trí thật trên màn hình.
+    return String(s ?? '').replace(/^\s*[A-Da-d]\s*[\.\)]\s*/, '').trim();
+}
+
 function normalizeQuestion(q) {
     if (!q) return null;
+    const rawOptions = Array.isArray(q.o) ? q.o : (Array.isArray(q.options) ? q.options : []);
+    const cleanedOptions = rawOptions.map(stripOptionPrefix_);
+    const cleanedAnswer = stripOptionPrefix_(q.a ?? q.answer ?? '');
+    // Xáo trộn ngẫu nhiên thứ tự 4 đáp án — tránh tình trạng đáp án đúng luôn cố định ở vị trí A
+    // (dù sau này nguồn dữ liệu gốc có tự xáo trộn lại thì 2 lớp xáo trộn chồng nhau vẫn cho kết quả ngẫu nhiên).
+    const shuffledOptions = shuffleArray(cleanedOptions);
     return {
         // Kho học liệu dùng "id"; đề thi dùng "id" + "q_num" (số thứ tự câu trong đề).
         question_id: q.id ?? q.question_id ?? q.question_no ?? 0,
@@ -183,8 +195,8 @@ function normalizeQuestion(q) {
         sub_topic_label: String(q.sub ?? q.sub_topic ?? 'Câu hỏi chung').trim(),
         week: q.week ?? q.w ?? null,
         question_text: q.q ?? q.question_text ?? '',
-        options: Array.isArray(q.o) ? q.o : (Array.isArray(q.options) ? q.options : []),
-        answer: q.a ?? q.answer ?? '',
+        options: shuffledOptions,
+        answer: cleanedAnswer,
         hint: q.h ?? q.hint ?? '',
         image_url: q.img ?? q.image_url ?? '',
         audio_text: q.aud ?? q.audio_text ?? '',
@@ -198,6 +210,7 @@ function normalizeQuestion(q) {
         diem: Number(q.diem ?? q.points ?? q.score ?? 0.5),
         explanation: q.explanation ?? q.h ?? 'Không có giải thích chi tiết.'
     };
+
 }
 
 function normalizeTopic(t) {
