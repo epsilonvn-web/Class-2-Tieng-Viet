@@ -107,6 +107,10 @@ const SKILL_TAXONOMY = {
 // Tiến trình tuần (kho học liệu không có skill_tag riêng từng câu, suy ra từ chủ đề gốc).
 const TOPIC_TO_SKILL = { 1: 'C1', 2: 'C1', 3: 'C1', 4: 'C2', 5: 'C3', 6: 'C4', 7: 'C4', 8: 'C2', 9: 'C5', 10: 'C6', 11: 'C1' };
 
+// Mỗi nhóm năng lực có tổng điểm tối đa KHÁC NHAU trong 1 đề thi 13 câu (theo đúng Ma trận đề thi V9):
+// C1=1.5đ (câu 1-3), C2=1.0đ (câu 4-5), C3=1.5đ (câu 6-7), C4=2.0đ (câu 8-9), C6=2.0đ (câu 10-11), C5=2.0đ (câu 12-13).
+const EXAM_SKILL_MAX_SCORE = { C1: 1.5, C2: 1.0, C3: 1.5, C4: 2.0, C5: 2.0, C6: 2.0 };
+
 const GREETINGS_STUDENT = [
     "Chào {name}, cô Thỏ Ngọc đố con hôm nay mình đọc và viết đúng chính tả đến đâu nhé!",
     "Chào mừng {name} quay lại! Cùng cô Thỏ Ngọc khám phá thêm thật nhiều từ ngữ hay nào!",
@@ -1752,7 +1756,14 @@ async function saveExamResultToSheet() {
     Object.keys(SKILL_TAXONOMY).forEach(k => {
         payload[SKILL_TAXONOMY[k].sheetCol] = skillScores[k].toFixed(1);
     });
-    try { await callAppsScript('saveExamResult', payload); } catch (e) {}
+    try {
+        const res = await callAppsScript('saveExamResult', payload);
+        if (!res || res.ok !== true) {
+            console.error('[Lưu điểm đề thi THẤT BẠI]', res?.error || res);
+        }
+    } catch (e) {
+        console.error('[Lưu điểm đề thi LỖI KẾT NỐI]', e);
+    }
 }
 
 async function saveWeeklyProgressToSheet(percent, starCount, scoreVal) {
@@ -1796,7 +1807,10 @@ async function saveWeeklyProgressToSheet(percent, starCount, scoreVal) {
     });
 
     try {
-        await callAppsScript('saveWeeklyProgress', payload);
+        const res = await callAppsScript('saveWeeklyProgress', payload);
+        if (!res || res.ok !== true) {
+            console.error('[Lưu tiến trình tuần THẤT BẠI]', res?.error || res);
+        }
         if (percent >= 80) {
             const nextWeek = week + 1;
             if (nextWeek > (Number(currentUser.tuanHienTai) || 1) && nextWeek <= TOTAL_ROADMAP_WEEKS) {
@@ -1804,7 +1818,9 @@ async function saveWeeklyProgressToSheet(percent, starCount, scoreVal) {
                 setTimeout(() => alert(`🎉 Chúc mừng bé đạt ${percent}% điểm! Tuần ${nextWeek} đã được mở khóa trên bản đồ!`), 500);
             }
         }
-    } catch (e) {}
+    } catch (e) {
+        console.error('[Lưu tiến trình tuần LỖI KẾT NỐI]', e);
+    }
 }
 
 async function openHistoryModal(sheetName = 'LichSuTienTrinhTuan') {
@@ -1823,9 +1839,9 @@ async function openHistoryModal(sheetName = 'LichSuTienTrinhTuan') {
 
     const titleMap = {
         LichSuTienTrinhTuan: "Báo cáo tiến trình 24 tuần học tập",
-        LichSuBaiThiHK1: "Báo cáo kết quả đấu trường — Học kỳ 1",
-        LichSuBaiThiHK2: "Báo cáo kết quả đấu trường — Học kỳ 2",
-        LichSuBaiThiHSG: "Báo cáo kết quả đấu trường — Học sinh giỏi"
+        LichSuBaiThiHK1: "Báo cáo kết quả — Học kỳ 1",
+        LichSuBaiThiHK2: "Báo cáo kết quả — Học kỳ 2",
+        LichSuBaiThiHSG: "Báo cáo kết quả — Học sinh giỏi"
     };
     document.getElementById('hist-modal-title').textContent = titleMap[sheetName] || "Kết quả tiến trình học tập";
 
@@ -1925,9 +1941,9 @@ function renderHistoryReport(rows, sheetName) {
     });
 
     const skillKeys = ['C1', 'C2', 'C3', 'C4', 'C5', 'C6'];
-    const skillAverages = isWeekly
-        ? { C1: 0, C2: 0, C3: 0, C4: 0, C5: 0, C6: 0 }
-        : { C1: 85, C2: 78, C3: 92, C4: 70, C5: 80, C6: 75 };
+    // Mặc định LUÔN là 0 cho mọi trường hợp — KHÔNG dùng số liệu mẫu/giả định nào cả (đúng quy tắc chống lỗi
+    // Mục 8.2: nhóm nào bé chưa làm câu nào thì phải coi là "chưa đủ dữ liệu", không tự vẽ % bất kỳ).
+    const skillAverages = { C1: 0, C2: 0, C3: 0, C4: 0, C5: 0, C6: 0 };
     const touchedSkills = [];
 
     if (rows.length && isWeekly) {
@@ -1946,15 +1962,21 @@ function renderHistoryReport(rows, sheetName) {
             }
         });
     } else if (rows.length) {
+        // Đề thi: % = tổng điểm đạt được / tổng điểm TỐI ĐA CÓ THỂ của nhóm đó qua các đề đã làm
+        // (mỗi nhóm năng lực có mẫu số khác nhau theo đúng Ma trận đề thi V9 — xem EXAM_SKILL_MAX_SCORE).
         skillKeys.forEach((k) => {
             const colName = SKILL_TAXONOMY[k].sheetCol;
-            const vals = rows.map(r => {
+            let sumEarned = 0, examCount = 0;
+            rows.forEach(r => {
                 const val = r[`diem${k}`] ?? r[colName] ?? r[`diem_${k.toLowerCase()}`] ?? r[k];
-                return (val !== undefined && val !== null && val !== '--') ? Number(val) : 0;
+                if (val !== undefined && val !== null && val !== '--' && val !== '') {
+                    sumEarned += Number(val) || 0;
+                    examCount++;
+                }
             });
-            const sum = vals.reduce((a, b) => a + b, 0);
-            if (vals.length > 0) {
-                skillAverages[k] = Math.min(100, Math.round((sum / (vals.length * 1.5)) * 100)) || 75;
+            if (examCount > 0) {
+                const maxPossible = examCount * EXAM_SKILL_MAX_SCORE[k];
+                skillAverages[k] = maxPossible > 0 ? Math.min(100, Math.round((sumEarned / maxPossible) * 100)) : 0;
                 touchedSkills.push(k);
             }
         });
@@ -1963,6 +1985,9 @@ function renderHistoryReport(rows, sheetName) {
     const ctxBar = document.getElementById('topicRadarChartCanvas').getContext('2d');
     if (histBarChartInstance) histBarChartInstance.destroy();
 
+    const palette = ['#f472b6', '#fb7185', '#f59e0b', '#a855f7', '#ec4899', '#e11d48'];
+    const barColors = skillKeys.map((k, i) => touchedSkills.includes(k) ? palette[i] : '#cbd5e1'); // xám nếu chưa đủ dữ liệu
+
     histBarChartInstance = new Chart(ctxBar, {
         type: 'bar',
         data: {
@@ -1970,7 +1995,7 @@ function renderHistoryReport(rows, sheetName) {
             datasets: [{
                 label: 'Độ thành thạo (%)',
                 data: skillKeys.map(k => skillAverages[k]),
-                backgroundColor: ['#f472b6', '#fb7185', '#f59e0b', '#a855f7', '#ec4899', '#e11d48'],
+                backgroundColor: barColors,
                 borderRadius: 8,
                 borderSkipped: false,
                 barThickness: 16
@@ -1994,7 +2019,11 @@ function renderHistoryReport(rows, sheetName) {
             },
             plugins: {
                 legend: { display: false },
-                tooltip: { callbacks: { label: (ctx) => ` Độ thành thạo: ${ctx.raw}%` } }
+                tooltip: {
+                    callbacks: {
+                        label: (ctx) => touchedSkills.includes(skillKeys[ctx.dataIndex]) ? ` Độ thành thạo: ${ctx.raw}%` : ' Chưa đủ dữ liệu'
+                    }
+                }
             }
         },
         plugins: [{
@@ -2006,10 +2035,11 @@ function renderHistoryReport(rows, sheetName) {
                     if (!meta) return;
                     ctx.save();
                     ctx.font = 'bold 12px Quicksand, sans-serif';
-                    ctx.fillStyle = '#1e293b';
+                    ctx.fillStyle = touchedSkills.includes(skillKeys[i]) ? '#1e293b' : '#94a3b8';
                     ctx.textAlign = 'left';
                     ctx.textBaseline = 'middle';
-                    ctx.fillText(`${val}%`, meta.x + 6, meta.y);
+                    const label = touchedSkills.includes(skillKeys[i]) ? `${val}%` : 'Chưa đủ dữ liệu';
+                    ctx.fillText(label, meta.x + 6, meta.y);
                     ctx.restore();
                 });
             }
