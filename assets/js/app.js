@@ -1834,8 +1834,8 @@ async function openHistoryModal(sheetName = 'LichSuTienTrinhTuan') {
     document.getElementById('hist-info-name').textContent = currentUser.hoTen || '--';
     document.getElementById('hist-info-class').textContent = currentUser.lop || '--';
     document.getElementById('hist-info-code').textContent = currentUser.maHS || '--';
-    document.getElementById('hist-info-dob').textContent = currentUser.ngaySinh || '03/09/2019';
-    document.getElementById('hist-report-date').textContent = new Date().toLocaleDateString('vi-VN');
+    document.getElementById('hist-info-dob').textContent = formatDDMMYY_(currentUser.ngaySinh) || '05-09-2019';
+    document.getElementById('hist-report-date').textContent = formatDDMMYY_(new Date());
 
     const titleMap = {
         LichSuTienTrinhTuan: "Báo cáo tiến trình 24 tuần học tập",
@@ -1872,6 +1872,17 @@ function getSkillCell(row, skillKey) {
     const total = Number(row[taxo.totalCol]);
     if (!row[taxo.totalCol] || isNaN(total) || total <= 0) return null;
     return { correct: isNaN(correct) ? 0 : correct, total };
+}
+
+// Định dạng DD-MM-YY, bỏ hoàn toàn phần giờ/phút/giây (dùng cho Ngày sinh & Ngày báo cáo trên báo cáo in PDF).
+function formatDDMMYY_(value) {
+    if (!value) return '';
+    const d = new Date(value);
+    if (isNaN(d.getTime())) return String(value).split('T')[0] || String(value);
+    const dd = String(d.getDate()).padStart(2, '0');
+    const mm = String(d.getMonth() + 1).padStart(2, '0');
+    const yy = String(d.getFullYear()).slice(-2);
+    return `${dd}-${mm}-${yy}`;
 }
 
 function formatDateOnly(value) {
@@ -2258,6 +2269,14 @@ function stopSpeaking() {
             banMaiAudio.onended = null;
         }
     } catch (e) {}
+}
+
+function speakPedagogicalEvaluation() {
+    const box = document.getElementById('pedagogical-evaluation-box');
+    if (!box) return;
+    const text = box.innerText || box.textContent || '';
+    if (!text.trim()) return;
+    speakVietnamese(text);
 }
 
 function speakVietnamese(text, rate = 0.96) {
