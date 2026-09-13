@@ -140,7 +140,9 @@ let allQuestionsFlatCache = null;
 let autoSpeechEnabled = localStorage.getItem('tvl2_autoSpeechEnabled') !== 'false';
 const examsCache = {};
 
-let currentUser = null;
+let currentUser = { name: 'Khách (Guest)', isGuest: true, tuanHienTai: 1, hoTen: 'Bé Khách', lop: '', maHS: 'KHACH', vaiTro: 'guest', loaiTaiKhoan: 'guest' };
+let currentSessionPin = '';
+let adminAccountsCache = [];
 let starGreenCount = 0;
 let starRedCount = 0;
 let activeTopicId = null;
@@ -395,8 +397,10 @@ async function renderDashboardGrid() {
             ? `<div class="w-8 h-8 bg-rose-100 rounded-xl flex items-center justify-center text-[11px] font-black text-rose-600 shadow-inner group-hover:scale-110 transition-transform shrink-0 tracking-tight">S/X</div>`
             : `<div class="w-8 h-8 bg-${t.color}-100 rounded-xl flex items-center justify-center text-sm font-extrabold text-${t.color}-600 shadow-inner group-hover:scale-110 transition-transform shrink-0">${t.icon}</div>`;
 
+        const premiumLocked = t.id === 11 && !hasPremiumAccess();
         html += `
-            <div onclick="openTopic(${t.id}, '${t.title}', '${t.icon}')" class="pastel-card p-3 flex flex-col justify-between cursor-pointer hover:border-${t.color}-400 transition-all group min-h-[92px]">
+            <div onclick="openTopic(${t.id}, '${t.title}', '${t.icon}')" class="pastel-card p-3 flex flex-col justify-between cursor-pointer hover:border-${t.color}-400 transition-all group min-h-[92px] relative">
+                ${premiumLocked ? '<span class="absolute top-2 right-2 text-slate-400 text-xs"><i class="fa-solid fa-lock"></i></span>' : ''}
                 <div class="flex items-center space-x-2.5">
                     ${iconHtml}
                     <h3 class="font-extrabold text-${t.color}-700 text-sm md:text-base leading-tight">${t.title}</h3>
@@ -416,7 +420,8 @@ async function renderDashboardGrid() {
     } catch (e) {}
 
     html += `
-        <div onclick="openExamHub()" class="pastel-card p-3 flex flex-col justify-between cursor-pointer hover:border-amber-400 transition-all group bg-gradient-to-br from-white to-amber-50/50 min-h-[92px]">
+        <div onclick="openExamHub()" class="pastel-card p-3 flex flex-col justify-between cursor-pointer hover:border-amber-400 transition-all group bg-gradient-to-br from-white to-amber-50/50 min-h-[92px] relative">
+            ${!hasPremiumAccess() ? '<span class="absolute top-2 right-2 text-slate-400 text-xs"><i class="fa-solid fa-lock"></i></span>' : ''}
             <div class="flex items-center space-x-2.5">
                 <div class="w-8 h-8 bg-amber-100 rounded-xl flex items-center justify-center text-sm font-extrabold text-amber-600 shadow-inner group-hover:scale-110 transition-transform shrink-0">🏆</div>
                 <h3 class="font-extrabold text-amber-700 text-sm md:text-base leading-tight">12. Đấu trường đề thi</h3>
@@ -491,6 +496,10 @@ function updateExamTimerDisplay() {
 
 function openExamHub() {
     stopSpeaking();
+    if (!hasPremiumAccess()) {
+        showPremiumGate('Đấu trường đề thi', '🏆');
+        return;
+    }
     activeExamContext = null;
     activeRoadmapContext = null;
     activeTopicId = null;
@@ -699,6 +708,12 @@ async function doLogin() {
         alert(msg);
         return;
     }
+    if (!/^\d{6}$/.test(maPin)) {
+        const msg = 'Mã PIN phải gồm đúng 6 chữ số!';
+        showAuthError(msg);
+        alert(msg);
+        return;
+    }
 
     const btn = document.getElementById('btn-do-login');
     btn.disabled = true;
@@ -713,8 +728,7 @@ async function doLogin() {
             return;
         }
         currentUser = { ...result.student, isGuest: false };
-        localStorage.setItem('tvl2_mahs', maHS);
-        localStorage.setItem('tvl2_mapin', maPin);
+        currentSessionPin = maPin;
         enterDashboard();
     } catch (err) {
         const connErr = 'Lỗi kết nối máy chủ: ' + err.message;
@@ -740,8 +754,8 @@ async function doRegister() {
         alert(msg);
         return;
     }
-    if (!/^\d{4}$/.test(maPin)) {
-        const msg = 'Mã PIN phải gồm đúng 4 chữ số!';
+    if (!/^\d{6}$/.test(maPin)) {
+        const msg = 'Mã PIN phải gồm đúng 6 chữ số!';
         showAuthError(msg);
         alert(msg);
         return;
@@ -760,7 +774,11 @@ async function doRegister() {
             alert(result.error);
             return;
         }
-        alert(`Đã gửi đăng ký thành công, vui lòng chờ Admin duyệt! Mã ID của bé là: ${result.student.maHS}`);
+        if (result.wasAutoAdjusted) {
+            alert(`Mã ID ${result.baseMaHS} đã có người sử dụng. Hệ thống đã tự tạo mã ID mới cho bé là: ${result.student.maHS}\n\nBé hãy ghi nhớ mã ID này để đăng nhập nhé!`);
+        } else {
+            alert(`Đăng ký thành công! Tài khoản ${result.student.maHS} đã được tạo ở hạng Regular và có thể đăng nhập ngay.`);
+        }
         document.getElementById('login-mahs').value = result.student.maHS;
         switchAuthTab('login');
     } catch (err) {
@@ -774,88 +792,159 @@ async function doRegister() {
 }
 
 async function tryAutoLogin() {
-    const maHS = localStorage.getItem('tvl2_mahs');
-    const maPin = localStorage.getItem('tvl2_mapin');
-    if (!maHS || !maPin) return;
+    // Không lưu PIN thô trong localStorage. Mỗi lần mở app luôn vào Home ở chế độ Khách.
+    return;
+}
 
-    // Ẩn ngay màn hình đăng nhập và hiện loading, tránh hiện "chớp" màn hình đăng nhập
-    // rồi mới chuyển sang trang chủ khi đã có sẵn thông tin đăng nhập.
-    const loginScreen = document.getElementById('screen-login');
-    if (loginScreen) loginScreen.classList.add('hidden');
-    showLoadingOverlay('Đang đăng nhập lại cho bé...');
-
-    try {
-        const res = await callAppsScript('login', { maHS: maHS.toUpperCase(), maPin });
-        if (res.ok) {
-            currentUser = { ...res.student, isGuest: false };
-            enterDashboard(true);
-        } else {
-            if (loginScreen) loginScreen.classList.remove('hidden');
-        }
-    } catch (e) {
-        if (loginScreen) loginScreen.classList.remove('hidden');
-    } finally {
-        hideLoadingOverlay();
-    }
+function showAuthScreen(tab = 'login') {
+    stopSpeaking();
+    document.getElementById('screen-dashboard')?.classList.add('hidden');
+    document.getElementById('screen-login')?.classList.remove('hidden');
+    switchAuthTab(tab);
+    setTimeout(() => {
+        if (tab === 'login') document.getElementById('login-mahs')?.focus();
+        else document.getElementById('reg-hoten')?.focus();
+    }, 50);
 }
 
 function logout() {
-    currentUser = null;
-    localStorage.removeItem('tvl2_mahs');
-    localStorage.removeItem('tvl2_mapin');
-    document.getElementById('screen-dashboard').classList.add('hidden');
-    document.getElementById('screen-login').classList.remove('hidden');
+    currentSessionPin = '';
+    currentUser = { name: 'Khách (Guest)', isGuest: true, tuanHienTai: 1, hoTen: 'Bé Khách', lop: '', maHS: 'KHACH', vaiTro: 'guest', loaiTaiKhoan: 'guest' };
     const mahsInput = document.getElementById('login-mahs');
     const mapinInput = document.getElementById('login-mapin');
     if (mahsInput) mahsInput.value = '';
     if (mapinInput) mapinInput.value = '';
     hideAuthError();
+    enterDashboard(true);
 }
 
 function handleGuestMode() {
-    currentUser = { name: "Khách (Guest)", isGuest: true, tuanHienTai: 1, hoTen: "Bé Khách", lop: "1A", maHS: "KHACH" };
-    enterDashboard();
+    currentSessionPin = '';
+    currentUser = { name: 'Khách (Guest)', isGuest: true, tuanHienTai: 1, hoTen: 'Bé Khách', lop: '', maHS: 'KHACH', vaiTro: 'guest', loaiTaiKhoan: 'guest' };
+    enterDashboard(true);
 }
 
 function enterDashboard(isSilent = false) {
-    document.getElementById('screen-login').classList.add('hidden');
-    document.getElementById('screen-dashboard').classList.remove('hidden');
+    document.getElementById('screen-login')?.classList.add('hidden');
+    document.getElementById('screen-dashboard')?.classList.remove('hidden');
     updateUserInfoBox();
     resetStars();
     renderDashboardGrid();
     renderExamHubGrid();
     goHome();
 
-    // Phát ngẫu nhiên lời chào sư phạm (Không nhạc)
-    if (!isSilent) {
+    if (!isSilent && currentUser && !currentUser.isGuest) {
         setTimeout(() => {
-            if (currentUser && !currentUser.isGuest) {
-                const template = GREETINGS_STUDENT[Math.floor(Math.random() * GREETINGS_STUDENT.length)];
-                const msg = template.replace('{name}', currentUser.hoTen);
-                speakVietnamese(msg, 0.96);
-            } else {
-                const msg = GREETINGS_GUEST[Math.floor(Math.random() * GREETINGS_GUEST.length)];
-                speakVietnamese(msg, 0.96);
-            }
+            const template = GREETINGS_STUDENT[Math.floor(Math.random() * GREETINGS_STUDENT.length)];
+            const msg = template.replace('{name}', currentUser.hoTen);
+            speakVietnamese(msg, 0.96);
         }, 450);
     }
+}
+
+function hasPremiumAccess() {
+    if (!currentUser || currentUser.isGuest) return false;
+    if (String(currentUser.vaiTro || '').toLowerCase() === 'admin') return true;
+    const tier = String(currentUser.loaiTaiKhoan || 'regular').toLowerCase();
+    return tier === 'trial' || tier === 'vip';
+}
+
+function getTierLabel_() {
+    if (!currentUser || currentUser.isGuest) return 'Khách';
+    if (String(currentUser.vaiTro || '').toLowerCase() === 'admin') return 'Admin';
+    const tier = String(currentUser.loaiTaiKhoan || 'regular').toLowerCase();
+    if (tier === 'vip') return 'VIP';
+    if (tier === 'trial') return 'Trial';
+    return 'Regular';
+}
+
+
+function showAccessGate(options = {}) {
+    const modal = document.getElementById('modal-access-gate');
+    if (!modal) return;
+
+    const title = options.title || 'Tính năng dành cho tài khoản';
+    const message = options.message || 'Con vui lòng đăng nhập để sử dụng tính năng này nhé!';
+    const icon = options.icon || '🐰';
+    const showAuth = options.showAuth !== false;
+    const note = options.note || '🌸 Các chuyên đề cơ bản vẫn học miễn phí bình thường nhé!';
+
+    const titleEl = document.getElementById('access-gate-title');
+    const msgEl = document.getElementById('access-gate-message');
+    const iconEl = document.getElementById('access-gate-icon');
+    const noteEl = document.getElementById('access-gate-note');
+    const authActions = document.getElementById('access-gate-auth-actions');
+
+    if (titleEl) titleEl.textContent = title;
+    if (msgEl) msgEl.innerHTML = message;
+    if (iconEl) iconEl.textContent = icon;
+    if (noteEl) noteEl.textContent = note;
+    if (authActions) authActions.classList.toggle('hidden', !showAuth);
+
+    modal.classList.remove('hidden');
+}
+
+function closeAccessGate() {
+    document.getElementById('modal-access-gate')?.classList.add('hidden');
+}
+
+function openAuthFromAccessGate(tab) {
+    closeAccessGate();
+    showAuthScreen(tab || 'login');
+}
+
+function showLoginRequiredGate(featureName = 'Tính năng này', icon = '🐰') {
+    showAccessGate({
+        title: featureName,
+        icon,
+        showAuth: true,
+        message: `${escapeHtml(featureName)} dành cho học sinh đã đăng nhập.<br>Con có thể <strong>Sign in</strong> nếu đã có tài khoản hoặc <strong>Sign up</strong> để đăng ký nhé!`
+    });
+}
+
+function showPremiumGate(featureName = 'Nội dung Premium', icon = '🔒') {
+    const isGuest = !currentUser || currentUser.isGuest;
+    const safeFeatureName = escapeHtml(featureName);
+    showAccessGate({
+        title: featureName,
+        icon,
+        showAuth: isGuest,
+        message: isGuest
+            ? `Đây là <strong>${safeFeatureName}</strong> dành cho tài khoản <strong>Trial hoặc VIP</strong>.<br>Con có thể <strong>Sign in</strong> nếu đã có tài khoản hoặc <strong>Sign up</strong> để đăng ký nhé!<br>Các chuyên đề cơ bản vẫn học miễn phí bình thường.`
+            : `Đây là <strong>${safeFeatureName}</strong> dành cho tài khoản <strong>Trial hoặc VIP</strong>.<br>Tài khoản hiện tại của con đang là <strong>Regular</strong>.<br>Các chuyên đề cơ bản vẫn học miễn phí bình thường.`
+    });
 }
 
 function updateUserInfoBox() {
     const box = document.getElementById('user-info-box');
     if (!box) return;
-    if (currentUser && !currentUser.isGuest) {
+
+    // Khóa Bản đồ tuần chỉ hiện với Khách / Regular; ẩn khi Admin / Trial / VIP đã có quyền Premium.
+    const roadmapLock = document.getElementById('roadmap-lock-icon');
+    if (roadmapLock) roadmapLock.classList.toggle('hidden', hasPremiumAccess());
+
+    if (!currentUser || currentUser.isGuest) {
         box.innerHTML = `
-            <div class="flex items-center space-x-2">
-                <div class="text-right">
-                    <div class="text-pink-600 font-extrabold text-xs md:text-sm leading-tight">${escapeHtml(currentUser.hoTen)}</div>
-                    <div class="text-gray-500 font-semibold text-[10px]">ID: ${escapeHtml(currentUser.maHS)} | Lớp ${escapeHtml(currentUser.lop)}</div>
-                </div>
-                <button onclick="logout()" title="Đăng xuất" class="w-8 h-8 flex items-center justify-center bg-rose-100 hover:bg-rose-200 text-rose-500 rounded-xl border border-rose-200 text-xs transition-shadow duration-200 hover:shadow-[0_0_12px_rgba(244,63,94,0.55)]"><i class="fa-solid fa-right-from-bracket"></i></button>
+            <div class="flex items-center gap-1.5">
+                <span class="text-amber-600 font-extrabold text-xs px-1.5">Khách</span>
+                <button onclick="showAuthScreen('login')" class="px-3 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-xl font-extrabold text-xs pastel-btn">Đăng nhập</button>
+                <button onclick="showAuthScreen('register')" class="px-3 py-2 bg-white text-purple-600 border border-purple-200 rounded-xl font-extrabold text-xs pastel-btn">Đăng ký</button>
             </div>`;
-    } else {
-        box.innerHTML = `<span class="text-amber-600 font-extrabold text-xs">Khách (Guest)</span><br><span class="text-gray-400 font-semibold text-[10px]">Chưa đăng nhập</span>`;
+        return;
     }
+
+    const isAdmin = String(currentUser.vaiTro || '').toLowerCase() === 'admin';
+    const tier = getTierLabel_();
+    const tierClass = isAdmin ? 'text-amber-600' : (tier === 'VIP' ? 'text-amber-600' : (tier === 'Trial' ? 'text-purple-600' : 'text-slate-500'));
+    box.innerHTML = `
+        <div class="flex items-center space-x-2">
+            <div class="text-right">
+                <div class="${isAdmin ? 'text-amber-600' : 'text-pink-600'} font-extrabold text-xs md:text-sm leading-tight">${escapeHtml(currentUser.hoTen)}</div>
+                <div class="${tierClass} font-semibold text-[10px]">${escapeHtml(tier)} · ID ${escapeHtml(currentUser.maHS)}</div>
+            </div>
+            ${isAdmin ? '<button onclick="openAdminAccounts()" title="Quản lý tài khoản" class="h-9 px-3 flex items-center justify-center bg-amber-100 hover:bg-amber-200 text-amber-700 rounded-xl border border-amber-200 text-xs font-extrabold pastel-btn"><i class="fa-solid fa-users-gear mr-1"></i>Quản lý</button>' : ''}
+            <button onclick="logout()" title="Đăng xuất" class="w-8 h-8 flex items-center justify-center bg-rose-100 hover:bg-rose-200 text-rose-500 rounded-xl border border-rose-200 text-xs transition-shadow duration-200 hover:shadow-[0_0_12px_rgba(244,63,94,0.55)]"><i class="fa-solid fa-right-from-bracket"></i></button>
+        </div>`;
 }
 
 function resetStars() {
@@ -867,9 +956,22 @@ function resetStars() {
 }
 
 function clickProgressOrExam(type) {
-    if (!currentUser || currentUser.isGuest) return alert('Bé vui lòng đăng nhập để sử dụng tính năng này nhé!');
-    if (type === 'progress') openRoadmap();
-    else if (type === 'exam') openExamHub();
+    // Bản đồ tuần là nội dung Premium giống TA3: chỉ Admin / Trial / VIP được vào.
+    // Khách và Regular đều dùng chung popup Premium để thông báo nhất quán.
+    if (type === 'progress') {
+        if (!hasPremiumAccess()) {
+            showPremiumGate('Bản đồ tuần', '🗺️');
+            return;
+        }
+        openRoadmap();
+        return;
+    }
+
+    if (!currentUser || currentUser.isGuest) {
+        showLoginRequiredGate('Tính năng này', '🐰');
+        return;
+    }
+    if (type === 'exam') openExamHub();
 }
 
 // ==========================================
@@ -877,6 +979,10 @@ function clickProgressOrExam(type) {
 // ==========================================
 function openTopic(topicNum, topicName, icon) {
     stopSpeaking();
+    if (Number(topicNum) === 11 && !hasPremiumAccess()) {
+        showPremiumGate('11. Ôn tập tổng hợp', '🎮');
+        return;
+    }
     activeTopicId = topicNum; activeExamContext = null; activeRoadmapContext = null;
     updateNavTabs(topicName, icon || '🐰', null);
 
@@ -1825,7 +1931,8 @@ async function saveWeeklyProgressToSheet(percent, starCount, scoreVal) {
 
 async function openHistoryModal(sheetName = 'LichSuTienTrinhTuan') {
     if (!currentUser || currentUser.isGuest) {
-        return alert('Bé vui lòng đăng nhập để xem lịch sử tiến trình nhé!');
+        showLoginRequiredGate('Lịch sử tiến trình', '📊');
+        return;
     }
 
     const modal = document.getElementById('modal-history-progress');
@@ -2259,6 +2366,103 @@ function exportReportToPDF() {
 }
 
 // ==========================================
+// ADMIN - QUAN LY TAI KHOAN
+// ==========================================
+function formatAccountDate_(value) {
+    if (!value) return '--';
+    const d = new Date(value);
+    if (isNaN(d.getTime())) return String(value);
+    return d.toLocaleDateString('vi-VN');
+}
+
+function adminAuthPayload_() {
+    return { adminMaHS: currentUser?.maHS || '', adminPin: currentSessionPin || '' };
+}
+
+async function openAdminAccounts() {
+    if (!currentUser || String(currentUser.vaiTro || '').toLowerCase() !== 'admin') return;
+    document.getElementById('modal-admin-accounts')?.classList.remove('hidden');
+    await loadAdminAccounts();
+}
+
+function closeAdminAccounts() {
+    document.getElementById('modal-admin-accounts')?.classList.add('hidden');
+}
+
+async function loadAdminAccounts() {
+    const body = document.getElementById('admin-accounts-body');
+    if (body) body.innerHTML = '<tr><td colspan="8" class="p-6 text-center text-slate-400 font-bold"><i class="fa-solid fa-spinner fa-spin mr-2"></i>Đang tải...</td></tr>';
+    try {
+        const res = await callAppsScript('getAccounts', adminAuthPayload_());
+        if (!res?.ok) throw new Error(res?.error || 'Không tải được danh sách tài khoản');
+        adminAccountsCache = Array.isArray(res.accounts) ? res.accounts : [];
+        renderAdminAccountsTable();
+    } catch (err) {
+        if (body) body.innerHTML = `<tr><td colspan="8" class="p-6 text-center text-rose-500 font-bold">${escapeHtml(err.message)}</td></tr>`;
+    }
+}
+
+function renderAdminAccountsTable() {
+    const body = document.getElementById('admin-accounts-body');
+    if (!body) return;
+    const q = (document.getElementById('admin-account-search')?.value || '').trim().toLowerCase();
+    // Giao diện quản lý tập trung vào tài khoản học sinh; admin vẫn được giữ nguyên trong dữ liệu/backend.
+    const studentAccounts = adminAccountsCache.filter(a => String(a.vaiTro || 'student').toLowerCase() !== 'admin');
+    const rows = studentAccounts.filter(a => !q || [a.maHS, a.hoTen, a.lop, a.loaiTaiKhoan].some(v => String(v || '').toLowerCase().includes(q)));
+    const countEl = document.getElementById('admin-account-count');
+    if (countEl) countEl.textContent = `${studentAccounts.length} tài khoản`;
+    if (!rows.length) {
+        body.innerHTML = '<tr><td colspan="6" class="p-6 text-center text-slate-400 font-bold">Không có tài khoản phù hợp</td></tr>';
+        return;
+    }
+    body.innerHTML = rows.map(a => {
+        const tier = String(a.loaiTaiKhoan || 'regular').toLowerCase();
+        const tierStyle = tier === 'vip'
+            ? 'border-purple-300 text-purple-700 bg-purple-50'
+            : (tier === 'trial' ? 'border-amber-300 text-amber-700 bg-amber-50' : 'border-slate-300 text-slate-600 bg-white');
+        return `<tr class="hover:bg-fuchsia-50/30 transition-colors">
+            <td class="p-3 font-black text-sm text-slate-700">${escapeHtml(a.maHS || '')}</td>
+            <td class="p-3 font-bold text-sm text-slate-700">${escapeHtml(a.hoTen || '')}</td>
+            <td class="p-3 text-center font-bold text-sm text-slate-600">${escapeHtml(a.lop || '--')}</td>
+            <td class="p-3 text-center">
+                <select onchange="adminSetTier('${String(a.maHS).replace(/'/g, "\\'")}', this.value)" class="min-w-[96px] px-3 py-1.5 rounded-xl border font-extrabold text-sm outline-none ${tierStyle}">
+                    <option value="regular" ${tier === 'regular' ? 'selected' : ''}>Regular</option>
+                    <option value="trial" ${tier === 'trial' ? 'selected' : ''}>Trial</option>
+                    <option value="vip" ${tier === 'vip' ? 'selected' : ''}>VIP</option>
+                </select>
+            </td>
+            <td class="p-3 text-center font-bold text-sm text-slate-500">${formatAccountDate_(a.hanDungThu)}</td>
+            <td class="p-3 text-center font-black text-sm text-purple-600">${formatAccountDate_(a.hanVIP)}</td>
+        </tr>`;
+    }).join('');
+}
+
+async function adminSetTier(targetMaHS, loaiTaiKhoan) {
+    try {
+        const res = await callAppsScript('setAccountTier', { ...adminAuthPayload_(), targetMaHS, loaiTaiKhoan });
+        if (!res?.ok) throw new Error(res?.error || 'Không cập nhật được hạng tài khoản');
+        await loadAdminAccounts();
+    } catch (err) {
+        alert(err.message);
+        await loadAdminAccounts();
+    }
+}
+
+async function adminResetPin(targetMaHS) {
+    const newPin = prompt(`Nhập PIN mới 6 chữ số cho tài khoản ${targetMaHS}:`);
+    if (newPin === null) return;
+    if (!/^\d{6}$/.test(newPin)) return alert('PIN mới phải gồm đúng 6 chữ số!');
+    try {
+        const res = await callAppsScript('resetAccountPin', { ...adminAuthPayload_(), targetMaHS, newPin });
+        if (!res?.ok) throw new Error(res?.error || 'Không đặt lại được PIN');
+        alert(`Đã đặt lại PIN cho ${targetMaHS}.`);
+        if (targetMaHS.toLowerCase() === String(currentUser.maHS || '').toLowerCase()) currentSessionPin = newPin;
+    } catch (err) {
+        alert(err.message);
+    }
+}
+
+// ==========================================
 // ĐỘNG CƠ ÂM THANH: GOOGLE TTS CHỊ BAN MAI
 // ==========================================
 function stopSpeaking() {
@@ -2487,6 +2691,9 @@ function updateAutoSpeechButtonUI() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+    updateUserInfoBox();
+    renderDashboardGrid();
+    goHome();
     document.getElementById('login-mapin')?.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') doLogin();
     });
