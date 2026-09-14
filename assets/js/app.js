@@ -148,6 +148,7 @@ let starRedCount = 0;
 let activeTopicId = null;
 let activeExamContext = null;
 let activeRoadmapContext = null;
+let inMiniGameFlow = false;
 let activeQuestionsList = [];
 let practiceCycleRawPool = [];
 let pendingTopicQuiz = null;
@@ -496,6 +497,7 @@ function updateExamTimerDisplay() {
 
 function openExamHub() {
     stopSpeaking();
+    inMiniGameFlow = false;
     if (!hasPremiumAccess()) {
         showPremiumGate('Đấu trường đề thi', '🏆');
         return;
@@ -631,12 +633,14 @@ function returnToTopicLecture() {
     } else if (pendingTopicQuiz) {
         updateNavTabs(pendingTopicQuiz.topicName, TOPICS_CONFIG.find(t => t.id === pendingTopicQuiz.topicNum)?.icon, null);
         switchAppView('view-lecture');
+    } else if (inMiniGameFlow) {
+        openMiniGameHub();
     }
 }
 
 function switchAppView(viewId) {
     stopSpeaking();
-    ['view-dashboard-grid', 'view-lecture', 'view-quiz', 'view-roadmap', 'view-exam-hub', 'view-result'].forEach(id => {
+    ['view-dashboard-grid', 'view-lecture', 'view-quiz', 'view-roadmap', 'view-minigame-hub', 'view-game-play', 'view-exam-hub', 'view-result'].forEach(id => {
         const el = document.getElementById(id);
         if (!el) return;
         if (id === viewId) el.classList.remove('hidden');
@@ -647,6 +651,7 @@ function switchAppView(viewId) {
 function goHome() {
     stopSpeaking();
     clearInterval(quizTimerInterval);
+    inMiniGameFlow = false;
     updateNavTabs(null, null, null);
     switchAppView('view-dashboard-grid');
 }
@@ -922,6 +927,8 @@ function updateUserInfoBox() {
     // Khóa Bản đồ tuần chỉ hiện với Khách / Regular; ẩn khi Admin / Trial / VIP đã có quyền Premium.
     const roadmapLock = document.getElementById('roadmap-lock-icon');
     if (roadmapLock) roadmapLock.classList.toggle('hidden', hasPremiumAccess());
+    const minigameLock = document.getElementById('minigame-lock-icon');
+    if (minigameLock) minigameLock.classList.toggle('hidden', hasPremiumAccess());
 
     if (!currentUser || currentUser.isGuest) {
         box.innerHTML = `
@@ -979,6 +986,7 @@ function clickProgressOrExam(type) {
 // ==========================================
 function openTopic(topicNum, topicName, icon) {
     stopSpeaking();
+    inMiniGameFlow = false;
     if (Number(topicNum) === 11 && !hasPremiumAccess()) {
         showPremiumGate('11. Ôn tập tổng hợp', '🎮');
         return;
@@ -1085,6 +1093,7 @@ function handleNextExamFromReport() {
 
 function openRoadmap() {
     stopSpeaking();
+    inMiniGameFlow = false;
     updateNavTabs("Bản đồ tiến trình tuần", "🗺️", null);
     renderRoadmapSVG();
     switchAppView('view-roadmap');
@@ -2696,6 +2705,147 @@ function updateAutoSpeechButtonUI() {
         btn.title = 'Đang TẮT tự động đọc câu hỏi — bấm để bật';
         btn.classList.remove('bg-pink-50', 'text-pink-600', 'border-pink-200');
         btn.classList.add('bg-gray-100', 'text-gray-400', 'border-gray-200');
+    }
+}
+
+
+// ==========================================
+// TRUNG TÂM MINI GAME - TIẾNG VIỆT 2
+// Kiến trúc giống TA2: Hub -> lazy-load file JS riêng -> game tự quản lý state.
+// ==========================================
+const MINIGAME_TOPIC_PALETTES = SUBTOPIC_PALETTES;
+
+function miniGameHash(text = '') {
+    return [...String(text)].reduce((acc, ch) => ((acc * 31) + ch.charCodeAt(0)) >>> 0, 7);
+}
+
+function getMiniGamePaletteOrder(seed = 'tv2-minigame') {
+    const order = MINIGAME_TOPIC_PALETTES.map((_, i) => i);
+    let state = miniGameHash(seed) || 1;
+    for (let i = order.length - 1; i > 0; i--) {
+        state = (state * 1664525 + 1013904223) >>> 0;
+        const j = state % (i + 1);
+        [order[i], order[j]] = [order[j], order[i]];
+    }
+    return order.map(i => MINIGAME_TOPIC_PALETTES[i]);
+}
+
+function ensureMiniGameThemeStyles() {
+    if (document.getElementById('tv2-minigame-theme-v1')) return;
+    const style = document.createElement('style');
+    style.id = 'tv2-minigame-theme-v1';
+    style.textContent = `
+        #view-game-play > div { max-width: 56rem !important; }
+        #game-play-title { font-size: 1.2rem !important; }
+        #game-play-container { font-size: 16px; }
+        @media (max-width: 640px) {
+            #view-game-play > div { max-width: 100% !important; }
+            #game-play-title { font-size: 1.05rem !important; }
+        }
+    `;
+    document.head.appendChild(style);
+}
+
+const MINIGAME_LIST = [
+    { id: 'spelling-knight', title: '1. Hiệp sĩ Chính tả', desc: 'Vượt cổng từ đúng - giữ khiên thật lâu', icon: '⚔️', ready: true },
+    { id: 'rhyme-treasure', title: '2. Kho báu âm vần', desc: 'Ghép âm đầu, vần và thanh', icon: '💎', ready: false },
+    { id: 'word-garden', title: '3. Khu vườn từ loại', desc: 'Phân loại sự vật - hoạt động - đặc điểm', icon: '🌳', ready: false },
+    { id: 'sentence-train-tv', title: '4. Đoàn tàu ghép câu', desc: 'Xếp từ thành câu hoàn chỉnh', icon: '🚂', ready: false },
+    { id: 'punctuation-doctor', title: '5. Bác sĩ dấu câu', desc: 'Tìm và chữa dấu câu chưa đúng', icon: '🩺', ready: false },
+    { id: 'sentence-world', title: '6. Thế giới mẫu câu', desc: 'Ai là gì? Ai làm gì? Ai thế nào?', icon: '💬', ready: false },
+    { id: 'vocab-fishing', title: '7. Câu cá từ vựng', desc: 'Câu đúng từ theo từng chủ đề', icon: '🎣', ready: false },
+    { id: 'reading-detective', title: '8. Thám tử đọc hiểu', desc: 'Truy tìm chi tiết trong đoạn đọc', icon: '🕵️', ready: false },
+    { id: 'riddle-arena', title: '9. Đấu trường câu đố', desc: 'Giải đố dân gian và IQ ngôn ngữ', icon: '🏆', ready: false },
+    { id: 'message-postman', title: '10. Bưu tá tí hon', desc: 'Chọn lời nhắn và giao tiếp phù hợp', icon: '💌', ready: false },
+    { id: 'word-maze', title: '11. Mê cung từ ngữ', desc: 'Tìm đường qua các từ đúng', icon: '🌀', ready: false },
+    { id: 'teacher-says-tv', title: '12. Cô Thỏ ra lệnh', desc: 'Phản xạ đọc hiểu thật nhanh', icon: '🤖', ready: false }
+];
+
+function openMiniGameHub() {
+    stopSpeaking();
+    if (!hasPremiumAccess()) {
+        showPremiumGate('Mini Game', '🎮');
+        return;
+    }
+    inMiniGameFlow = true;
+    activeExamContext = null;
+    activeRoadmapContext = null;
+    activeTopicId = null;
+    pendingTopicQuiz = null;
+    updateNavTabs('Mini Game', '🎮', null);
+    ensureMiniGameThemeStyles();
+
+    const grid = document.getElementById('minigame-grid');
+    if (!grid) return;
+    const palettes = getMiniGamePaletteOrder('tv2-hub');
+    grid.innerHTML = MINIGAME_LIST.map((g, idx) => {
+        const style = palettes[idx % palettes.length];
+        return `
+        <div onclick="openGamePlay('${g.id}')" class="p-3.5 md:p-4 flex flex-col items-center text-center cursor-pointer transition-all group ${style.card} border-2 rounded-[26px] min-h-[132px] justify-between relative shadow-sm pastel-btn">
+            ${!g.ready ? `<span class="absolute top-2 right-2 bg-amber-100 text-amber-700 text-[10px] font-black px-2 py-0.5 rounded-full border border-amber-200">Sắp ra mắt</span>` : ''}
+            <div class="text-4xl group-hover:scale-110 transition-transform mt-1">${g.icon}</div>
+            <div class="w-full">
+                <h3 class="font-extrabold ${style.num} text-base leading-tight">${g.title}</h3>
+                <p class="text-sm text-gray-700 font-bold mt-1 w-full leading-snug">${g.desc}</p>
+            </div>
+        </div>`;
+    }).join('');
+    switchAppView('view-minigame-hub');
+}
+
+const GAME_SCRIPT_MAP = {
+    'spelling-knight': 'assets/js/games/hiep-si-chinh-ta.js?v=tv2mg1'
+};
+const loadedGameScripts = {};
+
+function loadGameScript(src) {
+    if (loadedGameScripts[src]) return Promise.resolve();
+    return new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.src = src;
+        script.onload = () => { loadedGameScripts[src] = true; resolve(); };
+        script.onerror = () => reject(new Error(`Không tải được file game: ${src}`));
+        document.body.appendChild(script);
+    });
+}
+
+async function openGamePlay(gameId) {
+    stopSpeaking();
+    ensureMiniGameThemeStyles();
+    inMiniGameFlow = true;
+    const game = MINIGAME_LIST.find(g => g.id === gameId);
+    if (!game) return;
+
+    if (!game.ready) {
+        showAccessGate({
+            title: 'Sắp ra mắt',
+            icon: game.icon,
+            showAuth: false,
+            message: `<strong>${escapeHtml(game.title)}</strong> đang được cô Thỏ Ngọc chuẩn bị.<br>Con quay lại sau nhé!`,
+            note: '🎮 Hiệp sĩ Chính tả đã có thể chơi ngay rồi!'
+        });
+        return;
+    }
+
+    const title = document.getElementById('game-play-title');
+    if (title) title.innerHTML = `<span>${game.icon}</span><span>${game.title}</span>`;
+    updateNavTabs('Mini Game', '🎮', game.title);
+    switchAppView('view-game-play');
+
+    const scriptSrc = GAME_SCRIPT_MAP[gameId];
+    if (scriptSrc) {
+        const box = document.getElementById('game-play-container');
+        if (box) box.innerHTML = '<p class="text-center text-gray-400 font-bold py-8">Đang mở cổng thành...</p>';
+        try {
+            await loadGameScript(scriptSrc);
+        } catch (e) {
+            if (box) box.innerHTML = '<p class="text-center text-rose-500 font-bold py-8">Không tải được game. Bé thử lại nhé!</p>';
+            return;
+        }
+    }
+
+    if (gameId === 'spelling-knight' && typeof startSpellingKnightGame === 'function') {
+        startSpellingKnightGame();
     }
 }
 
