@@ -1,9 +1,11 @@
-const CACHE_NAME = 'tv2-pwa-v1';
+const CACHE_NAME = 'tv2-pwa-v2';
 const APP_SHELL = [
   './',
   './index.html',
   './manifest.json',
-  './favicon.svg',
+  './icon-192.png',
+  './icon-512.png',
+  './apple-touch-icon.png',
   './assets/js/app.js',
   './assets/data/kho_hoc_tieng_viet_2_part1.json',
   './assets/data/kho_hoc_tieng_viet_2_part2.json',
