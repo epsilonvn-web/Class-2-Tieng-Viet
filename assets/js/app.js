@@ -2,17 +2,17 @@
 // CẤU HÌNH 11 CHUYÊN ĐỀ KHO HỌC LIỆU & MA TRẬN NĂNG LỰC TV_C1-C6 (TIẾNG VIỆT LỚP 2)
 // ==========================================
 const TOPICS_CONFIG = [
-    { id: 1, title: "1. Ngôi nhà âm vần", desc: "Bảng chữ cái, quy tắc viết hoa tên riêng, viết hoa đầu câu", icon: "🏠", color: "pink" },
-    { id: 2, title: "2. Hiệp sĩ chính tả", desc: "Phân biệt phụ âm đầu dễ sai ch/tr, s/x, l/n, r/d/gi", icon: "⚔️", color: "rose" },
-    { id: 3, title: "3. Vương quốc vần khó", desc: "Luật chính tả c/k, g/gh, ng/ngh, vần ghép, dấu hỏi/ngã", icon: "🔮", color: "purple" },
-    { id: 4, title: "4. Kho báu từ vựng", desc: "Từ vựng Gia đình, Trường học, Thiên nhiên, Đất nước", icon: "💰", color: "amber" },
-    { id: 5, title: "5. Khu vườn từ loại", desc: "Nhận diện danh từ, động từ, tính từ", icon: "🌳", color: "emerald" },
-    { id: 6, title: "6. Kỹ sư ghép câu", desc: "Dấu câu và sắp xếp từ tạo câu hoàn chỉnh", icon: "🖊️", color: "cyan" },
-    { id: 7, title: "7. Thế giới mẫu câu", desc: "Ba mẫu câu Ai là gì?, Ai làm gì?, Ai thế nào?", icon: "💬", color: "indigo" },
-    { id: 8, title: "8. Đại sứ giao tiếp", desc: "Nghi thức giao tiếp, viết tin nhắn, bưu thiếp", icon: "🤝", color: "sky" },
-    { id: 9, title: "9. Nhà thông thái nhỏ", desc: "Đọc hiểu truyện kể và thơ, rút bài học", icon: "📖", color: "fuchsia" },
-    { id: 10, title: "10. Trí tuệ Trạng Nguyên", desc: "Đố vui dân gian, IQ ngôn ngữ", icon: "🧩", color: "yellow" },
-    { id: 11, title: "11. Ôn tập tổng hợp", desc: "Ôn tập học kỳ 1, học kỳ 2 và cả năm", icon: "📚", color: "violet" }
+    { id: 1, title: "1. Ngôi nhà chữ Việt", desc: "Bảng chữ cái Việt Nam và quy ước viết hoa đầu câu, tên người, địa danh", icon: "🏠", color: "pink" },
+    { id: 2, title: "2. Hiệp sĩ âm đầu", desc: "ch/tr, s/x, l/n, r/d/gi và quy tắc c/k, g/gh, ng/ngh", icon: "⚔️", color: "rose" },
+    { id: 3, title: "3. Vương quốc vần & dấu", desc: "Âm cuối dễ lẫn, vần phức hợp và dấu hỏi/ngã", icon: "🔮", color: "purple" },
+    { id: 4, title: "4. Kho báu từ vựng", desc: "Vốn từ và nghĩa từ theo các chủ điểm gần gũi", icon: "💰", color: "amber" },
+    { id: 5, title: "5. Khu vườn từ loại", desc: "Từ chỉ sự vật, hoạt động/trạng thái và đặc điểm", icon: "🌳", color: "emerald" },
+    { id: 6, title: "6. Kỹ sư ghép câu", desc: "Dấu câu, tạo câu và sắp xếp đoạn ngắn hợp lí", icon: "🖊️", color: "cyan" },
+    { id: 7, title: "7. Thế giới câu hay", desc: "Câu giới thiệu, câu nêu hoạt động và câu nêu đặc điểm", icon: "💬", color: "indigo" },
+    { id: 8, title: "8. Đại sứ giao tiếp", desc: "Lời nói/lời đáp, tin nhắn, thư ngắn, bưu thiếp và bảng biểu", icon: "🤝", color: "sky" },
+    { id: 9, title: "9. Nhà thông thái nhỏ", desc: "Đọc hiểu thơ, truyện, văn bản thông tin và suy luận", icon: "📖", color: "fuchsia" },
+    { id: 10, title: "10. PHẦN THÊM: Trí tuệ Trạng Nguyên", desc: "Câu đố, suy luận bằng lời và trò chơi ngôn ngữ tăng hứng thú", icon: "🧩", color: "yellow" },
+    { id: 11, title: "11. Ôn tập tổng hợp", desc: "Ôn tích lũy Học kỳ I, Học kỳ II và cả năm", icon: "📚", color: "violet" }
 ];
 
 const SUBTOPIC_PALETTES = [
@@ -27,30 +27,30 @@ const SUBTOPIC_PALETTES = [
 // Lộ trình 24 tuần (Tỷ lệ Vàng 30/60) — mapping tới đúng tiểu mục con (tên "sub" đầy đủ, không phải mã X.Y)
 // Tuần 12 = Đấu trường thi Học kỳ I | Tuần 24 = Đấu trường thi Học kỳ II + Học sinh giỏi
 const roadmapConfig = {
-    1: { name: "Tuần 1: Khởi Động Bảng Chữ Cái", subIds: ["Bảng chữ cái & âm vần", "Viết hoa đầu câu", "Viết hoa tên người", "Viết hoa địa danh", "Phân biệt ch / tr", "Phân biệt s / x"], desc: "Luyện bảng chữ cái, phân biệt nguyên âm/phụ âm và quy tắc viết hoa đầu câu.", icon: "🔤" },
-    2: { name: "Tuần 2: Nắn Nót Chữ Hoa Tên Riêng", subIds: ["Bảng chữ cái & âm vần", "Viết hoa đầu câu", "Viết hoa tên người", "Viết hoa địa danh", "Phân biệt l / n", "Phân biệt r / d / gi"], desc: "Thực hành quy tắc viết hoa tên riêng người và địa danh Việt Nam.", icon: "✍️" },
-    3: { name: "Tuần 3: Hiệp Sĩ Chính Tả - ch/tr & s/x", subIds: ["Phân biệt ch / tr", "Phân biệt s / x", "Phân biệt l / n", "Phân biệt r / d / gi", "Luật chính tả c/k, g/gh, ng/ngh", "Vần có âm cuối c / t"], desc: "Phân biệt cặp phụ âm đầu dễ lẫn ch/tr và s/x qua trắc nghiệm sửa sai.", icon: "⚔️" },
-    4: { name: "Tuần 4: Hiệp Sĩ Chính Tả - l/n & r/d/gi", subIds: ["Phân biệt ch / tr", "Phân biệt s / x", "Phân biệt l / n", "Phân biệt r / d / gi", "Vần có âm cuối n / ng", "Cặp vần chứa nguyên âm đôi"], desc: "Khắc phục lỗi phát âm vùng miền l/n và r/d/gi qua điền khuyết.", icon: "⚔️" },
-    5: { name: "Tuần 5: Vương Quốc Vần Khó - c/k, g/gh, ngh", subIds: ["Luật chính tả c/k, g/gh, ng/ngh", "Vần có âm cuối c / t", "Vần có âm cuối n / ng", "Cặp vần chứa nguyên âm đôi", "Đấu trí Hỏi / Ngã", "Phân biệt ch / tr"], desc: "Quy tắc điền k, gh, ngh trước e, ê, i và phân biệt vần n/ng.", icon: "🔮" },
-    6: { name: "Tuần 6: Vương Quốc Vần Khó - Cặp Vần & Dấu Thanh", subIds: ["Luật chính tả c/k, g/gh, ng/ngh", "Vần có âm cuối c / t", "Vần có âm cuối n / ng", "Cặp vần chứa nguyên âm đôi", "Đấu trí Hỏi / Ngã", "Phân biệt s / x"], desc: "Phân biệt vần c/t, nguyên âm đôi và luyện dấu Hỏi/Ngã.", icon: "🔮" },
-    7: { name: "Tuần 7: Ôn Tập Giữa Học Kỳ I", topicIds: [1, 2, 3], subIds: [], desc: "Bốc ngẫu nhiên 30 câu ôn tập ngắt quãng kiến thức chính tả từ Tuần 1-6.", icon: "🎯" },
-    8: { name: "Tuần 8: Kho Báu Từ Vựng - Gia Đình & Trường Học", subIds: ["Vốn từ chủ đề Gia đình", "Vốn từ chủ đề Trường học", "Vốn từ chủ đề Thiên nhiên & Bốn mùa", "Vốn từ chủ đề Quê hương & Đất nước", "Từ chỉ sự vật", "Từ chỉ hoạt động, trạng thái"], desc: "Mở rộng vốn từ về người thân, trường học, thời tiết bốn mùa và đất nước.", icon: "💰" },
-    9: { name: "Tuần 9: Khu Vườn Từ Loại - Sự Vật & Hoạt Động", subIds: ["Từ chỉ sự vật", "Từ chỉ hoạt động, trạng thái", "Từ chỉ đặc điểm", "Vốn từ chủ đề Gia đình", "Vốn từ chủ đề Trường học", "Vốn từ chủ đề Thiên nhiên & Bốn mùa"], desc: "Nhận diện danh từ chỉ người, vật và động từ hoạt động, trạng thái.", icon: "🌳" },
-    10: { name: "Tuần 10: Khu Vườn Từ Loại - Từ Chỉ Đặc Điểm", subIds: ["Từ chỉ sự vật", "Từ chỉ hoạt động, trạng thái", "Từ chỉ đặc điểm", "Vốn từ chủ đề Trường học", "Vốn từ chủ đề Thiên nhiên & Bốn mùa", "Vốn từ chủ đề Quê hương & Đất nước"], desc: "Nhận diện tính từ chỉ màu sắc, hình dáng, kích thước và so sánh đặc điểm.", icon: "🌳" },
-    11: { name: "Tuần 11: Kỹ Sư Ghép Câu - Sắp Xếp Câu & Dấu Câu", subIds: ["Thực hành Dấu chấm & Dấu phẩy", "Thực hành Dấu hỏi & Dấu than", "Thử thách sắp xếp từ tạo câu", "Từ chỉ sự vật", "Từ chỉ hoạt động, trạng thái", "Từ chỉ đặc điểm"], desc: "Sử dụng dấu chấm, phẩy, hỏi, than và khôi phục trật tự câu văn.", icon: "🖊️" },
-    12: { name: "Tuần 12: Đấu Trường Thi Học Kỳ I", isExam: true, subIds: [], desc: "Bài thi thử cuối kì I bám sát ma trận 13 câu trắc nghiệm (Thời gian 40 phút).", icon: "🏆" },
-    13: { name: "Tuần 13: Thế Giới Mẫu Câu - Giới Thiệu & Hoạt Động", subIds: ["Mẫu câu 'Ai là gì?'", "Mẫu câu 'Ai làm gì?'", "Mẫu câu 'Ai thế nào?'", "Thực hành Dấu chấm & Dấu phẩy", "Thực hành Dấu hỏi & Dấu than", "Thử thách sắp xếp từ tạo câu"], desc: "Nhận diện và thực hành đặt câu theo mô hình 'Ai là gì?' và 'Ai làm gì?'.", icon: "💬" },
-    14: { name: "Tuần 14: Thế Giới Mẫu Câu - Miêu Tả 'Ai Thế Nào?'", subIds: ["Mẫu câu 'Ai là gì?'", "Mẫu câu 'Ai làm gì?'", "Mẫu câu 'Ai thế nào?'", "Chào hỏi, xin lỗi & Cảm ơn", "Viết tin nhắn & Lời nhắn", "Viết bưu thiếp yêu thương"], desc: "Nhận diện và thực hành mẫu câu miêu tả đặc điểm, trạng thái của sự vật.", icon: "💬" },
-    15: { name: "Tuần 15: Đại Sứ Giao Tiếp - Chào Hỏi & Nói Lời Đẹp", subIds: ["Chào hỏi, xin lỗi & Cảm ơn", "Viết tin nhắn & Lời nhắn", "Viết bưu thiếp yêu thương", "Đọc Thời khóa biểu & Danh sách", "Mẫu câu 'Ai là gì?'", "Mẫu câu 'Ai làm gì?'"], desc: "Luyện kỹ năng đáp lời xin lỗi, cảm ơn và viết tin nhắn ngắn hàng ngày.", icon: "🤝" },
-    16: { name: "Tuần 16: Đại Sứ Giao Tiếp - Bưu Thiếp & Thời Khóa Biểu", subIds: ["Chào hỏi, xin lỗi & Cảm ơn", "Viết tin nhắn & Lời nhắn", "Viết bưu thiếp yêu thương", "Đọc Thời khóa biểu & Danh sách", "Mẫu câu 'Ai làm gì?'", "Mẫu câu 'Ai thế nào?'"], desc: "Viết bưu thiếp yêu thương và rèn kỹ năng đọc Thời khóa biểu, Danh sách lớp.", icon: "🤝" },
-    17: { name: "Tuần 17: Ôn Tập Giữa Học Kỳ II", topicIds: [7, 8], subIds: [], desc: "Bốc ngẫu nhiên 30 câu ôn tập ngắt quãng kiến thức mẫu câu và giao tiếp.", icon: "🎯" },
-    18: { name: "Tuần 18: Nhà Thông Thái Nhỏ - Đọc Hiểu Thơ", subIds: ["Đọc hiểu văn bản Thơ", "Đọc hiểu văn bản Văn xuôi", "Suy luận & Bài học đạo đức", "Chào hỏi, xin lỗi & Cảm ơn", "Viết tin nhắn & Lời nhắn", "Viết bưu thiếp yêu thương"], desc: "Đọc hiểu thơ ngắn chuẩn SGK, trích xuất thông tin, tìm hình ảnh so sánh.", icon: "📖" },
-    19: { name: "Tuần 19: Nhà Thông Thái Nhỏ - Văn Xuôi & Bài Học", subIds: ["Đọc hiểu văn bản Thơ", "Đọc hiểu văn bản Văn xuôi", "Suy luận & Bài học đạo đức", "Bạn nhỏ bốn chân", "Cư dân nước & Côn trùng", "Vườn quả ngọt & Sắc hoa"], desc: "Đọc hiểu truyện kể, tìm chi tiết hành động và suy luận đạo đức ý nghĩa.", icon: "📖" },
-    20: { name: "Tuần 20: Trí Tuệ Trạng Nguyên - Muông Thú", subIds: ["Bạn nhỏ bốn chân", "Cư dân nước & Côn trùng", "Vườn quả ngọt & Sắc hoa", "Người bạn học tập & Đồ dùng nhà", "Bé đi đường an toàn", "Siêu trí tuệ ngôn ngữ (IQ)"], desc: "Giải câu đố dân gian tả đặc điểm ngoại hình, tiếng kêu các loài vật nuôi.", icon: "🧩" },
-    21: { name: "Tuần 21: Trí Tuệ Trạng Nguyên - Đồ Dùng & Quả Ngọt", subIds: ["Bạn nhỏ bốn chân", "Cư dân nước & Côn trùng", "Vườn quả ngọt & Sắc hoa", "Người bạn học tập & Đồ dùng nhà", "Bé đi đường an toàn", "Siêu trí tuệ ngôn ngữ (IQ)"], desc: "Giải câu đố sinh động về cây trái, muôn sắc hoa và đồ dùng gia đình.", icon: "🧩" },
-    22: { name: "Tuần 22: Trí Tuệ Trạng Nguyên - IQ Ngôn Ngữ", subIds: ["Bạn nhỏ bốn chân", "Cư dân nước & Côn trùng", "Vườn quả ngọt & Sắc hoa", "Người bạn học tập & Đồ dùng nhà", "Bé đi đường an toàn", "Siêu trí tuệ ngôn ngữ (IQ)"], desc: "Thử thách tìm từ lạc nhóm, đố chữ IQ và luật đi đường an toàn.", icon: "🧩" },
-    23: { name: "Tuần 23: Ôn Tập Tổng Hợp Cuối Năm", topicIds: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], subIds: [], desc: "Hệ thống quét ngẫu nhiên toàn diện kiến thức của cả năm học.", icon: "🎓" },
-    24: { name: "Tuần 24: Đấu Trường Thi Cuối Năm", isExam: true, subIds: [], desc: "Bài thi thử cuối kì II chuẩn ma trận 13 câu trắc nghiệm (Thời gian 40 phút).", icon: "🏆" }
+    1: { name: "Tuần 1: Ngôi nhà chữ Việt I - Bảng chữ cái & viết hoa đầu câu", focusSubIds: ["TV_2_M1_1", "TV_2_M1_2"], reviewSubIds: [], desc: "Bảng chữ cái Việt Nam, viết hoa đầu câu và đầu dòng thơ.", icon: "🔤" },
+    2: { name: "Tuần 2: Ngôi nhà chữ Việt II - Tên người & địa danh", focusSubIds: ["TV_2_M1_3", "TV_2_M1_4"], reviewSubIds: ["TV_2_M1_1", "TV_2_M1_2"], desc: "Luyện viết hoa tên người, địa danh và ôn nền tảng chữ cái.", icon: "✍️" },
+    3: { name: "Tuần 3: Hiệp sĩ âm đầu I - ch/tr & s/x", focusSubIds: ["TV_2_M2_1"], reviewTopicIds: [1], desc: "Phân biệt ch/tr và s/x trong từ, câu tự nhiên.", icon: "⚔️" },
+    4: { name: "Tuần 4: Hiệp sĩ âm đầu II - l/n & r/d/gi", focusSubIds: ["TV_2_M2_2"], reviewSubIds: ["TV_2_M2_1"], reviewTopicIds: [1], desc: "Phân biệt l/n và r/d/gi, đồng thời ôn âm đầu đã học.", icon: "⚔️" },
+    5: { name: "Tuần 5: Hiệp sĩ âm đầu III - c/k, g/gh, ng/ngh", focusSubIds: ["TV_2_M2_3", "TV_2_M2_4"], reviewSubIds: ["TV_2_M2_1", "TV_2_M2_2"], reviewTopicIds: [1], desc: "Luyện các quy tắc chính tả c/k, g/gh, ng/ngh.", icon: "⚔️" },
+    6: { name: "Tuần 6: Vương quốc vần & dấu - Âm cuối, vần phức hợp & hỏi/ngã", focusSubIds: ["TV_2_M3_1", "TV_2_M3_2", "TV_2_M3_3", "TV_2_M3_4", "TV_2_M3_5"], reviewTopicIds: [1, 2], desc: "Luyện c/t, n/ng, ch/nh, vần phức hợp và dấu hỏi/ngã.", icon: "🔮" },
+    7: { name: "Tuần 7: Ôn tập C1 - Chữ, âm đầu, vần & dấu", focusTopicIds: [1, 2, 3], desc: "Ôn đủ ba tầng: chữ/viết hoa → âm đầu → vần/dấu.", icon: "🎯" },
+    8: { name: "Tuần 8: Kho báu từ vựng - Gia đình, Trường học & Thiên nhiên", focusSubIds: ["TV_2_M4_1", "TV_2_M4_2", "TV_2_M4_3", "TV_2_M4_4"], reviewSubIds: [], desc: "Mở rộng vốn từ và nghĩa từ theo các chủ điểm gần gũi.", icon: "💰" },
+    9: { name: "Tuần 9: Từ chỉ sự vật & từ chỉ hoạt động", focusSubIds: ["TV_2_M5_1", "TV_2_M5_2"], reviewTopicIds: [4], desc: "Nhận diện và sử dụng từ chỉ sự vật, hoạt động/trạng thái.", icon: "🌳" },
+    10: { name: "Tuần 10: Từ chỉ đặc điểm & quan hệ nghĩa đơn giản", focusSubIds: ["TV_2_M5_3", "TV_2_M4_1", "TV_2_M4_2", "TV_2_M4_3", "TV_2_M4_4"], reviewSubIds: ["TV_2_M5_1", "TV_2_M5_2"], desc: "Luyện từ chỉ đặc điểm và nghĩa từ trong ngữ cảnh.", icon: "🌳" },
+    11: { name: "Tuần 11: Dấu câu, tạo câu & đoạn ngắn", focusSubIds: ["TV_2_M6_1", "TV_2_M6_2", "TV_2_M6_3"], reviewTopicIds: [5], desc: "Dùng dấu câu, sắp xếp từ thành câu và câu thành đoạn ngắn.", icon: "🖊️" },
+    12: { name: "Tuần 12: Đấu trường đánh giá số hóa HKI", isExam: true, desc: "13 câu - 40 phút - theo ma trận V6.1.", icon: "🏆" },
+    13: { name: "Tuần 13: Câu giới thiệu & câu nêu hoạt động", focusSubIds: ["TV_2_M7_1", "TV_2_M7_2"], reviewTopicIds: [5, 6], desc: "Nhận diện và tạo câu giới thiệu, câu nêu hoạt động.", icon: "💬" },
+    14: { name: "Tuần 14: Câu nêu đặc điểm & mở rộng câu", focusSubIds: ["TV_2_M7_3"], reviewSubIds: ["TV_2_M7_1", "TV_2_M7_2", "TV_2_M5_3"], desc: "Luyện câu nêu đặc điểm và ôn các kiểu câu đã học.", icon: "💬" },
+    15: { name: "Tuần 15: Đại sứ giao tiếp - Chào hỏi & nói lời phù hợp", focusSubIds: ["TV_2_M8_1"], reviewTopicIds: [6, 7], desc: "Luyện chào hỏi, cảm ơn, xin lỗi, mời, đề nghị và chúc mừng.", icon: "🤝" },
+    16: { name: "Tuần 16: Tin nhắn, thư/bưu thiếp & bảng biểu", focusSubIds: ["TV_2_M8_2", "TV_2_M8_3", "TV_2_M8_4"], reviewTopicIds: [6, 7], desc: "Luyện văn bản giao tiếp ngắn và đọc thông tin trực tiếp.", icon: "🤝" },
+    17: { name: "Tuần 17: Ôn tập giữa giai đoạn HKII", focusTopicIds: [7, 8], reviewTopicIds: [4, 5, 6], desc: "Trọng tâm câu và giao tiếp; nhắc lại từ vựng, từ ngữ và dấu câu.", icon: "🎯" },
+    18: { name: "Tuần 18: Đọc hiểu chuyên sâu - Thơ", focusSubIds: ["TV_2_M9_1"], reviewSubIds: [], desc: "Đọc thơ, tìm chi tiết, hình ảnh, cảm xúc và thông tin trực tiếp.", icon: "📖" },
+    19: { name: "Tuần 19: Đọc hiểu chuyên sâu - Truyện/văn xuôi & bài học", focusSubIds: ["TV_2_M9_2", "TV_2_M9_3"], reviewSubIds: ["TV_2_M9_1"], desc: "Đọc truyện/văn xuôi, suy luận và phản hồi văn bản.", icon: "📖" },
+    20: { name: "Tuần 20: PHẦN THÊM - Trí tuệ ngôn ngữ: Động vật & muông thú", focusSubIds: ["TV_2_M10_1", "TV_2_M10_2"], reviewSubIds: ["TV_2_M4_3", "TV_2_M5_1", "TV_2_M5_3"], desc: "Giải câu đố và suy luận bằng manh mối ngôn ngữ về động vật.", icon: "🧩" },
+    21: { name: "Tuần 21: PHẦN THÊM - Đồ dùng, cây trái & hoa", focusSubIds: ["TV_2_M10_3", "TV_2_M10_4"], reviewTopicIds: [4, 5], desc: "Suy luận qua mô tả đặc điểm, công dụng, cây trái và đồ dùng.", icon: "🧩" },
+    22: { name: "Tuần 22: PHẦN THÊM - IQ ngôn ngữ, đố chữ & bối cảnh ATGT", focusSubIds: ["TV_2_M10_5", "TV_2_M10_6"], reviewTopicIds: [1, 2, 3], desc: "Đố chữ, từ lạc nhóm và suy luận bằng lời; ATGT chỉ là bối cảnh.", icon: "🧩" },
+    23: { name: "Tuần 23: Ôn tập tổng hợp cuối năm", focusTopicIds: [1,2,3,4,5,6,7,8,9,10], desc: "Ôn toàn bộ TV_C1-TV_C6, bảo đảm độ phủ hợp lí.", icon: "🎓" },
+    24: { name: "Tuần 24: Đấu trường đánh giá số hóa cuối năm", isExam: true, desc: "13 câu - 40 phút - HKII/HSG theo ma trận V6.1.", icon: "🏆" }
 };
 
 
@@ -93,23 +93,28 @@ const examFileMap = {
     hsg:    { file: 'de_thi_tieng_viet_2.json', idPrefix: 'TV_2_M12_3', sheet: 'LichSuBaiThiHSG', label: 'Học sinh giỏi', color: 'amber' }
 };
 
-// 6 nhóm năng lực Tiếng Việt lớp 2 (TV_C1 - TV_C6)
+// 6 nhóm năng lực Tiếng Việt lớp 2 (TV_C1 - TV_C6) - chuẩn V6.1
 const SKILL_TAXONOMY = {
-    C1: { code: 'C1', sheetCol: 'TV_C1_Dung', totalCol: 'TV_C1_Tong', name: 'Chính tả & Vần', advice: 'Cần luyện thêm cách phân biệt phụ âm đầu dễ sai (ch/tr, s/x, l/n, r/d/gi) và các quy tắc chính tả c/k, g/gh, ng/ngh, dấu hỏi/ngã.' },
-    C2: { code: 'C2', sheetCol: 'TV_C2_Dung', totalCol: 'TV_C2_Tong', name: 'Từ vựng & Giao tiếp', advice: 'Rèn luyện thêm vốn từ theo chủ đề (Gia đình, Trường học, Thiên nhiên, Đất nước) và cách nói lời lịch sự đúng nghi thức.' },
-    C3: { code: 'C3', sheetCol: 'TV_C3_Dung', totalCol: 'TV_C3_Tong', name: 'Từ loại Tiếng Việt', advice: 'Cần luyện thêm cách nhận diện từ chỉ sự vật (danh từ), từ chỉ hoạt động (động từ) và từ chỉ đặc điểm (tính từ).' },
-    C4: { code: 'C4', sheetCol: 'TV_C4_Dung', totalCol: 'TV_C4_Tong', name: 'Ngữ pháp & Dấu câu', advice: 'Tăng cường luyện dùng dấu câu đúng ngữ cảnh và thực hành 3 mẫu câu Ai là gì?, Ai làm gì?, Ai thế nào?.' },
-    C5: { code: 'C5', sheetCol: 'TV_C5_Dung', totalCol: 'TV_C5_Tong', name: 'Đọc hiểu đoạn văn', advice: 'Luyện đọc hiểu thơ và văn xuôi ngắn, tập trích xuất chi tiết và rút ra bài học ý nghĩa từ câu chuyện.' },
-    C6: { code: 'C6', sheetCol: 'TV_C6_Dung', totalCol: 'TV_C6_Tong', name: 'Tư duy ngôn ngữ (IQ)', advice: 'Rèn kỹ năng giải câu đố dân gian, tìm từ lạc nhóm và các trò chơi đố chữ logic ngôn ngữ.' }
+    C1: { code: 'C1', sheetCol: 'TV_C1_Dung', totalCol: 'TV_C1_Tong', name: 'Chính tả & Âm - Vần', advice: 'Ôn theo ba tầng: chữ/viết hoa → âm đầu → vần, âm cuối và dấu thanh.' },
+    C2: { code: 'C2', sheetCol: 'TV_C2_Dung', totalCol: 'TV_C2_Tong', name: 'Từ vựng & Giao tiếp / Nói - nghe', advice: 'Mở rộng vốn từ theo chủ điểm và luyện lời nói, lời đáp, tin nhắn, thư/bưu thiếp, bảng biểu đơn giản.' },
+    C3: { code: 'C3', sheetCol: 'TV_C3_Dung', totalCol: 'TV_C3_Tong', name: 'Từ chỉ sự vật - hoạt động - đặc điểm', advice: 'Luyện nhận diện và sử dụng từ chỉ sự vật, hoạt động/trạng thái và đặc điểm theo ngôn ngữ lớp 2.' },
+    C4: { code: 'C4', sheetCol: 'TV_C4_Dung', totalCol: 'TV_C4_Tong', name: 'Câu, Dấu câu & Tạo lập văn bản ngắn', advice: 'Luyện dấu câu, câu giới thiệu/câu nêu hoạt động/câu nêu đặc điểm và sắp xếp câu thành đoạn ngắn.' },
+    C5: { code: 'C5', sheetCol: 'TV_C5_Dung', totalCol: 'TV_C5_Tong', name: 'Đọc hiểu & Phản hồi văn bản', advice: 'Luyện tìm chi tiết, hiểu nội dung, trình tự, nghĩa từ trong ngữ cảnh và suy luận đơn giản từ văn bản.' },
+    C6: { code: 'C6', sheetCol: 'TV_C6_Dung', totalCol: 'TV_C6_Tong', name: 'Tư duy ngôn ngữ - Phần thêm', advice: 'Phần thêm tăng hứng thú: câu đố, từ lạc nhóm, đố chữ và suy luận bằng manh mối ngôn ngữ.' }
 };
 
-// Mỗi CHỦ ĐỀ (kho học liệu) được gán CỐ ĐỊNH vào 1 nhóm năng lực — dùng để tính điểm
-// Tiến trình tuần (kho học liệu không có skill_tag riêng từng câu, suy ra từ chủ đề gốc).
+// Chủ đề mẹ dùng làm fallback nếu câu chưa có skill_tag; dữ liệu V6.1 đã tự mang skill_tag ở từng câu.
 const TOPIC_TO_SKILL = { 1: 'C1', 2: 'C1', 3: 'C1', 4: 'C2', 5: 'C3', 6: 'C4', 7: 'C4', 8: 'C2', 9: 'C5', 10: 'C6', 11: 'C1' };
 
-// Mỗi nhóm năng lực có tổng điểm tối đa KHÁC NHAU trong 1 đề thi 13 câu (theo đúng Ma trận đề thi V9):
-// C1=1.5đ (câu 1-3), C2=1.0đ (câu 4-5), C3=1.5đ (câu 6-7), C4=2.0đ (câu 8-9), C6=2.0đ (câu 10-11), C5=2.0đ (câu 12-13).
-const EXAM_SKILL_MAX_SCORE = { C1: 1.5, C2: 1.0, C3: 1.5, C4: 2.0, C5: 2.0, C6: 2.0 };
+// Mẫu số điểm năng lực phụ thuộc loại đề V6.1; HKI/HKII không chấm C6, HSG có C6.
+const EXAM_SKILL_MAX_SCORE_BY_SHEET = {
+    LichSuBaiThiHK1: { C1: 1.5, C2: 1.5, C3: 1.5, C4: 2.5, C5: 3.0, C6: 0.0 },
+    LichSuBaiThiHK2: { C1: 1.5, C2: 1.5, C3: 1.5, C4: 2.5, C5: 3.0, C6: 0.0 },
+    LichSuBaiThiHSG: { C1: 1.5, C2: 1.5, C3: 1.5, C4: 1.5, C5: 2.0, C6: 2.0 }
+};
+function getExamSkillMaxScoreForSheet(sheetName, skillKey) {
+    return Number(EXAM_SKILL_MAX_SCORE_BY_SHEET[sheetName]?.[skillKey] ?? 0);
+}
 
 const GREETINGS_STUDENT = [
     "Chào {name}, cô Thỏ Ngọc đố con hôm nay mình đọc và viết đúng chính tả đến đâu nhé!",
@@ -139,6 +144,14 @@ let allQuestionsFlatCache = null;
 // dù tắt tính năng này (đây chỉ tắt phần tự động phát, không tắt hẳn tính năng nghe).
 let autoSpeechEnabled = localStorage.getItem('tvl2_autoSpeechEnabled') !== 'false';
 const examsCache = {};
+
+// ==========================================
+// GIÁO ÁN - mô phỏng tiết học theo SGK Kết nối tri thức
+// ==========================================
+const GIAO_AN_DATA_FILE = 'assets/data/giao_an_tieng_viet_2.json';
+let giaoAnDataCache = null;
+let inGiaoAnFlow = false;
+let activeGiaoAnContext = { semester: 1, week: null, unitId: null };
 
 let currentUser = { name: 'Khách (Guest)', isGuest: true, tuanHienTai: 1, hoTen: 'Bé Khách', lop: '', maHS: 'KHACH', vaiTro: 'guest', loaiTaiKhoan: 'guest' };
 let currentSessionPin = '';
@@ -196,10 +209,11 @@ function normalizeQuestion(q) {
         // Kho học liệu dùng "id"; đề thi dùng "id" + "q_num" (số thứ tự câu trong đề).
         question_id: q.id ?? q.question_id ?? q.question_no ?? 0,
         question_number_in_exam: q.q_num ?? null,
-        // Kho học liệu Tiếng Việt lớp 2 chỉ có "sub" = TÊN đầy đủ tiểu mục (không có mã "X.Y" riêng),
-        // nên dùng luôn tên đầy đủ này làm định danh khớp với roadmapConfig.subIds.
+        // Kho học liệu V6.1 có cả sub_id và tên sub; Roadmap dùng sub_id để tránh lệch do đổi tên hiển thị.
+        sub_id: String(q.sub_id ?? q.subId ?? '').trim(),
         sub_topic: String(q.sub ?? q.sub_topic ?? 'Câu hỏi chung').trim(),
         sub_topic_label: String(q.sub ?? q.sub_topic ?? 'Câu hỏi chung').trim(),
+        difficulty: String(q.difficulty ?? q.level ?? 'medium').toLowerCase(),
         week: q.week ?? q.w ?? null,
         question_text: q.q ?? q.question_text ?? '',
         options: shuffledOptions,
@@ -212,6 +226,7 @@ function normalizeQuestion(q) {
         // Đề thi tự mang "tag" (TV_C1..TV_C6) cho từng câu. Kho học liệu KHÔNG có tag riêng từng câu
         // — sẽ được gán bổ sung theo chủ đề gốc (TOPIC_TO_SKILL) ngay sau bước normalize (xem fetchAllQuestionsFlat).
         skill_tag: q.skill_tag ?? q.tag ?? null,
+        secondary_tags: Array.isArray(q.secondary_tags) ? q.secondary_tags : [],
         source_topic_id: q.source_topic_id ?? null,
         // Đề thi dùng field "points"; kho học liệu hằng ngày không có điểm riêng từng câu (mặc định 0.5).
         diem: Number(q.diem ?? q.points ?? q.score ?? 0.5),
@@ -262,31 +277,66 @@ function buildTrickyChoices(correctAnswer, sameGroupPool, allPool, count = 3) {
     return shuffleArray([correctAnswer, ...picks]);
 }
 
+function takeUniqueRandom_(pool, count, usedIds) {
+    const usable = shuffleArray((pool || []).filter(q => !usedIds.has(String(q.question_id))));
+    const picked = usable.slice(0, Math.max(0, count));
+    picked.forEach(q => usedIds.add(String(q.question_id)));
+    return picked;
+}
+
+function getRoadmapScopedPool_(config, kind) {
+    if (!allQuestionsFlatCache) return [];
+    const subIds = config[`${kind}SubIds`] || [];
+    const topicIds = config[`${kind}TopicIds`] || [];
+    return allQuestionsFlatCache.filter(q =>
+        (subIds.length && subIds.includes(q.sub_id)) ||
+        (topicIds.length && topicIds.includes(Number(q.source_topic_id)))
+    );
+}
+
 function getQuestionsForWeek343(weekNumber) {
     const config = roadmapConfig[weekNumber];
     if (!config || !allQuestionsFlatCache) return [];
 
-    // Tuần ôn tập (7, 17, 23) dùng "topicIds": quét toàn bộ câu hỏi của các Chuyên đề đó.
-    // Tuần học thường dùng "subIds": chỉ lấy đúng các tiểu mục (tên đầy đủ) đã khai báo.
-    let pool;
-    if (Array.isArray(config.topicIds) && config.topicIds.length) {
-        pool = allQuestionsFlatCache.filter(q => config.topicIds.includes(Number(q.source_topic_id)));
-    } else {
-        pool = allQuestionsFlatCache.filter(q => config.subIds.includes(q.sub_topic));
+    const focusPool = getRoadmapScopedPool_(config, 'focus');
+    const reviewPool = getRoadmapScopedPool_(config, 'review');
+    const allScoped = [...focusPool, ...reviewPool];
+    if (!allScoped.length) return [];
+
+    const difficultyTargets = { easy: 9, medium: 12, hard: 9 };
+    const focusTargets = { easy: 6, medium: 8, hard: 6 }; // 20/30 ≈ 67% trọng tâm
+    const used = new Set();
+    const selected = [];
+
+    for (const difficulty of ['easy', 'medium', 'hard']) {
+        const totalNeed = difficultyTargets[difficulty];
+        const focusNeed = reviewPool.length ? focusTargets[difficulty] : totalNeed;
+        const focusDiff = focusPool.filter(q => q.difficulty === difficulty);
+        const reviewDiff = reviewPool.filter(q => q.difficulty === difficulty);
+
+        let picked = takeUniqueRandom_(focusDiff, focusNeed, used);
+        selected.push(...picked);
+
+        let remain = totalNeed - picked.length;
+        if (remain > 0) {
+            picked = takeUniqueRandom_(reviewDiff, remain, used);
+            selected.push(...picked);
+            remain -= picked.length;
+        }
+        if (remain > 0) {
+            const fallbackSameDifficulty = allScoped.filter(q => q.difficulty === difficulty);
+            picked = takeUniqueRandom_(fallbackSameDifficulty, remain, used);
+            selected.push(...picked);
+            remain -= picked.length;
+        }
     }
 
-    if (pool.length < 30) return shuffleArray([...pool]);
-    
-    const size = pool.length;
-    const basket1 = pool.slice(0, Math.floor(size * 0.35));
-    const basket2 = pool.slice(Math.floor(size * 0.35), Math.floor(size * 0.75));
-    const basket3 = pool.slice(Math.floor(size * 0.75));
-    
-    const easy = shuffleArray([...basket1]).slice(0, 9);
-    const medium = shuffleArray([...basket2]).slice(0, 12);
-    const hard = shuffleArray([...basket3]).slice(0, 9);
-    
-    return shuffleArray([...easy, ...medium, ...hard]);
+    // Nếu một mức khó tạm thiếu dữ liệu, bù từ pool hợp lệ nhưng không lặp câu.
+    if (selected.length < 30) {
+        selected.push(...takeUniqueRandom_(allScoped, 30 - selected.length, used));
+    }
+
+    return shuffleArray(selected.slice(0, 30));
 }
 
 function capitalizeFirstLetter(val) {
@@ -367,6 +417,9 @@ async function loadExamDataFile(file) {
                     exam_id: String(ex.exam_id ?? `${cat.sub_id}_EX?`),
                     exam_title: ex.exam_name || ex.exam_title || `${cat.sub_name} - Đề số ${ex.exam_id}`,
                     time_limit: ex.time_limit,
+                    exam_category: ex.exam_category || null,
+                    matrix_version: ex.matrix_version || null,
+                    skill_max_score: ex.skill_max_score || null,
                     questions: (ex.questions || ex.qs || []).map(normalizeQuestion).filter(Boolean)
                 });
             });
@@ -436,6 +489,344 @@ async function renderDashboardGrid() {
     container.innerHTML = html;
 }
 
+
+const GIAO_AN_LESSON_TYPE = {
+    reading: { label: 'Đọc', icon: '📖', cls: 'pink' },
+    handwriting: { label: 'Tập viết', icon: '✍️', cls: 'sky' },
+    speaking_listening: { label: 'Nói & nghe', icon: '🎙️', cls: 'emerald' },
+    spelling: { label: 'Chính tả', icon: '📝', cls: 'rose' },
+    vocabulary_sentence: { label: 'Luyện từ & câu', icon: '💬', cls: 'indigo' },
+    writing: { label: 'Luyện viết đoạn', icon: '🖊️', cls: 'amber' },
+    review: { label: 'Ôn tập', icon: '🎯', cls: 'violet' }
+};
+
+async function loadGiaoAnData() {
+    if (giaoAnDataCache) return giaoAnDataCache;
+    const res = await fetch(GIAO_AN_DATA_FILE);
+    if (!res.ok) throw new Error('Không thể tải dữ liệu Giáo án');
+    giaoAnDataCache = await res.json();
+    return giaoAnDataCache;
+}
+
+function getGiaoAnSemester_(data, semesterNumber) {
+    return (data?.semesters || []).find(s => Number(s.semester) === Number(semesterNumber)) || null;
+}
+
+function findGiaoAnWeek_(data, semesterNumber, weekNumber) {
+    const sem = getGiaoAnSemester_(data, semesterNumber);
+    return (sem?.weeks || []).find(w => Number(w.week) === Number(weekNumber)) || null;
+}
+
+function findGiaoAnUnit_(data, unitId) {
+    for (const sem of (data?.semesters || [])) {
+        for (const week of (sem.weeks || [])) {
+            const unit = (week.units || []).find(u => String(u.unit_id) === String(unitId));
+            if (unit) return { sem, week, unit };
+        }
+    }
+    return null;
+}
+
+function getGiaoAnProgressKey_() {
+    const id = currentUser?.maHS || 'KHACH';
+    return `tv2_giao_an_completed_${String(id).toUpperCase()}`;
+}
+
+function getGiaoAnCompletedSet_() {
+    try {
+        const raw = JSON.parse(localStorage.getItem(getGiaoAnProgressKey_()) || '[]');
+        return new Set(Array.isArray(raw) ? raw : []);
+    } catch (e) { return new Set(); }
+}
+
+function saveGiaoAnCompletedSet_(setObj) {
+    localStorage.setItem(getGiaoAnProgressKey_(), JSON.stringify([...setObj]));
+}
+
+async function openGiaoAnHub(semesterNumber = 1) {
+    stopSpeaking();
+    clearInterval(quizTimerInterval);
+    // Giáo án là nội dung Premium giống Tiến trình tuần và Mini Game:
+    // chỉ Admin / Trial / VIP được truy cập.
+    if (!hasPremiumAccess()) {
+        showPremiumGate('Giáo án', '📘');
+        return;
+    }
+    inGiaoAnFlow = true;
+    inMiniGameFlow = false;
+    activeExamContext = null;
+    activeRoadmapContext = null;
+    activeTopicId = null;
+    pendingTopicQuiz = null;
+    activeGiaoAnContext = { semester: Number(semesterNumber) || 1, week: null, unitId: null };
+    updateNavTabs('Giáo án', '📘', null);
+    switchAppView('view-giao-an-hub');
+    showLoadingOverlay('Đang mở Giáo án Tiếng Việt 2...');
+    try {
+        const data = await loadGiaoAnData();
+        renderGiaoAnHub_(data, activeGiaoAnContext.semester);
+    } catch (err) {
+        alert(`Không thể mở Giáo án: ${err.message}`);
+    } finally {
+        hideLoadingOverlay();
+    }
+}
+
+function renderGiaoAnHub_(data, semesterNumber) {
+    const tabs = document.getElementById('giao-an-semester-tabs');
+    const grid = document.getElementById('giao-an-week-grid');
+    const subtitle = document.getElementById('giao-an-hub-subtitle');
+    if (!tabs || !grid) return;
+
+    tabs.innerHTML = (data.semesters || []).map(sem => {
+        const active = Number(sem.semester) === Number(semesterNumber);
+        return `<button onclick="openGiaoAnHub(${sem.semester})" class="px-4 py-2 rounded-xl text-xs md:text-sm font-extrabold border transition-all ${active ? 'bg-sky-500 text-white border-sky-500 shadow-md' : 'bg-white text-sky-700 border-sky-200 hover:bg-sky-50'}">Học kỳ ${sem.semester}</button>`;
+    }).join('');
+
+    const sem = getGiaoAnSemester_(data, semesterNumber);
+    if (!sem) { grid.innerHTML = '<p class="text-slate-400 font-bold">Chưa có dữ liệu học kỳ này.</p>'; return; }
+    if (subtitle) subtitle.textContent = `Học kỳ ${sem.semester} · Tuần ${sem.week_from}-${sem.week_to} · mô phỏng các tiết học theo Kết nối tri thức`;
+
+    const completed = getGiaoAnCompletedSet_();
+    grid.innerHTML = (sem.weeks || []).map(w => {
+        const units = w.units || [];
+        const done = units.filter(u => completed.has(u.unit_id)).length;
+        const pct = units.length ? Math.round(done * 100 / units.length) : 0;
+        return `<button onclick="openGiaoAnWeek(${sem.semester}, ${w.week})" class="text-left pastel-card p-3.5 border-2 border-sky-100 hover:border-sky-300 transition-all group min-h-[118px]">
+            <div class="flex items-center justify-between gap-2">
+                <div class="flex items-center gap-2"><span class="text-2xl group-hover:scale-110 transition-transform">📅</span><span class="font-black text-sky-700">Tuần ${w.week}</span></div>
+                <span class="text-[10px] font-black px-2 py-0.5 rounded-full bg-sky-50 text-sky-700 border border-sky-100">${units.length} bài/tiết</span>
+            </div>
+            <p class="text-xs text-slate-500 font-bold mt-2">${done}/${units.length} đã hoàn thành</p>
+            <div class="w-full h-2 bg-sky-100 rounded-full mt-2 overflow-hidden"><div class="h-full bg-sky-400 rounded-full" style="width:${pct}%"></div></div>
+        </button>`;
+    }).join('');
+}
+
+async function openGiaoAnWeek(semesterNumber, weekNumber) {
+    stopSpeaking();
+    inGiaoAnFlow = true;
+    activeGiaoAnContext = { semester: Number(semesterNumber), week: Number(weekNumber), unitId: null };
+    updateNavTabs('Giáo án', '📘', `Tuần ${weekNumber}`);
+    switchAppView('view-giao-an-week');
+    showLoadingOverlay(`Đang mở Giáo án Tuần ${weekNumber}...`);
+    try {
+        const data = await loadGiaoAnData();
+        const week = findGiaoAnWeek_(data, semesterNumber, weekNumber);
+        renderGiaoAnWeek_(week);
+    } catch (err) {
+        alert(`Không thể mở tuần học: ${err.message}`);
+    } finally { hideLoadingOverlay(); }
+}
+
+function renderGiaoAnWeek_(week) {
+    const title = document.getElementById('giao-an-week-title');
+    const list = document.getElementById('giao-an-unit-list');
+    if (!week || !list) return;
+    if (title) title.textContent = `Tuần ${week.week}`;
+    const completed = getGiaoAnCompletedSet_();
+    list.innerHTML = (week.units || []).map((u, idx) => {
+        const meta = GIAO_AN_LESSON_TYPE[u.lesson_type] || { label: u.lesson_type || 'Bài học', icon: '📘', cls: 'sky' };
+        const span = Array.isArray(u.period_span) ? u.period_span : [];
+        const periodText = span.length > 1 && span[0] !== span[span.length - 1] ? `Tiết ${span[0]}-${span[span.length - 1]}` : `Tiết ${span[0] || idx + 1}`;
+        const done = completed.has(u.unit_id);
+        const firstObj = (u.objectives || [])[0] || 'Học theo tiến trình giáo án.';
+        return `<button onclick="openGiaoAnUnit('${u.unit_id}')" class="w-full text-left bg-white border-2 ${done ? 'border-emerald-200' : 'border-sky-100'} hover:border-sky-300 rounded-2xl p-3.5 shadow-sm transition-all group">
+            <div class="flex items-start justify-between gap-3">
+                <div class="flex items-start gap-3 min-w-0">
+                    <div class="w-10 h-10 rounded-xl bg-${meta.cls}-50 border border-${meta.cls}-100 flex items-center justify-center text-xl shrink-0">${meta.icon}</div>
+                    <div class="min-w-0">
+                        <div class="flex flex-wrap items-center gap-1.5"><span class="font-black text-slate-800 text-sm md:text-base">${escapeHtml(u.title)}</span><span class="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-slate-50 text-slate-500 border border-slate-200">${periodText}</span></div>
+                        <div class="text-[11px] font-extrabold text-${meta.cls}-600 mt-0.5">${meta.label}</div>
+                        <p class="text-xs text-slate-500 font-semibold mt-1 line-clamp-2">${escapeHtml(firstObj)}</p>
+                    </div>
+                </div>
+                <span class="shrink-0 text-sm">${done ? '✅' : '›'}</span>
+            </div>
+        </button>`;
+    }).join('');
+}
+
+async function openGiaoAnUnit(unitId) {
+    stopSpeaking();
+    inGiaoAnFlow = true;
+    showLoadingOverlay('Đang mở tiết học...');
+    try {
+        const data = await loadGiaoAnData();
+        const found = findGiaoAnUnit_(data, unitId);
+        if (!found) throw new Error('Không tìm thấy bài học');
+        activeGiaoAnContext = { semester: Number(found.sem.semester), week: Number(found.week.week), unitId: String(unitId) };
+        updateNavTabs('Giáo án', '📘', `Tuần ${found.week.week}`, found.unit.title);
+        renderGiaoAnLesson_(found.unit, found.week.week);
+        switchAppView('view-giao-an-lesson');
+    } catch (err) {
+        alert(`Không thể mở bài học: ${err.message}`);
+    } finally { hideLoadingOverlay(); }
+}
+
+function renderGiaoAnLesson_(unit, weekNumber) {
+    const meta = GIAO_AN_LESSON_TYPE[unit.lesson_type] || { label: 'Bài học', icon: '📘', cls: 'sky' };
+    const title = document.getElementById('giao-an-lesson-title');
+    const metaEl = document.getElementById('giao-an-lesson-meta');
+    const objectives = document.getElementById('giao-an-objectives');
+    const sections = document.getElementById('giao-an-sections');
+    const practiceBtn = document.getElementById('giao-an-extra-practice-btn');
+    if (!sections) return;
+    if (title) title.textContent = unit.title;
+    if (metaEl) metaEl.innerHTML = `${meta.icon} ${meta.label} · Tuần ${weekNumber} · ${formatPeriodSpan_(unit.period_span)}`;
+    if (objectives) objectives.innerHTML = (unit.objectives || []).map(x => `<li>${escapeHtml(x)}</li>`).join('');
+    sections.innerHTML = (unit.sections || []).map((s, idx) => renderGiaoAnSection_(unit, s, idx)).join('');
+    if (practiceBtn) {
+        const canPractice = unit.extra_practice && Array.isArray(unit.extra_practice.sub_ids) && unit.extra_practice.sub_ids.length;
+        practiceBtn.classList.toggle('hidden', !canPractice);
+        if (canPractice) practiceBtn.textContent = `🧩 ${unit.extra_practice.label || 'Luyện thêm'}`;
+    }
+    updateGiaoAnCompleteButton_(unit.unit_id);
+}
+
+function formatPeriodSpan_(span) {
+    const arr = Array.isArray(span) ? span : [];
+    if (!arr.length) return 'Tiết học';
+    return arr.length > 1 && arr[0] !== arr[arr.length - 1] ? `Tiết ${arr[0]}-${arr[arr.length - 1]}` : `Tiết ${arr[0]}`;
+}
+
+function renderGiaoAnSection_(unit, section, index) {
+    const icons = { warmup:'🌟', discovery:'🔎', teacher_guidance:'👩‍🏫', guided_practice:'🤝', independent_practice:'✏️', application:'🌱', summary:'💡' };
+    const icon = icons[section.type] || '📘';
+    const teacher = section.teacher_text ? `<div class="bg-sky-50/70 border border-sky-100 rounded-xl p-3 text-sm text-slate-700 font-semibold leading-relaxed">${escapeHtml(section.teacher_text)}</div>` : '';
+    const activities = (section.activities || []).map(a => renderGiaoAnActivity_(unit, a)).join('');
+    return `<section class="bg-white border border-sky-100 rounded-2xl p-3.5 md:p-4 shadow-sm space-y-3">
+        <div class="flex items-center gap-2"><span class="text-xl">${icon}</span><h3 class="font-black text-slate-800 text-sm md:text-base">${index + 1}. ${escapeHtml(section.title || 'Hoạt động')}</h3></div>
+        ${teacher}
+        <div class="space-y-2.5">${activities}</div>
+    </section>`;
+}
+
+function renderGiaoAnActivity_(unit, a) {
+    const type = a.activity_type || 'activity';
+    const prompt = escapeHtml(a.prompt || '');
+    const base = 'rounded-xl border p-3';
+    if (type === 'tap_word') {
+        const chips = (a.items || []).map(item => `<button type="button" onclick="this.classList.toggle('bg-pink-500');this.classList.toggle('text-white');this.classList.toggle('border-pink-500')" class="px-3 py-1.5 rounded-full bg-white border border-pink-200 text-pink-700 font-extrabold text-xs transition-all">${escapeHtml(item)}</button>`).join('');
+        return `<div class="${base} bg-pink-50/50 border-pink-100"><p class="font-bold text-sm text-slate-700">👆 ${prompt}</p><div class="flex flex-wrap gap-2 mt-2">${chips}</div></div>`;
+    }
+    if (type === 'single_choice') {
+        const opts = (a.options || []).map((op, idx) => `<button onclick="handleGiaoAnChoice('${unit.unit_id}','${a.activity_id}',${idx})" class="ga-choice w-full text-left px-3 py-2 rounded-xl bg-white border border-sky-200 hover:bg-sky-50 text-sm font-bold">${String.fromCharCode(65+idx)}. ${escapeHtml(op)}</button>`).join('');
+        return `<div id="ga-act-${safeDomId_(unit.unit_id)}-${safeDomId_(a.activity_id)}" class="${base} bg-sky-50/50 border-sky-100"><p class="font-bold text-sm text-slate-700">❓ ${prompt}</p><div class="grid gap-2 mt-2">${opts}</div><div class="ga-feedback hidden mt-2 text-xs font-extrabold"></div></div>`;
+    }
+    if (type === 'self_check') {
+        const checks = (a.checks || []).map(x => `<label class="flex items-start gap-2 text-xs font-bold text-slate-600"><input type="checkbox" class="mt-0.5 accent-emerald-500"> <span>${escapeHtml(x)}</span></label>`).join('');
+        return `<div class="${base} bg-emerald-50/50 border-emerald-100"><p class="font-bold text-sm text-slate-700">✅ ${prompt}</p><div class="grid gap-1.5 mt-2">${checks}</div></div>`;
+    }
+    if (type === 'listen') {
+        const src = a.media?.audio || '';
+        return `<div class="${base} bg-purple-50/50 border-purple-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2"><p class="font-bold text-sm text-slate-700">🎧 ${prompt}</p><button onclick="playGiaoAnAudio('${escapeJsString_(src)}','${escapeJsString_(a.prompt || '')}')" class="px-3 py-2 bg-purple-100 hover:bg-purple-200 text-purple-700 rounded-xl font-extrabold text-xs shrink-0">🔊 Nghe cô đọc</button></div>`;
+    }
+    if (type === 'observe') {
+        const src = a.media?.image || '';
+        const img = src ? `<div class="mt-2 rounded-xl overflow-hidden bg-white border border-sky-100"><img src="${escapeHtml(src)}" alt="Minh họa" class="max-h-64 w-full object-contain" onerror="this.parentElement.classList.add('hidden')"></div>` : '';
+        return `<div class="${base} bg-sky-50/40 border-sky-100"><p class="font-bold text-sm text-slate-700">🖼️ ${prompt}</p>${img}</div>`;
+    }
+    if (type === 'summary_card') return `<div class="${base} bg-amber-50 border-amber-200"><p class="font-black text-sm text-amber-900">💡 ${prompt}</p></div>`;
+    if (type === 'write_offline') return `<div class="${base} bg-amber-50/50 border-amber-100"><p class="font-bold text-sm text-slate-700">✍️ ${prompt}</p><p class="text-[11px] text-amber-700 font-bold mt-1">Con thực hành vào vở/bảng như một tiết học trên lớp nhé.</p></div>`;
+    if (type === 'read_aloud') return `<div class="${base} bg-rose-50/50 border-rose-100"><p class="font-bold text-sm text-slate-700">📣 ${prompt}</p></div>`;
+    if (type === 'speak') return `<div class="${base} bg-emerald-50/50 border-emerald-100"><p class="font-bold text-sm text-slate-700">🎙️ ${prompt}</p></div>`;
+    if (type === 'sequence') {
+        const items = (a.items || []).map((x,i) => `<span class="px-2.5 py-1 rounded-lg bg-white border border-indigo-100 text-xs font-extrabold text-indigo-700">${String(x).startsWith('IMG_') ? `Tranh ${i+1}` : escapeHtml(x)}</span>`).join('');
+        return `<div class="${base} bg-indigo-50/50 border-indigo-100"><p class="font-bold text-sm text-slate-700">🔢 ${prompt}</p><div class="flex flex-wrap gap-2 mt-2">${items}</div></div>`;
+    }
+    if (type === 'match') {
+        const groups = [...new Set((a.pairs || []).map(p => p.group))];
+        const rows = (a.pairs || []).map((p,i) => `<div class="flex items-center gap-2"><span class="flex-1 text-xs font-bold text-slate-700">${escapeHtml(p.item)}</span><select data-correct="${escapeHtml(p.group)}" class="ga-match-select px-2 py-1.5 rounded-lg border border-indigo-200 bg-white text-xs font-bold"><option value="">Chọn nhóm</option>${groups.map(g=>`<option value="${escapeHtml(g)}">${escapeHtml(g)}</option>`).join('')}</select></div>`).join('');
+        return `<div id="ga-act-${safeDomId_(unit.unit_id)}-${safeDomId_(a.activity_id)}" class="${base} bg-indigo-50/50 border-indigo-100"><p class="font-bold text-sm text-slate-700">🔗 ${prompt}</p><div class="grid gap-2 mt-2">${rows}</div><button onclick="checkGiaoAnMatch('${unit.unit_id}','${a.activity_id}')" class="mt-2 px-3 py-1.5 bg-indigo-500 text-white rounded-lg text-xs font-extrabold">Kiểm tra</button><div class="ga-feedback hidden mt-2 text-xs font-extrabold"></div></div>`;
+    }
+    return `<div class="${base} bg-slate-50 border-slate-200"><p class="font-bold text-sm text-slate-700">📘 ${prompt}</p></div>`;
+}
+
+function safeDomId_(s) { return String(s || '').replace(/[^a-zA-Z0-9_-]/g, '_'); }
+function escapeJsString_(s) { return String(s || '').replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/\r?\n/g,' '); }
+
+async function playGiaoAnAudio(src, fallbackText) {
+    stopSpeaking();
+    if (!src) return speakVietnamese(fallbackText || '', 0.94);
+    const audio = new Audio(src);
+    audio.onerror = () => speakVietnamese(fallbackText || '', 0.94);
+    try { await audio.play(); } catch (e) { speakVietnamese(fallbackText || '', 0.94); }
+}
+
+async function handleGiaoAnChoice(unitId, activityId, selectedIndex) {
+    const data = await loadGiaoAnData();
+    const found = findGiaoAnUnit_(data, unitId);
+    if (!found) return;
+    const activity = (found.unit.sections || []).flatMap(s => s.activities || []).find(a => String(a.activity_id) === String(activityId));
+    if (!activity) return;
+    const box = document.getElementById(`ga-act-${safeDomId_(unitId)}-${safeDomId_(activityId)}`);
+    if (!box) return;
+    const buttons = [...box.querySelectorAll('.ga-choice')];
+    buttons.forEach((b, i) => {
+        b.disabled = true;
+        if (i === Number(activity.answer)) b.classList.add('bg-emerald-100','border-emerald-400','text-emerald-800');
+        else if (i === Number(selectedIndex)) b.classList.add('bg-rose-100','border-rose-400','text-rose-800');
+    });
+    const ok = Number(selectedIndex) === Number(activity.answer);
+    const fb = box.querySelector('.ga-feedback');
+    if (fb) {
+        fb.textContent = ok ? (activity.feedback?.correct || 'Đúng rồi!') : (activity.feedback?.retry || 'Con xem lại gợi ý rồi thử nhớ nhé.');
+        fb.className = `ga-feedback mt-2 text-xs font-extrabold ${ok ? 'text-emerald-700' : 'text-rose-700'}`;
+    }
+}
+
+function checkGiaoAnMatch(unitId, activityId) {
+    const box = document.getElementById(`ga-act-${safeDomId_(unitId)}-${safeDomId_(activityId)}`);
+    if (!box) return;
+    const selects = [...box.querySelectorAll('.ga-match-select')];
+    const ok = selects.length && selects.every(s => s.value && s.value === s.dataset.correct);
+    const fb = box.querySelector('.ga-feedback');
+    selects.forEach(s => s.classList.toggle('border-emerald-400', s.value === s.dataset.correct));
+    if (fb) {
+        fb.textContent = ok ? 'Đúng rồi! Các từ đã được nối đúng nhóm.' : 'Con kiểm tra lại những từ chưa đúng nhóm nhé.';
+        fb.className = `ga-feedback mt-2 text-xs font-extrabold ${ok ? 'text-emerald-700' : 'text-rose-700'}`;
+    }
+}
+
+function markCurrentGiaoAnComplete() {
+    const unitId = activeGiaoAnContext.unitId;
+    if (!unitId) return;
+    const completed = getGiaoAnCompletedSet_();
+    completed.add(unitId);
+    saveGiaoAnCompletedSet_(completed);
+    updateGiaoAnCompleteButton_(unitId);
+    const el = document.getElementById('giao-an-complete-note');
+    if (el) { el.textContent = 'Đã hoàn thành tiết học trên thiết bị này ✅'; el.classList.remove('hidden'); }
+}
+
+function updateGiaoAnCompleteButton_(unitId) {
+    const btn = document.getElementById('giao-an-complete-btn');
+    if (!btn) return;
+    const done = getGiaoAnCompletedSet_().has(unitId);
+    btn.textContent = done ? '✅ Đã hoàn thành tiết học' : '✓ Hoàn thành tiết học';
+    btn.classList.toggle('bg-emerald-500', done);
+    btn.classList.toggle('bg-sky-500', !done);
+}
+
+async function startGiaoAnExtraPractice() {
+    const data = await loadGiaoAnData();
+    const found = findGiaoAnUnit_(data, activeGiaoAnContext.unitId);
+    if (!found || !found.unit.extra_practice) return;
+    await fetchAllTopicsData();
+    const subIds = found.unit.extra_practice.sub_ids || [];
+    const count = Number(found.unit.extra_practice.suggested_count || 5);
+    const pool = (allQuestionsFlatCache || []).filter(q => subIds.includes(q.sub_id));
+    if (!pool.length) return alert('Kho luyện thêm cho bài này đang được bổ sung.');
+    const qs = shuffleArray(pool).slice(0, Math.min(count, pool.length));
+    activeExamContext = null;
+    activeRoadmapContext = null;
+    pendingTopicQuiz = null;
+    practiceCycleRawPool = [...pool];
+    updateNavTabs('Giáo án', '📘', `Tuần ${found.week.week}`, `${found.unit.title} · Luyện thêm`);
+    startTopicQuiz(0, `${found.unit.title} - Luyện thêm`, qs, null);
+}
+
 async function startRandomExam(categoryKey) {
     stopSpeaking();
     // Dữ liệu đề thi Tiếng Việt 2 không có field "exam_category" dạng chữ — phân loại HK1/HK2/HSG
@@ -457,15 +848,23 @@ async function startRandomExam(categoryKey) {
         const examLabel = examFileMap[categoryKey]?.label || 'Đề thi';
         const examTitle = exam.exam_title || exam.name || exam.title || `${examLabel} - Đề số ${examIndex + 1}`;
 
-        activeExamContext = { categoryKey, examIndex, examTitle };
+        activeExamContext = {
+            categoryKey,
+            examIndex,
+            examTitle,
+            examCategory: exam.exam_category || categoryKey,
+            matrixVersion: exam.matrix_version || 'TV2_V6_1',
+            skillMaxScore: exam.skill_max_score || null
+        };
         activeRoadmapContext = null;
         pendingTopicQuiz = null;
 
-        const questions = Array.isArray(exam.questions) && exam.questions.length ? exam.questions : [];
+        const questions = Array.isArray(exam.questions) && exam.questions.length ? [...exam.questions] : [];
         if (!questions.length) return alert('Đề thi này chưa có câu hỏi, bé chọn đề khác nhé!');
+        questions.sort((a, b) => Number(a.question_number_in_exam || 999) - Number(b.question_number_in_exam || 999));
 
         updateNavTabs("12. Đấu trường đề thi", "🏆", examTitle);
-        startTopicQuiz(0, examTitle, shuffleArray(questions), null);
+        startTopicQuiz(0, examTitle, questions, null);
     } catch (err) {
         hideLoadingOverlay();
         alert(`Không thể tải đề thi: ${err.message}`);
@@ -498,6 +897,7 @@ function updateExamTimerDisplay() {
 function openExamHub() {
     stopSpeaking();
     inMiniGameFlow = false;
+    inGiaoAnFlow = false;
     if (!hasPremiumAccess()) {
         showPremiumGate('Đấu trường đề thi', '🏆');
         return;
@@ -626,7 +1026,9 @@ function updateNavTabs(level2Title, level2Icon, level3Title, level4Title) {
 function returnToTopicLecture() {
     stopSpeaking();
     clearInterval(quizTimerInterval);
-    if (activeExamContext) {
+    if (inGiaoAnFlow) {
+        openGiaoAnHub(activeGiaoAnContext.semester || 1);
+    } else if (activeExamContext) {
         openExamHub();
     } else if (activeRoadmapContext) {
         openRoadmap();
@@ -640,7 +1042,7 @@ function returnToTopicLecture() {
 
 function switchAppView(viewId) {
     stopSpeaking();
-    ['view-dashboard-grid', 'view-lecture', 'view-quiz', 'view-roadmap', 'view-minigame-hub', 'view-game-play', 'view-exam-hub', 'view-result'].forEach(id => {
+    ['view-dashboard-grid', 'view-giao-an-hub', 'view-giao-an-week', 'view-giao-an-lesson', 'view-lecture', 'view-quiz', 'view-roadmap', 'view-minigame-hub', 'view-game-play', 'view-exam-hub', 'view-result'].forEach(id => {
         const el = document.getElementById(id);
         if (!el) return;
         if (id === viewId) el.classList.remove('hidden');
@@ -652,6 +1054,7 @@ function goHome() {
     stopSpeaking();
     clearInterval(quizTimerInterval);
     inMiniGameFlow = false;
+    inGiaoAnFlow = false;
     updateNavTabs(null, null, null);
     switchAppView('view-dashboard-grid');
 }
@@ -924,7 +1327,10 @@ function updateUserInfoBox() {
     const box = document.getElementById('user-info-box');
     if (!box) return;
 
-    // Khóa Bản đồ tuần chỉ hiện với Khách / Regular; ẩn khi Admin / Trial / VIP đã có quyền Premium.
+    // Khóa các nội dung Premium chỉ hiện với Khách / Regular;
+    // ẩn khi Admin / Trial / VIP đã có quyền Premium.
+    const giaoAnLock = document.getElementById('giao-an-lock-icon');
+    if (giaoAnLock) giaoAnLock.classList.toggle('hidden', hasPremiumAccess());
     const roadmapLock = document.getElementById('roadmap-lock-icon');
     if (roadmapLock) roadmapLock.classList.toggle('hidden', hasPremiumAccess());
     const minigameLock = document.getElementById('minigame-lock-icon');
@@ -934,8 +1340,7 @@ function updateUserInfoBox() {
         box.innerHTML = `
             <div class="flex items-center gap-1.5">
                 <span class="text-amber-600 font-extrabold text-xs px-1.5">Khách</span>
-                <button onclick="showAuthScreen('login')" class="px-3 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-xl font-extrabold text-xs pastel-btn">Đăng nhập</button>
-                <button onclick="showAuthScreen('register')" class="px-3 py-2 bg-white text-purple-600 border border-purple-200 rounded-xl font-extrabold text-xs pastel-btn">Đăng ký</button>
+                <button onclick="showAuthScreen('login')" class="px-3 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-xl font-extrabold text-xs pastel-btn whitespace-nowrap">Sign in/up</button>
             </div>`;
         return;
     }
@@ -987,6 +1392,7 @@ function clickProgressOrExam(type) {
 function openTopic(topicNum, topicName, icon) {
     stopSpeaking();
     inMiniGameFlow = false;
+    inGiaoAnFlow = false;
     if (Number(topicNum) === 11 && !hasPremiumAccess()) {
         showPremiumGate('11. Ôn tập tổng hợp', '🎮');
         return;
@@ -1094,6 +1500,7 @@ function handleNextExamFromReport() {
 function openRoadmap() {
     stopSpeaking();
     inMiniGameFlow = false;
+    inGiaoAnFlow = false;
     updateNavTabs("Bản đồ tiến trình tuần", "🗺️", null);
     renderRoadmapSVG();
     switchAppView('view-roadmap');
@@ -1182,7 +1589,7 @@ async function selectRoadmapWeek(weekNum) {
 
     if (config.isExam) return openExamHub();
 
-    activeRoadmapContext = { week: weekNum, topicId: config.subIds[0] || '1.1', chuDe: config.name };
+    activeRoadmapContext = { week: weekNum, topicId: (config.focusSubIds && config.focusSubIds[0]) || `W${weekNum}`, chuDe: config.name };
     pendingTopicQuiz = null; activeExamContext = null;
     const topicLabel = config.name.replace(/^Tuần\s*\d+:\s*/i, '');
     updateNavTabs("Tiến trình tuần", "📅", `Tuần ${weekNum}`, topicLabel);
@@ -1762,9 +2169,23 @@ function renderReportTopicsBreakdown() {
     let html = '';
     skillKeys.forEach(k => {
         const data = skillStats[k];
+        const hasData = isRoadmap ? data.total > 0 : data.maxScore > 0;
+        if (!hasData) {
+            html += `
+                <div class="bg-slate-50/80 border border-slate-200 rounded-2xl p-3 flex flex-col justify-between space-y-2">
+                    <div class="flex items-center justify-between gap-2">
+                        <span class="font-black text-slate-700 text-xs sm:text-sm">${SKILL_TAXONOMY[k].name}</span>
+                        <span class="px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-slate-100 text-slate-500 border border-slate-200">Chưa đủ dữ liệu</span>
+                    </div>
+                    <div class="text-xs font-bold text-slate-400">Bài này chưa có câu hỏi đo nhóm năng lực này.</div>
+                    <div class="w-full bg-slate-200 rounded-full h-2 overflow-hidden"></div>
+                </div>`;
+            return;
+        }
+
         const pct = isRoadmap
-            ? (data.total > 0 ? Math.round((data.correct / data.total) * 100) : 0)
-            : (data.maxScore > 0 ? Math.round((data.earnedScore / data.maxScore) * 100) : 0);
+            ? Math.round((data.correct / data.total) * 100)
+            : Math.round((data.earnedScore / data.maxScore) * 100);
         const isPassed = pct >= 50;
         const badgeClass = isPassed ? 'bg-amber-100 text-amber-800 border border-amber-200' : 'bg-rose-50 text-rose-700 border border-rose-200';
         const badgeText = isPassed ? 'Đạt yêu cầu' : 'Cần luyện tập thêm';
@@ -1786,8 +2207,7 @@ function renderReportTopicsBreakdown() {
                 <div class="w-full bg-pink-100 rounded-full h-2 overflow-hidden">
                     <div class="${barColor} h-full rounded-full transition-all duration-500" style="width: ${pct}%"></div>
                 </div>
-            </div>
-        `;
+            </div>`;
     });
     container.innerHTML = html;
 }
@@ -2099,7 +2519,7 @@ function renderHistoryReport(rows, sheetName) {
         });
     } else if (rows.length) {
         // Đề thi: % = tổng điểm đạt được / tổng điểm TỐI ĐA CÓ THỂ của nhóm đó qua các đề đã làm
-        // (mỗi nhóm năng lực có mẫu số khác nhau theo đúng Ma trận đề thi V9 — xem EXAM_SKILL_MAX_SCORE).
+        // (mỗi nhóm năng lực có mẫu số khác nhau theo đúng Ma trận đề thi V6.1 — xem EXAM_SKILL_MAX_SCORE_BY_SHEET).
         skillKeys.forEach((k) => {
             const colName = SKILL_TAXONOMY[k].sheetCol;
             let sumEarned = 0, examCount = 0;
@@ -2110,9 +2530,10 @@ function renderHistoryReport(rows, sheetName) {
                     examCount++;
                 }
             });
-            if (examCount > 0) {
-                const maxPossible = examCount * EXAM_SKILL_MAX_SCORE[k];
-                skillAverages[k] = maxPossible > 0 ? Math.min(100, Math.round((sumEarned / maxPossible) * 100)) : 0;
+            const maxPerExam = getExamSkillMaxScoreForSheet(sheetName, k);
+            if (examCount > 0 && maxPerExam > 0) {
+                const maxPossible = examCount * maxPerExam;
+                skillAverages[k] = Math.min(100, Math.round((sumEarned / maxPossible) * 100));
                 touchedSkills.push(k);
             }
         });
@@ -2748,11 +3169,11 @@ function ensureMiniGameThemeStyles() {
 
 const MINIGAME_LIST = [
     { id: 'spelling-knight', title: '1. Hiệp sĩ Chính tả', desc: 'Vượt cổng từ đúng - giữ khiên thật lâu', icon: '⚔️', ready: true },
-    { id: 'rhyme-treasure', title: '2. Kho báu âm vần', desc: 'Ghép âm đầu, vần và thanh', icon: '💎', ready: false },
-    { id: 'word-garden', title: '3. Khu vườn từ loại', desc: 'Phân loại sự vật - hoạt động - đặc điểm', icon: '🌳', ready: false },
+    { id: 'family-activity', title: '2. Hoạt động gia đình', desc: 'Quan sát tranh - đọc hiểu - suy luận tình huống gia đình', icon: '🏡', ready: true },
+    { id: 'word-garden', title: '3. Khu vườn từ loại', desc: 'Phân loại từ chỉ sự vật - hoạt động - đặc điểm', icon: '🌳', ready: false },
     { id: 'sentence-train-tv', title: '4. Đoàn tàu ghép câu', desc: 'Xếp từ thành câu hoàn chỉnh', icon: '🚂', ready: false },
     { id: 'punctuation-doctor', title: '5. Bác sĩ dấu câu', desc: 'Tìm và chữa dấu câu chưa đúng', icon: '🩺', ready: false },
-    { id: 'sentence-world', title: '6. Thế giới mẫu câu', desc: 'Ai là gì? Ai làm gì? Ai thế nào?', icon: '💬', ready: false },
+    { id: 'sentence-world', title: '6. Thế giới câu hay', desc: 'Câu giới thiệu - nêu hoạt động - nêu đặc điểm', icon: '💬', ready: false },
     { id: 'vocab-fishing', title: '7. Câu cá từ vựng', desc: 'Câu đúng từ theo từng chủ đề', icon: '🎣', ready: false },
     { id: 'reading-detective', title: '8. Thám tử đọc hiểu', desc: 'Truy tìm chi tiết trong đoạn đọc', icon: '🕵️', ready: false },
     { id: 'riddle-arena', title: '9. Đấu trường câu đố', desc: 'Giải đố dân gian và IQ ngôn ngữ', icon: '🏆', ready: false },
@@ -2763,6 +3184,7 @@ const MINIGAME_LIST = [
 
 function openMiniGameHub() {
     stopSpeaking();
+    inGiaoAnFlow = false;
     if (!hasPremiumAccess()) {
         showPremiumGate('Mini Game', '🎮');
         return;
@@ -2794,7 +3216,8 @@ function openMiniGameHub() {
 }
 
 const GAME_SCRIPT_MAP = {
-    'spelling-knight': 'assets/js/games/hiep-si-chinh-ta.js?v=tv2mg1'
+    'spelling-knight': 'assets/js/games/hiep-si-chinh-ta.js?v=tv2mg1',
+    'family-activity': 'assets/js/games/hoat-dong-gia-dinh.js?v=tv2mg2'
 };
 const loadedGameScripts = {};
 
@@ -2846,6 +3269,8 @@ async function openGamePlay(gameId) {
 
     if (gameId === 'spelling-knight' && typeof startSpellingKnightGame === 'function') {
         startSpellingKnightGame();
+    } else if (gameId === 'family-activity' && typeof startFamilyActivityGame === 'function') {
+        startFamilyActivityGame();
     }
 }
 
