@@ -3167,19 +3167,90 @@ function ensureMiniGameThemeStyles() {
     document.head.appendChild(style);
 }
 
+
+// Loa nghe lai cau hoi dung chung cho TOAN BO mini game.
+// Quy uoc khuyen nghi cho file game: gan data-minigame-question vao phan tu chua cau hoi
+// hoac goi setMiniGameQuestionAudio(text) moi khi doi cau.
+let miniGameReplayText = '';
+let miniGameReplayRate = 0.94;
+
+function setMiniGameQuestionAudio(text, rate = 0.94) {
+    miniGameReplayText = String(text || '').replace(/\s+/g, ' ').trim();
+    miniGameReplayRate = Number.isFinite(Number(rate)) ? Number(rate) : 0.94;
+}
+
+function detectMiniGameQuestionText() {
+    const box = document.getElementById('game-play-container');
+    if (!box) return '';
+
+    const directSelectors = [
+        '[data-minigame-question]',
+        '#game-question', '#game-current-question', '#sk-question', '#fa-question',
+        '.game-question', '.mg-question', '.question-text'
+    ];
+    for (const selector of directSelectors) {
+        const el = box.querySelector(selector);
+        const text = String(el?.innerText || el?.textContent || '').replace(/\s+/g, ' ').trim();
+        if (text) return text;
+    }
+
+    // Fallback cho cac game cu chua gan marker: tim dong co dang cau hoi/nhiem vu.
+    const candidates = [...box.querySelectorAll('div,p,h2,h3,h4,span')]
+        .map(el => String(el.innerText || el.textContent || '').replace(/\s+/g, ' ').trim())
+        .filter(text => text.length >= 12 && text.length <= 260)
+        .filter(text => !/^(⭐|🔥|🏆|Lượt\s*\d+|Chính xác|Chưa đúng|Điểm|Sắp ra mắt)/i.test(text));
+
+    const questionLike = candidates.find(text =>
+        /[?？]$/.test(text) ||
+        /^(Vì sao|Tại sao|Nếu |Câu nào|Từ nào|Tiếng nào|Chọn |Tìm |Điền |Ghép |Sắp xếp |Bé |Em |Hãy )/i.test(text)
+    );
+    return questionLike || candidates[0] || '';
+}
+
+function speakMiniGameQuestion() {
+    const liveText = detectMiniGameQuestionText();
+    const text = liveText || miniGameReplayText;
+    if (!text) return;
+    setMiniGameQuestionAudio(text, miniGameReplayRate);
+    if (typeof speakVietnamese === 'function') speakVietnamese(text, miniGameReplayRate);
+}
+
+function ensureMiniGameReplayButton() {
+    const title = document.getElementById('game-play-title');
+    const header = title?.parentElement;
+    if (!header || document.getElementById('btn-minigame-replay')) return;
+
+    const backBtn = header.querySelector('button');
+    const btn = document.createElement('button');
+    btn.id = 'btn-minigame-replay';
+    btn.type = 'button';
+    btn.title = 'Nghe lại câu hỏi';
+    btn.setAttribute('aria-label', 'Nghe lại câu hỏi');
+    btn.onclick = speakMiniGameQuestion;
+    btn.className = 'w-9 h-9 md:w-10 md:h-10 rounded-full bg-sky-50 hover:bg-sky-100 text-sky-600 border-2 border-sky-200 shadow-sm pastel-btn shrink-0 flex items-center justify-center';
+    btn.innerHTML = '<i class="fa-solid fa-volume-high text-sm md:text-base"></i>';
+
+    if (backBtn) header.insertBefore(btn, backBtn);
+    else header.appendChild(btn);
+}
+
+window.setMiniGameQuestionAudio = setMiniGameQuestionAudio;
+window.speakMiniGameQuestion = speakMiniGameQuestion;
+
 const MINIGAME_LIST = [
     { id: 'spelling-knight', title: '1. Hiệp sĩ Chính tả', desc: 'Vượt cổng từ đúng - giữ khiên thật lâu', icon: '⚔️', ready: true },
     { id: 'family-activity', title: '2. Hoạt động gia đình', desc: 'Quan sát tranh - đọc hiểu - suy luận tình huống gia đình', icon: '🏡', ready: true },
-    { id: 'word-garden', title: '3. Khu vườn từ loại', desc: 'Phân loại từ chỉ sự vật - hoạt động - đặc điểm', icon: '🌳', ready: false },
-    { id: 'sentence-train-tv', title: '4. Đoàn tàu ghép câu', desc: 'Xếp từ thành câu hoàn chỉnh', icon: '🚂', ready: false },
-    { id: 'punctuation-doctor', title: '5. Bác sĩ dấu câu', desc: 'Tìm và chữa dấu câu chưa đúng', icon: '🩺', ready: false },
-    { id: 'sentence-world', title: '6. Thế giới câu hay', desc: 'Câu giới thiệu - nêu hoạt động - nêu đặc điểm', icon: '💬', ready: false },
-    { id: 'vocab-fishing', title: '7. Câu cá từ vựng', desc: 'Câu đúng từ theo từng chủ đề', icon: '🎣', ready: false },
-    { id: 'reading-detective', title: '8. Thám tử đọc hiểu', desc: 'Truy tìm chi tiết trong đoạn đọc', icon: '🕵️', ready: false },
-    { id: 'riddle-arena', title: '9. Đấu trường câu đố', desc: 'Giải đố dân gian và IQ ngôn ngữ', icon: '🏆', ready: false },
-    { id: 'message-postman', title: '10. Bưu tá tí hon', desc: 'Chọn lời nhắn và giao tiếp phù hợp', icon: '💌', ready: false },
-    { id: 'word-maze', title: '11. Mê cung từ ngữ', desc: 'Tìm đường qua các từ đúng', icon: '🌀', ready: false },
-    { id: 'teacher-says-tv', title: '12. Cô Thỏ ra lệnh', desc: 'Phản xạ đọc hiểu thật nhanh', icon: '🤖', ready: false }
+    { id: 'why-family', title: '3. Vì sao thế nhỉ?', desc: 'Suy luận nguyên nhân - kết quả - nếu thì - xử lí logic', icon: '🤔', ready: true },
+    { id: 'use-it-right', title: '4. Dùng sao cho đúng?', desc: 'Công năng - chất liệu - cách dùng - an toàn với đồ vật quanh nhà', icon: '🧰', ready: true },
+    { id: 'sentence-train-tv', title: '5. Đoàn tàu ghép câu', desc: 'Xếp từ thành câu hoàn chỉnh', icon: '🚂', ready: false },
+    { id: 'punctuation-doctor', title: '6. Bác sĩ dấu câu', desc: 'Tìm và chữa dấu câu chưa đúng', icon: '🩺', ready: false },
+    { id: 'sentence-world', title: '7. Thế giới câu hay', desc: 'Câu giới thiệu - nêu hoạt động - nêu đặc điểm', icon: '💬', ready: false },
+    { id: 'vocab-fishing', title: '8. Câu cá từ vựng', desc: 'Câu đúng từ theo từng chủ đề', icon: '🎣', ready: false },
+    { id: 'reading-detective', title: '9. Thám tử đọc hiểu', desc: 'Truy tìm chi tiết trong đoạn đọc', icon: '🕵️', ready: false },
+    { id: 'riddle-arena', title: '10. Đấu trường câu đố', desc: 'Giải đố dân gian và IQ ngôn ngữ', icon: '🏆', ready: false },
+    { id: 'message-postman', title: '11. Bưu tá tí hon', desc: 'Chọn lời nhắn và giao tiếp phù hợp', icon: '💌', ready: false },
+    { id: 'word-maze', title: '12. Mê cung từ ngữ', desc: 'Tìm đường qua các từ đúng', icon: '🌀', ready: false },
+    { id: 'teacher-says-tv', title: '13. Cô Thỏ ra lệnh', desc: 'Phản xạ đọc hiểu thật nhanh', icon: '🤖', ready: false }
 ];
 
 function openMiniGameHub() {
@@ -3217,7 +3288,9 @@ function openMiniGameHub() {
 
 const GAME_SCRIPT_MAP = {
     'spelling-knight': 'assets/js/games/hiep-si-chinh-ta.js?v=tv2mg1',
-    'family-activity': 'assets/js/games/hoat-dong-gia-dinh.js?v=tv2mg2'
+    'family-activity': 'assets/js/games/hoat-dong-gia-dinh.js?v=tv2mg2',
+    'why-family': 'assets/js/games/vi-sao-the-nhi.js?v=tv2mg3',
+    'use-it-right': 'assets/js/games/dung-sao-cho-dung.js?v=tv2mg4'
 };
 const loadedGameScripts = {};
 
@@ -3254,6 +3327,9 @@ async function openGamePlay(gameId) {
     if (title) title.innerHTML = `<span>${game.icon}</span><span>${game.title}</span>`;
     updateNavTabs('Mini Game', '🎮', game.title);
     switchAppView('view-game-play');
+    miniGameReplayText = '';
+    miniGameReplayRate = 0.94;
+    ensureMiniGameReplayButton();
 
     const scriptSrc = GAME_SCRIPT_MAP[gameId];
     if (scriptSrc) {
@@ -3271,6 +3347,10 @@ async function openGamePlay(gameId) {
         startSpellingKnightGame();
     } else if (gameId === 'family-activity' && typeof startFamilyActivityGame === 'function') {
         startFamilyActivityGame();
+    } else if (gameId === 'why-family' && typeof startWhyFamilyGame === 'function') {
+        startWhyFamilyGame();
+    } else if (gameId === 'use-it-right' && typeof startUseItRightGame === 'function') {
+        startUseItRightGame();
     }
 }
 
