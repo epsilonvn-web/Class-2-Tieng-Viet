@@ -301,7 +301,7 @@ function faRender(){
   <div class="flex items-center justify-between gap-2 mb-2">
     <div class="flex items-center gap-2 min-w-0">
       <span class="px-3 py-1.5 rounded-full bg-white/90 border border-pink-200 text-pink-600 font-black text-xs md:text-sm shrink-0">🏡 Lượt ${faRound}</span>
-      <div class="font-black text-teal-700 text-sm md:text-lg leading-tight">${question}</div>
+      <div id="fa-question" data-minigame-question class="font-black text-teal-700 text-sm md:text-lg leading-tight">${question}</div>
     </div>
     <div class="flex gap-1.5 shrink-0">
       <span class="px-2.5 py-1.5 rounded-full bg-amber-50 border border-amber-200 text-amber-700 font-black text-xs md:text-sm">⭐ ${faScore}</span>
@@ -317,6 +317,7 @@ function faRender(){
     </div>
   </div>
 </div>`;
+  if(typeof setMiniGameQuestionAudio==='function')setMiniGameQuestionAudio(question,0.94);
   if(typeof speakVietnamese==='function')setTimeout(()=>speakVietnamese(question,0.94),150);
 }
 
