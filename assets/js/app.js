@@ -3246,10 +3246,10 @@ const MINIGAME_LIST = [
     { id: 'traffic-why', title: '6. Vì sao phải thế?', desc: 'Tìm nguyên nhân - hậu quả phía sau các quy tắc an toàn giao thông', icon: '🧠', ready: true },
     { id: 'traffic-vehicle', title: '7. Chọn phương tiện nào?', desc: 'Cân nhắc quãng đường - số người - mục đích để chọn cách di chuyển phù hợp', icon: '🚌', ready: true },
     { id: 'traffic-handle', title: '8. Xử lý thế nào?', desc: 'Phản xạ với tình huống bất ngờ: nếu - thì - việc nào nên làm trước', icon: '⚡', ready: true },
-    { id: 'mall-where', title: '9. Mua gì ở đâu?', desc: 'Khám phá khu vực và công dụng trong trung tâm thương mại', icon: '🛍️', ready: false },
-    { id: 'mall-choice', title: '10. Chọn món phù hợp', desc: 'Đọc nhu cầu và lựa chọn sản phẩm hợp lý', icon: '🧺', ready: false },
-    { id: 'mall-route', title: '11. Tìm đường trong trung tâm', desc: 'Đọc biển chỉ dẫn - chọn lộ trình - xử lý khi bị lạc', icon: '🗺️', ready: false },
-    { id: 'mall-smart', title: '12. Mua sắm thông minh', desc: 'Xếp hàng - thanh toán - an toàn - ứng xử nơi công cộng', icon: '💳', ready: false }
+    { id: 'mall-where', title: '9. Đi đâu – mua gì?', desc: 'Nhận nhiệm vụ - đọc không gian - tìm đúng khu vực trong trung tâm thương mại', icon: '🗺️', ready: true },
+    { id: 'mall-choice', title: '10. Chọn sao cho hợp lý?', desc: 'Cân nhắc nhu cầu - công dụng - an toàn - tránh lãng phí khi mua sắm', icon: '🛒', ready: true },
+    { id: 'mall-talk', title: '11. Nói sao ở nơi công cộng?', desc: 'Hỏi đường - nhờ giúp - xếp hàng - giao tiếp lịch sự với nhân viên và mọi người', icon: '💬', ready: true },
+    { id: 'mall-handle', title: '12. Bé xử lý thế nào?', desc: 'Phản xạ với tình huống bị lạc - sàn ướt - thang cuốn - lối thoát hiểm và an toàn nơi công cộng', icon: '🚨', ready: true }
 ];
 
 function openMiniGameHub() {
@@ -3293,7 +3293,11 @@ const GAME_SCRIPT_MAP = {
     'traffic-safe': 'assets/js/games/di-sao-cho-dung.js?v=tv2mg5',
     'traffic-why': 'assets/js/games/vi-sao-phai-the.js?v=tv2mg6',
     'traffic-vehicle': 'assets/js/games/chon-phuong-tien-nao.js?v=tv2mg7',
-    'traffic-handle': 'assets/js/games/xu-ly-the-nao.js?v=tv2mg8'
+    'traffic-handle': 'assets/js/games/xu-ly-the-nao.js?v=tv2mg8',
+    'mall-where': 'assets/js/games/di-dau-mua-gi.js?v=tv2mg9',
+    'mall-choice': 'assets/js/games/chon-sao-cho-hop-ly.js?v=tv2mg10',
+    'mall-talk': 'assets/js/games/noi-sao-noi-cong-cong.js?v=tv2mg11',
+    'mall-handle': 'assets/js/games/be-xu-ly-the-nao.js?v=tv2mg12'
 };
 const loadedGameScripts = {};
 
@@ -3321,7 +3325,7 @@ async function openGamePlay(gameId) {
             icon: game.icon,
             showAuth: false,
             message: `<strong>${escapeHtml(game.title)}</strong> đang được cô Thỏ Ngọc chuẩn bị.<br>Con quay lại sau nhé!`,
-            note: '🎮 Các game Gia đình và Giao thông đã sẵn sàng!'
+            note: '🎮 Cả 12 Mini Game đã sẵn sàng!'
         });
         return;
     }
@@ -3362,6 +3366,14 @@ async function openGamePlay(gameId) {
         startTrafficVehicleGame();
     } else if (gameId === 'traffic-handle' && typeof startTrafficHandleGame === 'function') {
         startTrafficHandleGame();
+    } else if (gameId === 'mall-where' && typeof startMallWhereGame === 'function') {
+        startMallWhereGame();
+    } else if (gameId === 'mall-choice' && typeof startMallChoiceGame === 'function') {
+        startMallChoiceGame();
+    } else if (gameId === 'mall-talk' && typeof startMallTalkGame === 'function') {
+        startMallTalkGame();
+    } else if (gameId === 'mall-handle' && typeof startMallHandleGame === 'function') {
+        startMallHandleGame();
     }
 
 }
