@@ -3238,20 +3238,18 @@ window.setMiniGameQuestionAudio = setMiniGameQuestionAudio;
 window.speakMiniGameQuestion = speakMiniGameQuestion;
 
 const MINIGAME_LIST = [
-    { id: 'spelling-knight', title: '1. Hiệp sĩ Chính tả', desc: 'Vượt cổng từ đúng - giữ khiên thật lâu', icon: '⚔️', ready: true },
-    { id: 'family-activity', title: '2. Hoạt động gia đình', desc: 'Quan sát tranh - đọc hiểu - suy luận tình huống gia đình', icon: '🏡', ready: true },
-    { id: 'why-family', title: '3. Vì sao thế nhỉ?', desc: 'Suy luận nguyên nhân - kết quả - nếu thì - xử lí logic', icon: '🤔', ready: true },
-    { id: 'use-it-right', title: '4. Dùng sao cho đúng?', desc: 'Công năng - chất liệu - cách dùng - an toàn với đồ vật quanh nhà', icon: '🧰', ready: true },
-    { id: 'say-it-nicely', title: '5. Nói sao cho hay?', desc: 'Chào hỏi - cảm ơn - xin lỗi - nhờ giúp - đáp lời thật phù hợp', icon: '🗣️', ready: true },
-    { id: 'sentence-train-tv', title: '6. Đoàn tàu ghép câu', desc: 'Xếp từ thành câu hoàn chỉnh', icon: '🚂', ready: false },
-    { id: 'punctuation-doctor', title: '7. Bác sĩ dấu câu', desc: 'Tìm và chữa dấu câu chưa đúng', icon: '🩺', ready: false },
-    { id: 'sentence-world', title: '8. Thế giới câu hay', desc: 'Câu giới thiệu - nêu hoạt động - nêu đặc điểm', icon: '💬', ready: false },
-    { id: 'vocab-fishing', title: '9. Câu cá từ vựng', desc: 'Câu đúng từ theo từng chủ đề', icon: '🎣', ready: false },
-    { id: 'reading-detective', title: '10. Thám tử đọc hiểu', desc: 'Truy tìm chi tiết trong đoạn đọc', icon: '🕵️', ready: false },
-    { id: 'riddle-arena', title: '11. Đấu trường câu đố', desc: 'Giải đố dân gian và IQ ngôn ngữ', icon: '🏆', ready: false },
-    { id: 'message-postman', title: '12. Bưu tá tí hon', desc: 'Chọn lời nhắn và giao tiếp phù hợp', icon: '💌', ready: false },
-    { id: 'word-maze', title: '13. Mê cung từ ngữ', desc: 'Tìm đường qua các từ đúng', icon: '🌀', ready: false },
-    { id: 'teacher-says-tv', title: '14. Cô Thỏ ra lệnh', desc: 'Phản xạ đọc hiểu thật nhanh', icon: '🤖', ready: false }
+    { id: 'family-activity', title: '1. Hoạt động gia đình', desc: 'Quan sát tranh - đọc hiểu - suy luận tình huống gia đình', icon: '🏡', ready: true },
+    { id: 'why-family', title: '2. Vì sao thế nhỉ?', desc: 'Suy luận nguyên nhân - kết quả - nếu thì - xử lí logic', icon: '🤔', ready: true },
+    { id: 'use-it-right', title: '3. Dùng sao cho đúng?', desc: 'Công năng - chất liệu - cách dùng - an toàn với đồ vật quanh nhà', icon: '🧰', ready: true },
+    { id: 'say-it-nicely', title: '4. Nói sao cho hay?', desc: 'Chào hỏi - cảm ơn - xin lỗi - nhờ giúp - đáp lời thật phù hợp', icon: '🗣️', ready: true },
+    { id: 'traffic-safe', title: '5. Đi sao cho đúng?', desc: 'Chọn hành động đúng luật và an toàn trong từng tình huống giao thông', icon: '🚦', ready: true },
+    { id: 'traffic-why', title: '6. Vì sao phải thế?', desc: 'Tìm nguyên nhân - hậu quả phía sau các quy tắc an toàn giao thông', icon: '🧠', ready: true },
+    { id: 'traffic-vehicle', title: '7. Chọn phương tiện nào?', desc: 'Cân nhắc quãng đường - số người - mục đích để chọn cách di chuyển phù hợp', icon: '🚌', ready: true },
+    { id: 'traffic-handle', title: '8. Xử lý thế nào?', desc: 'Phản xạ với tình huống bất ngờ: nếu - thì - việc nào nên làm trước', icon: '⚡', ready: true },
+    { id: 'mall-where', title: '9. Mua gì ở đâu?', desc: 'Khám phá khu vực và công dụng trong trung tâm thương mại', icon: '🛍️', ready: false },
+    { id: 'mall-choice', title: '10. Chọn món phù hợp', desc: 'Đọc nhu cầu và lựa chọn sản phẩm hợp lý', icon: '🧺', ready: false },
+    { id: 'mall-route', title: '11. Tìm đường trong trung tâm', desc: 'Đọc biển chỉ dẫn - chọn lộ trình - xử lý khi bị lạc', icon: '🗺️', ready: false },
+    { id: 'mall-smart', title: '12. Mua sắm thông minh', desc: 'Xếp hàng - thanh toán - an toàn - ứng xử nơi công cộng', icon: '💳', ready: false }
 ];
 
 function openMiniGameHub() {
@@ -3288,11 +3286,14 @@ function openMiniGameHub() {
 }
 
 const GAME_SCRIPT_MAP = {
-    'spelling-knight': 'assets/js/games/hiep-si-chinh-ta.js?v=tv2mg1',
-    'family-activity': 'assets/js/games/hoat-dong-gia-dinh.js?v=tv2mg2',
-    'why-family': 'assets/js/games/vi-sao-the-nhi.js?v=tv2mg3',
-    'use-it-right': 'assets/js/games/dung-sao-cho-dung.js?v=tv2mg4',
-    'say-it-nicely': 'assets/js/games/noi-sao-cho-hay.js?v=tv2mg5'
+    'family-activity': 'assets/js/games/hoat-dong-gia-dinh.js?v=tv2mg1',
+    'why-family': 'assets/js/games/vi-sao-the-nhi.js?v=tv2mg2',
+    'use-it-right': 'assets/js/games/dung-sao-cho-dung.js?v=tv2mg3',
+    'say-it-nicely': 'assets/js/games/noi-sao-cho-hay.js?v=tv2mg4',
+    'traffic-safe': 'assets/js/games/di-sao-cho-dung.js?v=tv2mg5',
+    'traffic-why': 'assets/js/games/vi-sao-phai-the.js?v=tv2mg6',
+    'traffic-vehicle': 'assets/js/games/chon-phuong-tien-nao.js?v=tv2mg7',
+    'traffic-handle': 'assets/js/games/xu-ly-the-nao.js?v=tv2mg8'
 };
 const loadedGameScripts = {};
 
@@ -3320,7 +3321,7 @@ async function openGamePlay(gameId) {
             icon: game.icon,
             showAuth: false,
             message: `<strong>${escapeHtml(game.title)}</strong> đang được cô Thỏ Ngọc chuẩn bị.<br>Con quay lại sau nhé!`,
-            note: '🎮 Hiệp sĩ Chính tả đã có thể chơi ngay rồi!'
+            note: '🎮 Các game Gia đình và Giao thông đã sẵn sàng!'
         });
         return;
     }
@@ -3345,9 +3346,7 @@ async function openGamePlay(gameId) {
         }
     }
 
-    if (gameId === 'spelling-knight' && typeof startSpellingKnightGame === 'function') {
-        startSpellingKnightGame();
-    } else if (gameId === 'family-activity' && typeof startFamilyActivityGame === 'function') {
+    if (gameId === 'family-activity' && typeof startFamilyActivityGame === 'function') {
         startFamilyActivityGame();
     } else if (gameId === 'why-family' && typeof startWhyFamilyGame === 'function') {
         startWhyFamilyGame();
@@ -3355,7 +3354,16 @@ async function openGamePlay(gameId) {
         startUseItRightGame();
     } else if (gameId === 'say-it-nicely' && typeof startSayItNicelyGame === 'function') {
         startSayItNicelyGame();
+    } else if (gameId === 'traffic-safe' && typeof startTrafficSafeGame === 'function') {
+        startTrafficSafeGame();
+    } else if (gameId === 'traffic-why' && typeof startTrafficWhyGame === 'function') {
+        startTrafficWhyGame();
+    } else if (gameId === 'traffic-vehicle' && typeof startTrafficVehicleGame === 'function') {
+        startTrafficVehicleGame();
+    } else if (gameId === 'traffic-handle' && typeof startTrafficHandleGame === 'function') {
+        startTrafficHandleGame();
     }
+
 }
 
 document.addEventListener('DOMContentLoaded', () => {
