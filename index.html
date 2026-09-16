@@ -103,7 +103,7 @@
         @media (max-width: 767px) {
             .app-main-header {
                 display: grid !important;
-                grid-template-columns: auto minmax(0, 1fr) auto auto;
+                grid-template-columns: auto minmax(0, 1fr) auto auto auto;
                 grid-template-rows: auto auto;
                 gap: 0.35rem 0.35rem !important;
                 align-items: center;
@@ -138,16 +138,32 @@
                 column-gap: 0 !important;
             }
 
-            #btn-progress-header {
+            #btn-giao-an-header {
                 grid-row: 1;
                 grid-column: 3;
                 justify-self: end;
             }
 
-            #btn-minigame-header {
+            #btn-progress-header {
                 grid-row: 1;
                 grid-column: 4;
                 justify-self: end;
+            }
+
+            #btn-minigame-header {
+                grid-row: 1;
+                grid-column: 5;
+                justify-self: end;
+            }
+
+            #btn-giao-an-header,
+            #btn-progress-header,
+            #btn-minigame-header {
+                width: 2.5rem !important;
+                min-width: 2.5rem !important;
+                padding-left: 0 !important;
+                padding-right: 0 !important;
+                justify-content: center !important;
             }
 
             #btn-toggle-autospeech {
@@ -167,7 +183,7 @@
 
             #user-info-box {
                 grid-row: 2;
-                grid-column: 2 / 5;
+                grid-column: 2 / 6;
                 justify-self: end;
                 width: auto;
                 min-width: 0;
@@ -322,16 +338,30 @@
 
                     <div id="user-info-box" class="text-xs font-bold text-gray-600 text-right"></div>
 
-                    <button id="btn-progress-header" onclick="clickProgressOrExam('progress')" class="relative overflow-visible h-10 px-2.5 md:px-3 bg-gradient-to-r from-purple-500 to-indigo-500 text-white font-extrabold rounded-xl text-xs md:text-sm shadow-md hover:from-purple-600 hover:to-indigo-600 flex items-center space-x-1 md:space-x-1.5 shrink-0 transition-shadow duration-200 hover:shadow-[0_0_14px_rgba(129,74,240,0.65)]">
-                        <i class="fa-solid fa-map-location-dot"></i>
-                        <span class="md:hidden">Tuần</span>
-                        <span class="hidden md:inline">Bản đồ tuần</span>
+                    <button id="btn-giao-an-header" onclick="openGiaoAnHub(1)" title="Giáo án" class="relative overflow-visible h-10 md:h-12 w-10 md:w-auto md:min-w-[76px] px-0 md:px-3 bg-gradient-to-r from-sky-500 to-cyan-500 text-white font-extrabold rounded-xl text-xs md:text-sm shadow-md hover:from-sky-600 hover:to-cyan-600 flex items-center justify-center shrink-0 transition-shadow duration-200 hover:shadow-[0_0_14px_rgba(14,165,233,0.65)]">
+                        <span class="md:hidden relative inline-flex w-6 h-6 items-center justify-center" aria-hidden="true">
+                            <i class="fa-solid fa-book-open text-[17px]"></i>
+                            <i class="fa-solid fa-pen-nib absolute -right-0.5 -bottom-0.5 text-[9px] -rotate-12 drop-shadow"></i>
+                        </span>
+                        <span class="hidden md:flex flex-col items-center justify-center leading-[1.05]">
+                            <span>Giáo</span><span>án</span>
+                        </span>
+                        <span id="giao-an-lock-icon" class="hidden absolute -top-2 -right-1 text-[11px] leading-none drop-shadow-sm">🔒</span>
+                    </button>
+
+                    <button id="btn-progress-header" onclick="clickProgressOrExam('progress')" title="Tiến trình tuần" class="relative overflow-visible h-10 md:h-12 w-10 md:w-auto md:min-w-[84px] px-0 md:px-3 bg-gradient-to-r from-purple-500 to-indigo-500 text-white font-extrabold rounded-xl text-xs md:text-sm shadow-md hover:from-purple-600 hover:to-indigo-600 flex items-center justify-center shrink-0 transition-shadow duration-200 hover:shadow-[0_0_14px_rgba(129,74,240,0.65)]">
+                        <i class="fa-solid fa-map-location-dot md:hidden text-[17px]" aria-hidden="true"></i>
+                        <span class="hidden md:flex flex-col items-center justify-center leading-[1.05]">
+                            <span>Tiến trình</span><span>tuần</span>
+                        </span>
                         <span id="roadmap-lock-icon" class="hidden absolute -top-2 -right-1 text-[11px] leading-none drop-shadow-sm">🔒</span>
                     </button>
-                    <button id="btn-minigame-header" onclick="openMiniGameHub()" class="relative overflow-visible h-10 px-2.5 md:px-3 bg-gradient-to-r from-teal-500 to-emerald-500 text-white font-extrabold rounded-xl text-xs md:text-sm shadow-md hover:from-teal-600 hover:to-emerald-600 flex items-center space-x-1 md:space-x-1.5 shrink-0 transition-shadow duration-200 hover:shadow-[0_0_14px_rgba(20,184,166,0.65)]">
-                        <i class="fa-solid fa-gamepad"></i>
-                        <span class="md:hidden">Game</span>
-                        <span class="hidden md:inline">Mini Game</span>
+
+                    <button id="btn-minigame-header" onclick="openMiniGameHub()" title="Mini game" class="relative overflow-visible h-10 md:h-12 w-10 md:w-auto md:min-w-[76px] px-0 md:px-3 bg-gradient-to-r from-teal-500 to-emerald-500 text-white font-extrabold rounded-xl text-xs md:text-sm shadow-md hover:from-teal-600 hover:to-emerald-600 flex items-center justify-center shrink-0 transition-shadow duration-200 hover:shadow-[0_0_14px_rgba(20,184,166,0.65)]">
+                        <i class="fa-solid fa-gamepad md:hidden text-[17px]" aria-hidden="true"></i>
+                        <span class="hidden md:flex flex-col items-center justify-center leading-[1.05]">
+                            <span>Mini</span><span>game</span>
+                        </span>
                         <span id="minigame-lock-icon" class="hidden absolute -top-2 -right-1 text-[11px] leading-none drop-shadow-sm">🔒</span>
                     </button>
                 </div>
@@ -341,6 +371,53 @@
                 
                 <!-- VIEW 1: TRANG CHỦ 12 CHỦ ĐỀ -->
                 <div id="view-dashboard-grid" class="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2.5"></div>
+
+                <!-- MODULE GIÁO ÁN: HỌC THEO CHƯƠNG TRÌNH KẾT NỐI TRI THỨC -->
+                <div id="view-giao-an-hub" class="w-full hidden pastel-card p-3 md:p-5">
+                    <div class="w-full max-w-5xl mx-auto">
+                        <div class="text-center mb-4">
+                            <h2 class="text-lg md:text-xl font-black text-sky-700 flex items-center justify-center gap-2"><span>📘</span><span>Giáo án Tiếng Việt 2</span></h2>
+                            <p id="giao-an-hub-subtitle" class="text-xs md:text-sm text-slate-500 font-bold mt-1">Học theo chương trình Kết nối tri thức</p>
+                        </div>
+                        <div id="giao-an-semester-tabs" class="flex items-center justify-center gap-2 mb-4"></div>
+                        <div id="giao-an-week-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2.5"></div>
+                    </div>
+                </div>
+
+                <div id="view-giao-an-week" class="w-full hidden pastel-card p-3 md:p-5">
+                    <div class="w-full max-w-4xl mx-auto">
+                        <div class="flex items-center justify-between gap-2 mb-3">
+                            <div>
+                                <h2 id="giao-an-week-title" class="text-lg md:text-xl font-black text-sky-700">Tuần</h2>
+                                <p class="text-xs text-slate-500 font-bold">Chọn tiết học để bắt đầu.</p>
+                            </div>
+                            <button onclick="openGiaoAnHub(activeGiaoAnContext.semester || 1)" class="px-3 py-2 bg-sky-50 hover:bg-sky-100 text-sky-700 border border-sky-200 rounded-xl text-xs font-extrabold">← Các tuần</button>
+                        </div>
+                        <div id="giao-an-unit-list" class="grid grid-cols-1 md:grid-cols-2 gap-2.5"></div>
+                    </div>
+                </div>
+
+                <div id="view-giao-an-lesson" class="w-full hidden pastel-card p-3 md:p-5">
+                    <div class="w-full max-w-4xl mx-auto space-y-3">
+                        <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
+                            <div>
+                                <div id="giao-an-lesson-meta" class="text-xs font-extrabold text-sky-600 mb-1">📘 Tiết học</div>
+                                <h2 id="giao-an-lesson-title" class="text-lg md:text-xl font-black text-slate-800">Bài học</h2>
+                            </div>
+                            <button onclick="openGiaoAnWeek(activeGiaoAnContext.semester, activeGiaoAnContext.week)" class="px-3 py-2 bg-sky-50 hover:bg-sky-100 text-sky-700 border border-sky-200 rounded-xl text-xs font-extrabold shrink-0">← Danh sách tiết</button>
+                        </div>
+                        <div class="bg-sky-50/60 border border-sky-100 rounded-2xl p-3.5">
+                            <div class="text-xs font-black text-sky-700 mb-1.5">🎯 Mục tiêu</div>
+                            <ul id="giao-an-objectives" class="list-disc pl-5 space-y-1 text-sm text-slate-700 font-semibold"></ul>
+                        </div>
+                        <div id="giao-an-sections" class="space-y-3"></div>
+                        <div class="flex flex-col sm:flex-row gap-2 pt-1">
+                            <button id="giao-an-complete-btn" onclick="markCurrentGiaoAnComplete()" class="flex-1 py-2.5 bg-sky-500 hover:bg-sky-600 text-white rounded-xl font-black text-sm shadow-sm">✓ Hoàn thành tiết học</button>
+                            <button id="giao-an-extra-practice-btn" onclick="startGiaoAnExtraPractice()" class="flex-1 py-2.5 bg-gradient-to-r from-purple-500 to-indigo-500 hover:from-purple-600 hover:to-indigo-600 text-white rounded-xl font-black text-sm shadow-sm">🧩 Luyện thêm</button>
+                        </div>
+                        <p id="giao-an-complete-note" class="hidden text-center text-xs font-extrabold text-emerald-600">Đã hoàn thành tiết học trên thiết bị này ✅</p>
+                    </div>
+                </div>
 
                 <!-- VIEW 2: BÀI GIẢNG -->
                 <div id="view-lecture" class="w-full hidden pastel-card p-4 md:p-6 flex flex-col justify-between items-center min-h-[480px]">
@@ -451,7 +528,7 @@
                     </div>
                 </div>
 
-                <!-- VIEW 4: BẢN ĐỒ LỘ TRÌNH 12 TUẦN SVG CHỮ S -->
+                <!-- VIEW: BẢN ĐỒ LỘ TRÌNH 24 TUẦN -->
                 <div id="view-roadmap" class="w-full hidden pastel-card p-3 md:p-5 flex flex-col justify-start items-center">
                     <div class="w-full max-w-5xl flex flex-col items-center">
                         <div class="flex flex-col sm:flex-row items-center justify-between w-full px-2 mb-2 gap-2">
@@ -507,7 +584,7 @@
                             <h2 class="font-extrabold text-amber-600 text-lg md:text-xl flex items-center justify-center space-x-2">
                                 <span>🏆</span><span>Đấu trường đề thi thử</span>
                             </h2>
-                            <p class="text-xs md:text-sm text-gray-500 font-bold mt-1">Thử sức các bộ đề thi chuẩn ma trận 13 câu - 6 nhóm năng lực</p>
+                            <p class="text-xs md:text-sm text-gray-500 font-bold mt-1">Thử sức các bộ đề 13 câu - 40 phút theo ma trận V6.1</p>
                         </div>
                         <div id="exam-categories-grid" class="grid grid-cols-1 md:grid-cols-3 gap-4"></div>
                     </div>
@@ -544,7 +621,7 @@
                     <div class="bg-white rounded-3xl p-4 sm:p-5 border border-pink-100 soft-shadow-pink space-y-2.5">
                         <h3 class="text-sm sm:text-base font-black text-slate-800 tracking-tight flex items-center space-x-2">
                             <i class="fa-solid fa-chart-bar text-pink-600"></i>
-                            <span>Bóc tách điểm số & đánh giá năng lực 6 chủ đề</span>
+                            <span>Bóc tách điểm số & đánh giá 6 nhóm năng lực</span>
                         </h3>
                         <div id="report-topics-list" class="grid grid-cols-1 sm:grid-cols-2 gap-2"></div>
                     </div>
@@ -787,7 +864,7 @@
     </footer>
 
     <!-- NẠP ENGINE JAVASCRIPT ĐỒNG BỘ -->
-    <script src="assets/js/app.js?v=1.0"></script>
+    <script src="assets/js/app.js?v=6.1.1"></script>
 
     <script>
         if ('serviceWorker' in navigator) {
