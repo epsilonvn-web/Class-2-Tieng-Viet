@@ -163,6 +163,9 @@ let activeTopicId = null;
 let activeExamContext = null;
 let activeRoadmapContext = null;
 let inMiniGameFlow = false;
+let activeMiniGameId = null;
+let appViewEpoch = 0;
+const activeStandaloneAudios = new Set();
 let activeQuestionsList = [];
 let practiceCycleRawPool = [];
 let pendingTopicQuiz = null;
@@ -748,11 +751,27 @@ function safeDomId_(s) { return String(s || '').replace(/[^a-zA-Z0-9_-]/g, '_');
 function escapeJsString_(s) { return String(s || '').replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/\r?\n/g,' '); }
 
 async function playGiaoAnAudio(src, fallbackText) {
-    stopSpeaking();
-    if (!src) return speakVietnamese(fallbackText || '', 0.94);
+    stopAllAudio();
+    const epoch = appViewEpoch;
+    const lessonStillOpen = () => epoch === appViewEpoch && isViewActive('view-giao-an-lesson');
+    if (!src) {
+        if (lessonStillOpen()) speakVietnamese(fallbackText || '', 0.94);
+        return;
+    }
     const audio = new Audio(src);
-    audio.onerror = () => speakVietnamese(fallbackText || '', 0.94);
-    try { await audio.play(); } catch (e) { speakVietnamese(fallbackText || '', 0.94); }
+    activeStandaloneAudios.add(audio);
+    const cleanup = () => activeStandaloneAudios.delete(audio);
+    audio.onended = cleanup;
+    audio.onerror = () => {
+        cleanup();
+        if (lessonStillOpen()) speakVietnamese(fallbackText || '', 0.94);
+    };
+    try {
+        await audio.play();
+    } catch (e) {
+        cleanup();
+        if (lessonStillOpen()) speakVietnamese(fallbackText || '', 0.94);
+    }
 }
 
 async function handleGiaoAnChoice(unitId, activityId, selectedIndex) {
@@ -1042,7 +1061,9 @@ function returnToTopicLecture() {
 }
 
 function switchAppView(viewId) {
-    stopSpeaking();
+    appViewEpoch++;
+    stopAllAudio();
+    if (viewId !== 'view-game-play') activeMiniGameId = null;
     ['view-dashboard-grid', 'view-giao-an-hub', 'view-giao-an-week', 'view-giao-an-lesson', 'view-lecture', 'view-quiz', 'view-roadmap', 'view-minigame-hub', 'view-game-play', 'view-exam-hub', 'view-result'].forEach(id => {
         const el = document.getElementById(id);
         if (!el) return;
@@ -2019,7 +2040,7 @@ function checkAnswer(selectedOpt) {
         if (isCorrect) {
             playAudio('correct');
             confetti({ particleCount: 30, spread: 55, origin: { y: 0.7 } });
-            setTimeout(() => speakVietnamese(`${q.answer}`), 180);
+            setTimeout(() => { if (isViewActive('view-quiz')) speakVietnamese(`${q.answer}`); }, 180);
         } else {
             playAudio('wrong');
         }
@@ -2048,7 +2069,7 @@ function checkAnswer(selectedOpt) {
 
         playAudio('correct');
         confetti({ particleCount: 30, spread: 55, origin: { y: 0.7 } });
-        setTimeout(() => speakVietnamese(`${q.answer}`), 180);
+        setTimeout(() => { if (isViewActive('view-quiz')) speakVietnamese(`${q.answer}`); }, 180);
     } else {
         if (!wrongAttemptsByQ[currentQIndex]) wrongAttemptsByQ[currentQIndex] = [];
         if (!wrongAttemptsByQ[currentQIndex].includes(selectedOpt)) {
@@ -2979,6 +3000,52 @@ function stopSpeaking() {
     } catch (e) {}
 }
 
+
+function stopAllAudio() {
+    stopSpeaking();
+
+    // Dung ngay cac file audio HTML5 dang phat (vi du audio Giao an).
+    try {
+        activeStandaloneAudios.forEach(audio => {
+            try {
+                audio.pause();
+                audio.currentTime = 0;
+                audio.onended = null;
+                audio.onerror = null;
+            } catch (e) {}
+        });
+        activeStandaloneAudios.clear();
+    } catch (e) {}
+
+    // Dung ngay cac am thanh hieu ung WebAudio dang phat.
+    try {
+        if (audioCtx) {
+            const ctx = audioCtx;
+            audioCtx = null;
+            if (ctx.state !== 'closed') ctx.close().catch(() => {});
+        }
+    } catch (e) {
+        audioCtx = null;
+    }
+}
+
+function isViewActive(viewId) {
+    const el = document.getElementById(viewId);
+    return !!el && !el.classList.contains('hidden');
+}
+
+function isMiniGameActive(gameId) {
+    return !!gameId && activeMiniGameId === gameId && inMiniGameFlow && isViewActive('view-game-play');
+}
+
+function speakMiniGameTextSafe(text, rate = 0.94, gameId = '') {
+    if (!isMiniGameActive(gameId)) return;
+    speakVietnamese(text, rate);
+}
+
+window.isMiniGameActive = isMiniGameActive;
+window.speakMiniGameTextSafe = speakMiniGameTextSafe;
+
 function speakPedagogicalEvaluation() {
     const box = document.getElementById('pedagogical-evaluation-box');
     if (!box) return;
@@ -3079,13 +3146,15 @@ function playAudio(type) {
             osc.start(now);
             osc.stop(now + 0.25);
         } else if (type === 'win') {
+            const ctx = audioCtx;
             [523.25, 659.25, 783.99, 1046.50].forEach((freq, i) => {
                 setTimeout(() => {
-                    const o = audioCtx.createOscillator(), g = audioCtx.createGain();
-                    o.connect(g); g.connect(audioCtx.destination);
-                    o.frequency.value = freq; g.gain.setValueAtTime(0.2, audioCtx.currentTime);
-                    g.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
-                    o.start(); o.stop(audioCtx.currentTime + 0.3);
+                    if (!ctx || audioCtx !== ctx || ctx.state === 'closed') return;
+                    const o = ctx.createOscillator(), g = ctx.createGain();
+                    o.connect(g); g.connect(ctx.destination);
+                    o.frequency.value = freq; g.gain.setValueAtTime(0.2, ctx.currentTime);
+                    g.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+                    o.start(); o.stop(ctx.currentTime + 0.3);
                 }, i * 150);
             });
         }
@@ -3318,7 +3387,8 @@ const MINIGAME_LIST = [
 ];
 
 function openMiniGameHub() {
-    stopSpeaking();
+    activeMiniGameId = null;
+    stopAllAudio();
     inGiaoAnFlow = false;
     if (!hasPremiumAccess()) {
         showPremiumGate('Mini Game', '🎮');
@@ -3351,18 +3421,18 @@ function openMiniGameHub() {
 }
 
 const GAME_SCRIPT_MAP = {
-    'family-activity': 'assets/js/games/hoat-dong-gia-dinh.js?v=tv2mg1',
-    'why-family': 'assets/js/games/vi-sao-the-nhi.js?v=tv2mg2',
-    'use-it-right': 'assets/js/games/dung-sao-cho-dung.js?v=tv2mg3',
-    'say-it-nicely': 'assets/js/games/noi-sao-cho-hay.js?v=tv2mg4',
-    'traffic-safe': 'assets/js/games/di-sao-cho-dung.js?v=tv2mg5',
-    'traffic-why': 'assets/js/games/vi-sao-phai-the.js?v=tv2mg6',
-    'traffic-vehicle': 'assets/js/games/chon-phuong-tien-nao.js?v=tv2mg7',
-    'traffic-handle': 'assets/js/games/xu-ly-the-nao.js?v=tv2mg8',
-    'mall-where': 'assets/js/games/di-dau-mua-gi.js?v=tv2mg9',
-    'mall-choice': 'assets/js/games/chon-sao-cho-hop-ly.js?v=tv2mg10',
-    'mall-talk': 'assets/js/games/noi-sao-noi-cong-cong.js?v=tv2mg11',
-    'mall-handle': 'assets/js/games/be-xu-ly-the-nao.js?v=tv2mg12'
+    'family-activity': 'assets/js/games/hoat-dong-gia-dinh.js?v=tv2mg1c',
+    'why-family': 'assets/js/games/vi-sao-the-nhi.js?v=tv2mg2c',
+    'use-it-right': 'assets/js/games/dung-sao-cho-dung.js?v=tv2mg3c',
+    'say-it-nicely': 'assets/js/games/noi-sao-cho-hay.js?v=tv2mg4c',
+    'traffic-safe': 'assets/js/games/di-sao-cho-dung.js?v=tv2mg5c',
+    'traffic-why': 'assets/js/games/vi-sao-phai-the.js?v=tv2mg6c',
+    'traffic-vehicle': 'assets/js/games/chon-phuong-tien-nao.js?v=tv2mg7c',
+    'traffic-handle': 'assets/js/games/xu-ly-the-nao.js?v=tv2mg8c',
+    'mall-where': 'assets/js/games/di-dau-mua-gi.js?v=tv2mg9c',
+    'mall-choice': 'assets/js/games/chon-sao-cho-hop-ly.js?v=tv2mg10c',
+    'mall-talk': 'assets/js/games/noi-sao-noi-cong-cong.js?v=tv2mg11c',
+    'mall-handle': 'assets/js/games/be-xu-ly-the-nao.js?v=tv2mg12c'
 };
 const loadedGameScripts = {};
 
@@ -3378,7 +3448,7 @@ function loadGameScript(src) {
 }
 
 async function openGamePlay(gameId) {
-    stopSpeaking();
+    stopAllAudio();
     ensureMiniGameThemeStyles();
     inMiniGameFlow = true;
     const game = MINIGAME_LIST.find(g => g.id === gameId);
@@ -3398,6 +3468,7 @@ async function openGamePlay(gameId) {
     const title = document.getElementById('game-play-title');
     if (title) title.innerHTML = `<span>${game.icon}</span><span>${game.title}</span>`;
     updateNavTabs('Mini Game', '🎮', game.title);
+    activeMiniGameId = gameId;
     switchAppView('view-game-play');
     miniGameReplayText = '';
     miniGameReplayRate = 0.94;
@@ -3414,6 +3485,8 @@ async function openGamePlay(gameId) {
             return;
         }
     }
+
+    if (!isMiniGameActive(gameId)) return;
 
     if (gameId === 'family-activity' && typeof startFamilyActivityGame === 'function') {
         startFamilyActivityGame();
@@ -3442,6 +3515,11 @@ async function openGamePlay(gameId) {
     }
 
 }
+
+document.addEventListener('visibilitychange', () => {
+    if (document.hidden) stopAllAudio();
+});
+window.addEventListener('pagehide', stopAllAudio);
 
 document.addEventListener('DOMContentLoaded', () => {
     updateUserInfoBox();
