@@ -3242,15 +3242,16 @@ const MINIGAME_LIST = [
     { id: 'family-activity', title: '2. Hoạt động gia đình', desc: 'Quan sát tranh - đọc hiểu - suy luận tình huống gia đình', icon: '🏡', ready: true },
     { id: 'why-family', title: '3. Vì sao thế nhỉ?', desc: 'Suy luận nguyên nhân - kết quả - nếu thì - xử lí logic', icon: '🤔', ready: true },
     { id: 'use-it-right', title: '4. Dùng sao cho đúng?', desc: 'Công năng - chất liệu - cách dùng - an toàn với đồ vật quanh nhà', icon: '🧰', ready: true },
-    { id: 'sentence-train-tv', title: '5. Đoàn tàu ghép câu', desc: 'Xếp từ thành câu hoàn chỉnh', icon: '🚂', ready: false },
-    { id: 'punctuation-doctor', title: '6. Bác sĩ dấu câu', desc: 'Tìm và chữa dấu câu chưa đúng', icon: '🩺', ready: false },
-    { id: 'sentence-world', title: '7. Thế giới câu hay', desc: 'Câu giới thiệu - nêu hoạt động - nêu đặc điểm', icon: '💬', ready: false },
-    { id: 'vocab-fishing', title: '8. Câu cá từ vựng', desc: 'Câu đúng từ theo từng chủ đề', icon: '🎣', ready: false },
-    { id: 'reading-detective', title: '9. Thám tử đọc hiểu', desc: 'Truy tìm chi tiết trong đoạn đọc', icon: '🕵️', ready: false },
-    { id: 'riddle-arena', title: '10. Đấu trường câu đố', desc: 'Giải đố dân gian và IQ ngôn ngữ', icon: '🏆', ready: false },
-    { id: 'message-postman', title: '11. Bưu tá tí hon', desc: 'Chọn lời nhắn và giao tiếp phù hợp', icon: '💌', ready: false },
-    { id: 'word-maze', title: '12. Mê cung từ ngữ', desc: 'Tìm đường qua các từ đúng', icon: '🌀', ready: false },
-    { id: 'teacher-says-tv', title: '13. Cô Thỏ ra lệnh', desc: 'Phản xạ đọc hiểu thật nhanh', icon: '🤖', ready: false }
+    { id: 'say-it-nicely', title: '5. Nói sao cho hay?', desc: 'Chào hỏi - cảm ơn - xin lỗi - nhờ giúp - đáp lời thật phù hợp', icon: '🗣️', ready: true },
+    { id: 'sentence-train-tv', title: '6. Đoàn tàu ghép câu', desc: 'Xếp từ thành câu hoàn chỉnh', icon: '🚂', ready: false },
+    { id: 'punctuation-doctor', title: '7. Bác sĩ dấu câu', desc: 'Tìm và chữa dấu câu chưa đúng', icon: '🩺', ready: false },
+    { id: 'sentence-world', title: '8. Thế giới câu hay', desc: 'Câu giới thiệu - nêu hoạt động - nêu đặc điểm', icon: '💬', ready: false },
+    { id: 'vocab-fishing', title: '9. Câu cá từ vựng', desc: 'Câu đúng từ theo từng chủ đề', icon: '🎣', ready: false },
+    { id: 'reading-detective', title: '10. Thám tử đọc hiểu', desc: 'Truy tìm chi tiết trong đoạn đọc', icon: '🕵️', ready: false },
+    { id: 'riddle-arena', title: '11. Đấu trường câu đố', desc: 'Giải đố dân gian và IQ ngôn ngữ', icon: '🏆', ready: false },
+    { id: 'message-postman', title: '12. Bưu tá tí hon', desc: 'Chọn lời nhắn và giao tiếp phù hợp', icon: '💌', ready: false },
+    { id: 'word-maze', title: '13. Mê cung từ ngữ', desc: 'Tìm đường qua các từ đúng', icon: '🌀', ready: false },
+    { id: 'teacher-says-tv', title: '14. Cô Thỏ ra lệnh', desc: 'Phản xạ đọc hiểu thật nhanh', icon: '🤖', ready: false }
 ];
 
 function openMiniGameHub() {
@@ -3290,7 +3291,8 @@ const GAME_SCRIPT_MAP = {
     'spelling-knight': 'assets/js/games/hiep-si-chinh-ta.js?v=tv2mg1',
     'family-activity': 'assets/js/games/hoat-dong-gia-dinh.js?v=tv2mg2',
     'why-family': 'assets/js/games/vi-sao-the-nhi.js?v=tv2mg3',
-    'use-it-right': 'assets/js/games/dung-sao-cho-dung.js?v=tv2mg4'
+    'use-it-right': 'assets/js/games/dung-sao-cho-dung.js?v=tv2mg4',
+    'say-it-nicely': 'assets/js/games/noi-sao-cho-hay.js?v=tv2mg5'
 };
 const loadedGameScripts = {};
 
@@ -3351,6 +3353,8 @@ async function openGamePlay(gameId) {
         startWhyFamilyGame();
     } else if (gameId === 'use-it-right' && typeof startUseItRightGame === 'function') {
         startUseItRightGame();
+    } else if (gameId === 'say-it-nicely' && typeof startSayItNicelyGame === 'function') {
+        startSayItNicelyGame();
     }
 }
 
