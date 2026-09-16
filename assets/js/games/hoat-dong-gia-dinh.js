@@ -9,6 +9,8 @@
 // Layout: giu y het ai-mac-gi.js: anh vuong ben trai, 4 dap an doc ben phai; mobile xep doc.
 // ============================================================
 
+
+function faSpeakSafe(text, rate=0.94){if(typeof speakMiniGameTextSafe==='function')return speakMiniGameTextSafe(text,rate,'family-activity');}
 const FA_SCENES = [
   {id:'family_01_dinner',qs:[
     {q:'Câu nào mô tả đúng nhất bức tranh gia đình đang dùng bữa?',a:'Cả nhà quây quần bên bàn ăn và cùng dùng bữa.',o:['Cả nhà quây quần bên bàn ăn và cùng dùng bữa.','Mọi người đang đứng ngoài sân để tập thể dục.','Các bạn nhỏ đang dọn đồ chơi trong phòng khách.','Ông bà đang tưới cây ở ban công.'],level:1,skill:'mô tả'},
@@ -237,7 +239,7 @@ function faPickQuestion(scene){
   return scene.qs[index];
 }
 
-function faNext(){
+function faNext(){if(typeof isMiniGameActive==='function'&&!isMiniGameActive('family-activity'))return;
   if(!faDeck.length)faBuildDeck();
   const scene=faDeck.shift();
   const q=faPickQuestion(scene);
@@ -318,7 +320,7 @@ function faRender(){
   </div>
 </div>`;
   if(typeof setMiniGameQuestionAudio==='function')setMiniGameQuestionAudio(question,0.94);
-  if(typeof speakVietnamese==='function')setTimeout(()=>speakVietnamese(question,0.94),150);
+  if(typeof faSpeakSafe==='function')setTimeout(()=>faSpeakSafe(question,0.94),150);
 }
 
 function faChoose(btn){
@@ -335,7 +337,7 @@ function faChoose(btn){
     if(fb)fb.innerHTML=`🎉 Chính xác! <span class="text-emerald-700 ml-1">${correct}</span>`;
     if(typeof playAudio==='function')playAudio('correct');
     if(typeof confetti==='function')confetti({particleCount:50,spread:65,origin:{y:.72}});
-    if(typeof speakVietnamese==='function')speakVietnamese(`${correct}. Chính xác!`,1.0);
+    if(typeof faSpeakSafe==='function')faSpeakSafe(`${correct}. Chính xác!`,1.0);
     setTimeout(faNext,1200);
   }else{
     faStreak=0;
