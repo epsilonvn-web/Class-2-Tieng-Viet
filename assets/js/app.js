@@ -155,6 +155,7 @@ let activeGiaoAnContext = { semester: 1, week: null, unitId: null };
 
 let currentUser = { name: 'Khách (Guest)', isGuest: true, tuanHienTai: 1, hoTen: 'Bé Khách', lop: '', maHS: 'KHACH', vaiTro: 'guest', loaiTaiKhoan: 'guest' };
 let currentSessionPin = '';
+const PERSISTENT_SESSION_KEY = 'tv2_persistent_session_v1';
 let adminAccountsCache = [];
 let starGreenCount = 0;
 let starRedCount = 0;
@@ -1103,6 +1104,38 @@ async function callAppsScript(action, payload) {
     }
 }
 
+function savePersistentSession_() {
+    if (!currentUser || currentUser.isGuest || !currentUser.token) return;
+    const student = { ...currentUser };
+    delete student.isGuest;
+    try {
+        localStorage.setItem(PERSISTENT_SESSION_KEY, JSON.stringify({
+            token: currentUser.token,
+            maHS: currentUser.maHS,
+            student
+        }));
+    } catch (e) {
+        console.warn('Không thể lưu phiên đăng nhập:', e);
+    }
+}
+
+function clearPersistentSession_() {
+    try { localStorage.removeItem(PERSISTENT_SESSION_KEY); } catch (e) {}
+}
+
+function readPersistentSession_() {
+    try {
+        const raw = localStorage.getItem(PERSISTENT_SESSION_KEY);
+        if (!raw) return null;
+        const data = JSON.parse(raw);
+        if (!data || !data.token || !data.maHS) return null;
+        return data;
+    } catch (e) {
+        clearPersistentSession_();
+        return null;
+    }
+}
+
 async function doLogin() {
     hideAuthError();
     const maHSInput = document.getElementById('login-mahs');
@@ -1137,6 +1170,7 @@ async function doLogin() {
         }
         currentUser = { ...result.student, isGuest: false, token: result.token };
         currentSessionPin = maPin;
+        savePersistentSession_();
         enterDashboard();
     } catch (err) {
         const connErr = 'Lỗi kết nối máy chủ: ' + err.message;
@@ -1200,8 +1234,36 @@ async function doRegister() {
 }
 
 async function tryAutoLogin() {
-    // Không lưu PIN thô trong localStorage. Mỗi lần mở app luôn vào Home ở chế độ Khách.
-    return;
+    const saved = readPersistentSession_();
+    if (!saved) return false;
+
+    // Khôi phục ngay từ dữ liệu đã lưu để tránh cảm giác bị "văng" về Khách khi trang/PWA reload.
+    if (saved.student) {
+        currentUser = { ...saved.student, maHS: saved.maHS, isGuest: false, token: saved.token };
+        currentSessionPin = '';
+        enterDashboard(true);
+    }
+
+    // Sau đó xác thực lại với máy chủ và lấy thông tin tài khoản mới nhất.
+    try {
+        const result = await callAppsScript('restoreSession', { token: saved.token });
+        if (!result || !result.ok) {
+            clearPersistentSession_();
+            currentUser = { name: 'Khách (Guest)', isGuest: true, tuanHienTai: 1, hoTen: 'Bé Khách', lop: '', maHS: 'KHACH', vaiTro: 'guest', loaiTaiKhoan: 'guest' };
+            currentSessionPin = '';
+            enterDashboard(true);
+            return false;
+        }
+        currentUser = { ...result.student, isGuest: false, token: result.token || saved.token };
+        currentSessionPin = '';
+        savePersistentSession_();
+        enterDashboard(true);
+        return true;
+    } catch (err) {
+        // Mất mạng tạm thời không làm bé bị đăng xuất. Phiên đã lưu vẫn được giữ lại.
+        console.warn('Chưa xác thực lại được phiên đăng nhập; tiếp tục dùng phiên đã lưu.', err);
+        return !!saved.student;
+    }
 }
 
 function showAuthScreen(tab = 'login') {
@@ -1216,6 +1278,8 @@ function showAuthScreen(tab = 'login') {
 }
 
 function logout() {
+    const tokenToRevoke = currentUser?.token || '';
+    clearPersistentSession_();
     currentSessionPin = '';
     currentUser = { name: 'Khách (Guest)', isGuest: true, tuanHienTai: 1, hoTen: 'Bé Khách', lop: '', maHS: 'KHACH', vaiTro: 'guest', loaiTaiKhoan: 'guest' };
     const mahsInput = document.getElementById('login-mahs');
@@ -1224,6 +1288,7 @@ function logout() {
     if (mapinInput) mapinInput.value = '';
     hideAuthError();
     enterDashboard(true);
+    if (tokenToRevoke) callAppsScript('logout', { token: tokenToRevoke }).catch(() => {});
 }
 
 function handleGuestMode() {
@@ -2815,7 +2880,7 @@ function formatAccountDate_(value) {
 }
 
 function adminAuthPayload_() {
-    return { adminMaHS: currentUser?.maHS || '', adminPin: currentSessionPin || '' };
+    return { adminMaHS: currentUser?.maHS || '', adminPin: currentSessionPin || '', token: currentUser?.token || '' };
 }
 
 async function openAdminAccounts() {
@@ -3396,6 +3461,5 @@ document.addEventListener('DOMContentLoaded', () => {
     }, { once: true });
 
     updateAutoSpeechButtonUI();
+    tryAutoLogin();
 });
-
-tryAutoLogin();
