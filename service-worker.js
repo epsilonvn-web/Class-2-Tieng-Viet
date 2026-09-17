@@ -1,4 +1,4 @@
-const CACHE_NAME = 'tv2-pwa-v2';
+const CACHE_NAME = 'tv2-pwa-v8-3-1';
 const APP_SHELL = [
   './',
   './index.html',

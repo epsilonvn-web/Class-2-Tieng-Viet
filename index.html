@@ -207,6 +207,92 @@
             #user-info-box > * { max-width: 100%; }
         }
 
+
+        /* 3 nút module chính: đồng kích thước + viền nổi bóng bẩy */
+        #btn-giao-an-header,
+        #btn-progress-header,
+        #btn-minigame-header {
+            border: 1px solid rgba(255,255,255,0.72) !important;
+            box-shadow:
+                0 5px 12px rgba(15, 23, 42, 0.16),
+                0 1px 3px rgba(15, 23, 42, 0.12),
+                inset 0 1px 0 rgba(255,255,255,0.38) !important;
+            transition: transform .18s ease, box-shadow .18s ease, filter .18s ease !important;
+        }
+
+        #btn-giao-an-header:hover,
+        #btn-progress-header:hover,
+        #btn-minigame-header:hover {
+            transform: none !important;
+            filter: saturate(1.08) brightness(1.05);
+            box-shadow:
+                0 8px 17px rgba(15, 23, 42, 0.20),
+                0 2px 5px rgba(15, 23, 42, 0.12),
+                inset 0 1px 0 rgba(255,255,255,0.45) !important;
+        }
+
+        #btn-giao-an-header:active,
+        #btn-progress-header:active,
+        #btn-minigame-header:active {
+            transform: none !important;
+        }
+
+        @media (min-width: 768px) {
+            #btn-giao-an-header,
+            #btn-progress-header,
+            #btn-minigame-header {
+                width: 64px !important;
+                min-width: 64px !important;
+                height: 50px !important;
+                padding-left: 8px !important;
+                padding-right: 8px !important;
+            }
+        }
+
+
+        /* Học kỳ 1 / Học kỳ 2: tách xa, có khung + nền, active rõ ràng */
+        .semester-switch-btn {
+            min-width: 96px;
+            height: 38px;
+            padding: 0 18px;
+            border-radius: 14px;
+            font-weight: 900;
+            font-size: 12px;
+            transform: none !important;
+            transition: background .18s ease, color .18s ease, border-color .18s ease, box-shadow .18s ease, filter .18s ease !important;
+        }
+        .semester-switch-btn + .semester-switch-btn {
+            margin-left: 14px;
+        }
+        .semester-switch-btn:hover {
+            transform: none !important;
+            filter: brightness(1.04);
+        }
+        .semester-switch-btn.is-active {
+            color: #ffffff !important;
+            background: linear-gradient(135deg, #ec4899 0%, #a855f7 100%) !important;
+            border: 2px solid #c026d3 !important;
+            box-shadow: 0 5px 12px rgba(168,85,247,.28), 0 0 0 2px rgba(244,114,182,.12) !important;
+        }
+        .semester-switch-btn.is-inactive {
+            color: #7e22ce !important;
+            background: linear-gradient(135deg, #fff1f7 0%, #f5f3ff 100%) !important;
+            border: 1.5px solid #e9d5ff !important;
+            box-shadow: 0 2px 6px rgba(126,34,206,.08) !important;
+        }
+        .semester-switch-btn.is-inactive:hover {
+            background: linear-gradient(135deg, #fce7f3 0%, #ede9fe 100%) !important;
+            border-color: #d8b4fe !important;
+            box-shadow: 0 4px 10px rgba(126,34,206,.14) !important;
+        }
+
+
+        /* V8: semester switch ở cùng hàng tiêu đề để tiết kiệm chiều cao tablet */
+        .semester-switch-btn { min-width: 88px; height: 34px; padding: 0 14px; border-radius: 12px; }
+        @media (max-width: 900px) {
+            .semester-switch-btn { min-width: 78px; height: 32px; padding: 0 10px; font-size: 11px; }
+            #giao-an-semester-tabs, #roadmap-semester-tabs { gap: 8px !important; }
+        }
         @media print {
             body * { visibility: hidden; }
             #printable-report-area, #printable-report-area * { visibility: visible; }
@@ -348,21 +434,21 @@
 
                     <div id="user-info-box" class="text-xs font-bold text-gray-600 text-right"></div>
 
-                    <button id="btn-giao-an-header" onclick="openGiaoAnHub(1)" title="Giáo án" class="relative overflow-visible h-10 md:h-12 w-10 md:w-auto md:min-w-[76px] px-0 md:px-3 bg-gradient-to-r from-sky-500 to-cyan-500 text-white font-extrabold rounded-xl text-xs md:text-sm shadow-md hover:from-sky-600 hover:to-cyan-600 flex items-center justify-center shrink-0 transition-shadow duration-200 hover:shadow-[0_0_14px_rgba(14,165,233,0.65)]">
+                    <button id="btn-giao-an-header" onclick="openGiaoAnHub(1)" title="Bài học" class="relative overflow-visible h-10 md:h-12 w-10 md:w-auto md:min-w-[76px] px-0 md:px-3 bg-gradient-to-r from-sky-500 to-cyan-500 text-white font-extrabold rounded-xl text-xs md:text-sm shadow-md hover:from-sky-600 hover:to-cyan-600 flex items-center justify-center shrink-0 transition-shadow duration-200 hover:shadow-[0_0_14px_rgba(14,165,233,0.65)]">
                         <span class="md:hidden relative inline-flex w-6 h-6 items-center justify-center" aria-hidden="true">
                             <i class="fa-solid fa-book-open text-[17px]"></i>
                             <i class="fa-solid fa-pen-nib absolute -right-0.5 -bottom-0.5 text-[9px] -rotate-12 drop-shadow"></i>
                         </span>
                         <span class="hidden md:flex flex-col items-center justify-center leading-[1.05]">
-                            <span>Giáo</span><span>án</span>
+                            <span>Bài</span><span>học</span>
                         </span>
                         <span id="giao-an-lock-icon" class="hidden absolute -top-2 -right-1 text-[11px] leading-none drop-shadow-sm">🔒</span>
                     </button>
 
-                    <button id="btn-progress-header" onclick="clickProgressOrExam('progress')" title="Tiến trình tuần" class="relative overflow-visible h-10 md:h-12 w-10 md:w-auto md:min-w-[84px] px-0 md:px-3 bg-gradient-to-r from-purple-500 to-indigo-500 text-white font-extrabold rounded-xl text-xs md:text-sm shadow-md hover:from-purple-600 hover:to-indigo-600 flex items-center justify-center shrink-0 transition-shadow duration-200 hover:shadow-[0_0_14px_rgba(129,74,240,0.65)]">
+                    <button id="btn-progress-header" onclick="clickProgressOrExam('progress')" title="Luyện tuần" class="relative overflow-visible h-10 md:h-12 w-10 md:w-auto md:min-w-[84px] px-0 md:px-3 bg-gradient-to-r from-purple-500 to-indigo-500 text-white font-extrabold rounded-xl text-xs md:text-sm shadow-md hover:from-purple-600 hover:to-indigo-600 flex items-center justify-center shrink-0 transition-shadow duration-200 hover:shadow-[0_0_14px_rgba(129,74,240,0.65)]">
                         <i class="fa-solid fa-map-location-dot md:hidden text-[17px]" aria-hidden="true"></i>
                         <span class="hidden md:flex flex-col items-center justify-center leading-[1.05]">
-                            <span>Tiến trình</span><span>tuần</span>
+                            <span>Luyện</span><span>tuần</span>
                         </span>
                         <span id="roadmap-lock-icon" class="hidden absolute -top-2 -right-1 text-[11px] leading-none drop-shadow-sm">🔒</span>
                     </button>
@@ -382,14 +468,17 @@
                 <!-- VIEW 1: TRANG CHỦ 12 CHỦ ĐỀ -->
                 <div id="view-dashboard-grid" class="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2.5"></div>
 
-                <!-- MODULE GIÁO ÁN: HỌC THEO CHƯƠNG TRÌNH KẾT NỐI TRI THỨC -->
+                <!-- MODULE BÀI HỌC: HỌC THEO CHƯƠNG TRÌNH KẾT NỐI TRI THỨC -->
                 <div id="view-giao-an-hub" class="w-full hidden pastel-card p-3 md:p-5">
                     <div class="w-full max-w-5xl mx-auto">
-                        <div class="text-center mb-4">
-                            <h2 class="text-lg md:text-xl font-black text-sky-700 flex items-center justify-center gap-2"><span>📘</span><span>Giáo án Tiếng Việt 2</span></h2>
-                            <p id="giao-an-hub-subtitle" class="text-xs md:text-sm text-slate-500 font-bold mt-1">Học theo chương trình Kết nối tri thức</p>
+                        <div class="grid grid-cols-[auto_1fr_auto] items-center gap-3 mb-3">
+                            <div id="giao-an-semester-tabs" class="flex items-center gap-3 justify-self-start"></div>
+                            <div class="text-center min-w-0">
+                                <h2 class="text-lg md:text-xl font-black text-purple-700 flex items-center justify-center gap-2"><span>📘</span><span>Bài học Tiếng Việt 2</span></h2>
+                                <p id="giao-an-hub-subtitle" class="text-xs md:text-sm text-slate-500 font-bold mt-0.5">Học theo chương trình Kết nối tri thức</p>
+                            </div>
+                            <div class="w-[205px] hidden md:block" aria-hidden="true"></div>
                         </div>
-                        <div id="giao-an-semester-tabs" class="flex items-center justify-center gap-2 mb-4"></div>
                         <div id="giao-an-week-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2.5"></div>
                     </div>
                 </div>
@@ -399,7 +488,7 @@
                         <div class="flex items-center justify-between gap-2 mb-3">
                             <div>
                                 <h2 id="giao-an-week-title" class="text-lg md:text-xl font-black text-sky-700">Tuần</h2>
-                                <p class="text-xs text-slate-500 font-bold">Chọn tiết học để bắt đầu.</p>
+                                <p class="text-xs text-slate-500 font-bold">Chọn bài học để bắt đầu.</p>
                             </div>
                             <button onclick="openGiaoAnHub(activeGiaoAnContext.semester || 1)" class="px-3 py-2 bg-sky-50 hover:bg-sky-100 text-sky-700 border border-sky-200 rounded-xl text-xs font-extrabold">← Các tuần</button>
                         </div>
@@ -411,21 +500,21 @@
                     <div class="w-full max-w-4xl mx-auto space-y-3">
                         <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
                             <div>
-                                <div id="giao-an-lesson-meta" class="text-xs font-extrabold text-sky-600 mb-1">📘 Tiết học</div>
+                                <div id="giao-an-lesson-meta" class="text-xs font-extrabold text-sky-600 mb-1">📘 Bài học</div>
                                 <h2 id="giao-an-lesson-title" class="text-lg md:text-xl font-black text-slate-800">Bài học</h2>
                             </div>
-                            <button onclick="openGiaoAnWeek(activeGiaoAnContext.semester, activeGiaoAnContext.week)" class="px-3 py-2 bg-sky-50 hover:bg-sky-100 text-sky-700 border border-sky-200 rounded-xl text-xs font-extrabold shrink-0">← Danh sách tiết</button>
+                            <button onclick="openGiaoAnWeek(activeGiaoAnContext.semester, activeGiaoAnContext.week)" class="px-3 py-2 bg-sky-50 hover:bg-sky-100 text-sky-700 border border-sky-200 rounded-xl text-xs font-extrabold shrink-0">← Danh sách bài</button>
                         </div>
                         <div class="bg-sky-50/60 border border-sky-100 rounded-2xl p-3.5">
                             <div class="text-xs font-black text-sky-700 mb-1.5">🎯 Mục tiêu</div>
                             <ul id="giao-an-objectives" class="list-disc pl-5 space-y-1 text-sm text-slate-700 font-semibold"></ul>
                         </div>
                         <div id="giao-an-sections" class="space-y-3"></div>
-                        <div class="flex flex-col sm:flex-row gap-2 pt-1">
-                            <button id="giao-an-complete-btn" onclick="markCurrentGiaoAnComplete()" class="flex-1 py-2.5 bg-sky-500 hover:bg-sky-600 text-white rounded-xl font-black text-sm shadow-sm">✓ Hoàn thành tiết học</button>
+                        <div id="giao-an-legacy-actions" class="hidden flex-col sm:flex-row gap-2 pt-1">
+                            <button id="giao-an-complete-btn" onclick="markCurrentGiaoAnComplete()" class="flex-1 py-2.5 bg-sky-500 hover:bg-sky-600 text-white rounded-xl font-black text-sm shadow-sm">✓ Hoàn thành bài học</button>
                             <button id="giao-an-extra-practice-btn" onclick="startGiaoAnExtraPractice()" class="flex-1 py-2.5 bg-gradient-to-r from-purple-500 to-indigo-500 hover:from-purple-600 hover:to-indigo-600 text-white rounded-xl font-black text-sm shadow-sm">🧩 Luyện thêm</button>
                         </div>
-                        <p id="giao-an-complete-note" class="hidden text-center text-xs font-extrabold text-emerald-600">Đã hoàn thành tiết học trên thiết bị này ✅</p>
+                        <p id="giao-an-complete-note" class="hidden text-center text-xs font-extrabold text-emerald-600">Đã hoàn thành bài học trên thiết bị này ✅</p>
                     </div>
                 </div>
 
@@ -490,7 +579,7 @@
                             
                             <button id="btn-roadmap-history" onclick="openHistoryModal('LichSuTienTrinhTuan')" class="hidden px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 rounded-xl text-sm font-extrabold items-center space-x-1.5 transition-shadow duration-200 hover:shadow-[0_0_10px_rgba(99,102,241,0.5)] shadow-xs">
                                 <i class="fa-solid fa-chart-line"></i>
-                                <span>Lịch sử tiến trình tuần</span>
+                                <span>Lịch sử Luyện tuần</span>
                             </button>
 
                             <button onclick="speakCurrentQuestion()" class="px-3 py-1.5 bg-pink-50 hover:bg-pink-100 text-pink-700 border border-pink-200 rounded-xl text-sm font-extrabold flex items-center space-x-1.5 transition-all pastel-btn shadow-xs">
@@ -538,21 +627,22 @@
                     </div>
                 </div>
 
-                <!-- VIEW: BẢN ĐỒ LỘ TRÌNH 24 TUẦN -->
+                <!-- VIEW: LUYỆN TUẦN -->
                 <div id="view-roadmap" class="w-full hidden pastel-card p-3 md:p-5 flex flex-col justify-start items-center">
                     <div class="w-full max-w-5xl flex flex-col items-center">
                         <div class="flex flex-col sm:flex-row items-center justify-between w-full px-2 mb-2 gap-2">
                             <div>
                                 <h2 class="text-base md:text-lg font-extrabold text-indigo-600 flex items-center space-x-2">
-                                    <span>🗺️</span><span>Bản đồ lộ trình 24 tuần bứt phá</span>
+                                    <span>🗺️</span><span>Luyện tuần</span>
                                 </h2>
-                                <p class="text-[11px] md:text-xs text-gray-500 font-bold">Mỗi tuần 30 câu (tỷ lệ 3:4:3). Đạt từ 80% trở lên để mở khóa tuần kế tiếp!</p>
+                                <p class="text-[11px] md:text-xs text-gray-500 font-bold">20 câu mỗi tuần · đạt từ 80% để mở tuần tiếp theo · đánh giá theo 6 năng lực</p>
                             </div>
                             
-                            <div class="flex items-center space-x-2 shrink-0">
+                            <div class="flex items-center gap-3 shrink-0">
+                                <div id="roadmap-semester-tabs" class="flex items-center gap-3"></div>
                                 <button onclick="openHistoryModal('LichSuTienTrinhTuan')" class="px-3 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-extrabold rounded-xl border border-indigo-200 text-xs pastel-btn flex items-center space-x-1.5 shadow-sm">
                                     <i class="fa-solid fa-chart-line text-indigo-600"></i>
-                                    <span>📊 Xem lịch sử tiến trình</span>
+                                    <span>📊 Lịch sử Luyện tuần</span>
                                 </button>
                             </div>
                         </div>
@@ -874,7 +964,7 @@
     </footer>
 
     <!-- NẠP ENGINE JAVASCRIPT ĐỒNG BỘ -->
-    <script src="assets/js/app.js?v=6.1.1"></script>
+    <script src="assets/js/app.js?v=8.3.1"></script>
 
     <script>
         if ('serviceWorker' in navigator) {
