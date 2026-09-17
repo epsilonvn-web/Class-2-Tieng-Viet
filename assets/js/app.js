@@ -676,16 +676,107 @@ function renderGiaoAnLesson_(unit, weekNumber) {
     const sections = document.getElementById('giao-an-sections');
     const practiceBtn = document.getElementById('giao-an-extra-practice-btn');
     if (!sections) return;
-    if (title) title.textContent = unit.title;
+
+    const displayTitle = unit.display_title || unit.title;
+    if (title) title.textContent = displayTitle;
     if (metaEl) metaEl.innerHTML = `${meta.icon} ${meta.label} · Tuần ${weekNumber} · ${formatPeriodSpan_(unit.period_span)}`;
-    if (objectives) objectives.innerHTML = (unit.objectives || []).map(x => `<li>${escapeHtml(x)}</li>`).join('');
-    sections.innerHTML = (unit.sections || []).map((s, idx) => renderGiaoAnSection_(unit, s, idx)).join('');
+
+    // Child-facing opening: keep curriculum objectives in JSON, but do not show teacher-style wording here.
+    if (objectives) {
+        const intro = unit.lesson_intro || {};
+        const today = Array.isArray(intro.today) && intro.today.length ? intro.today : (unit.objectives || []).slice(0, 4);
+        objectives.innerHTML = today.map(x => `<li>${escapeHtml(x)}</li>`).join('');
+        const objectiveBox = objectives.closest('div');
+        if (objectiveBox) {
+            const heading = objectiveBox.querySelector('h3, h4, p.font-black, p.font-extrabold');
+            if (heading) heading.textContent = '🎯 Hôm nay con sẽ';
+        }
+    }
+
+    const introHtml = renderGiaoAnIntro_(unit);
+    const materialHtml = renderGiaoAnLearningMaterial_(unit);
+    const flowHtml = (unit.sections || []).map((s, idx) => renderGiaoAnSection_(unit, s, idx)).join('');
+    sections.innerHTML = `${introHtml}${materialHtml}${flowHtml}`;
+
     if (practiceBtn) {
         const canPractice = unit.extra_practice && Array.isArray(unit.extra_practice.sub_ids) && unit.extra_practice.sub_ids.length;
         practiceBtn.classList.toggle('hidden', !canPractice);
         if (canPractice) practiceBtn.textContent = `🧩 ${unit.extra_practice.label || 'Luyện thêm'}`;
     }
     updateGiaoAnCompleteButton_(unit.unit_id);
+}
+
+function renderGiaoAnIntro_(unit) {
+    const intro = unit.lesson_intro || {};
+    if (!intro.hook && !intro.remember) return '';
+    const remember = intro.remember ? `<div class="mt-3 rounded-xl bg-amber-50 border border-amber-100 px-3 py-2 text-sm font-bold text-amber-900">${escapeHtml(intro.remember)}</div>` : '';
+    return `<section class="rounded-3xl border-2 border-sky-100 bg-gradient-to-br from-sky-50 via-white to-amber-50 p-4 md:p-5 shadow-sm mb-4">
+        <div class="flex items-start gap-3">
+            <div class="text-3xl shrink-0">🐰</div>
+            <div class="min-w-0">
+                <p class="font-black text-slate-800 text-base md:text-lg leading-relaxed">${escapeHtml(intro.hook || 'Cùng Cô Thỏ Ngọc bắt đầu bài học nhé!')}</p>
+                ${remember}
+            </div>
+        </div>
+    </section>`;
+}
+
+function getGiaoAnLearningAudioText_(unit) {
+    const m = unit && unit.learning_material ? unit.learning_material : {};
+    if (m.audio_text) return String(m.audio_text);
+    if (m.text) return String(m.text);
+    if (Array.isArray(m.paragraphs)) return m.paragraphs.join(' ');
+    if (Array.isArray(m.lines)) return m.lines.join(' ');
+    if (m.model) return String(m.model);
+    if (m.intro) return String(m.intro);
+    if (Array.isArray(m.sentences)) return m.sentences.join(' ');
+    return unit?.display_title || unit?.title || '';
+}
+
+function renderGiaoAnLearningMaterial_(unit) {
+    const m = unit.learning_material || null;
+    if (!m) return '';
+    const kind = m.kind || 'text';
+    const listenBtn = `<button onclick="speakVietnamese(getGiaoAnLearningAudioText_(window.__gaCurrentUnit || {}), 0.94)" class="px-3 py-2 rounded-xl bg-purple-100 hover:bg-purple-200 text-purple-700 font-extrabold text-xs">🔊 Cô đọc</button>`;
+    window.__gaCurrentUnit = unit;
+
+    let body = '';
+    if (kind === 'story') {
+        body = (m.paragraphs || []).map(p => `<p class="text-[15px] md:text-base leading-7 text-slate-700 font-semibold">${escapeHtml(p)}</p>`).join('');
+    } else if (kind === 'poem') {
+        body = `<div class="text-center space-y-1.5 py-1">${(m.lines || []).map(x => `<p class="text-[15px] md:text-base leading-7 text-slate-700 font-bold">${escapeHtml(x)}</p>`).join('')}</div>`;
+    } else if (kind === 'table') {
+        body = `<div class="overflow-x-auto"><table class="w-full text-sm"><tbody>${(m.rows || []).map(r => `<tr class="border-b border-sky-50"><td class="py-2 pr-3 font-black text-sky-700">${escapeHtml(r[0])}</td><td class="py-2 text-slate-700 font-semibold">${escapeHtml(r[1])}</td></tr>`).join('')}</tbody></table></div>`;
+    } else if (kind === 'handwriting') {
+        body = `<div class="text-center"><div class="text-7xl md:text-8xl font-black text-sky-700 leading-none">${escapeHtml(m.letter || '')}</div><div class="flex flex-wrap justify-center gap-2 mt-4">${(m.examples || []).map(x=>`<span class="px-3 py-1.5 rounded-xl bg-white border border-sky-100 font-black text-slate-700">${escapeHtml(x)}</span>`).join('')}</div>${m.application_sentence ? `<p class="mt-4 text-base font-bold text-slate-700">${escapeHtml(m.application_sentence)}</p>`:''}</div>`;
+    } else if (kind === 'dictation') {
+        body = `<div class="rounded-2xl bg-amber-50 border border-amber-100 p-3"><p class="text-sm font-bold text-slate-700">👂 Nghe trước, chưa cần nhìn đáp án. Khi soát bài con mới mở phần từ cần chú ý.</p><div class="flex flex-wrap gap-2 mt-3">${(m.focus_words || []).map(x=>`<button onclick="speakVietnamese('${escapeJsString_(x)}',0.9)" class="px-3 py-1.5 rounded-full bg-white border border-amber-200 text-amber-800 font-extrabold text-xs">🔊 ${escapeHtml(x)}</button>`).join('')}</div></div>`;
+    } else if (kind === 'examples') {
+        const cards=[];
+        if (m.things?.length) cards.push(['🎒 Sự vật',m.things]);
+        if (m.actions?.length) cards.push(['⚽ Hoạt động',m.actions]);
+        if (m.descriptions?.length) cards.push(['🌈 Đặc điểm',m.descriptions]);
+        if (m.sentences?.length) cards.push(['💬 Câu mẫu',m.sentences]);
+        body = `<div class="grid md:grid-cols-2 gap-3">${cards.map(([h,arr])=>`<div class="rounded-2xl bg-white border border-sky-100 p-3"><p class="font-black text-slate-800 mb-2">${h}</p><div class="flex flex-wrap gap-2">${arr.map(x=>`<button onclick="speakVietnamese('${escapeJsString_(x)}',0.92)" class="px-2.5 py-1.5 rounded-full bg-sky-50 text-sky-800 font-bold text-xs">🔊 ${escapeHtml(x)}</button>`).join('')}</div></div>`).join('')}</div>`;
+    } else if (kind === 'speaking') {
+        body = `<div class="space-y-3"><p class="text-sm font-bold text-slate-700">${escapeHtml(m.scenario || '')}</p><div class="flex flex-wrap gap-2">${(m.guides || []).map(x=>`<span class="px-3 py-1.5 rounded-full bg-emerald-50 border border-emerald-100 text-emerald-800 font-bold text-xs">${escapeHtml(x)}</span>`).join('')}</div>${m.model?`<div class="rounded-xl bg-white border border-emerald-100 p-3 text-sm font-semibold text-slate-700">🐰 Ví dụ: ${escapeHtml(m.model)}</div>`:''}</div>`;
+    } else if (kind === 'writing_model') {
+        body = `<div class="space-y-3"><div class="grid gap-2">${(m.prompts || []).map((x,i)=>`<div class="rounded-xl bg-white border border-amber-100 px-3 py-2 text-sm font-bold text-slate-700">${i+1}. ${escapeHtml(x)}</div>`).join('')}</div>${m.model?`<div class="rounded-xl bg-amber-50 border border-amber-100 p-3"><p class="text-xs font-black text-amber-800 mb-1">✏️ Cô viết mẫu</p><p class="text-sm font-semibold text-slate-700 leading-relaxed">${escapeHtml(m.model)}</p></div>`:''}</div>`;
+    } else if (kind === 'review') {
+        body = `<div class="grid gap-2">${(m.prompts || []).map((x,i)=>`<div class="rounded-xl bg-white border border-indigo-100 px-3 py-2 text-sm font-bold text-slate-700">${i+1}. ${escapeHtml(x)}</div>`).join('')}</div>`;
+    } else {
+        body = `<p class="text-sm font-semibold text-slate-700">${escapeHtml(m.text || m.model || '')}</p>`;
+    }
+
+    const title = escapeHtml(m.title || unit.display_title || unit.title || 'Học liệu của Cô Thỏ Ngọc');
+    const showListen = ['story','poem','table','speaking','writing_model'].includes(kind);
+    return `<section class="bg-white border-2 border-sky-100 rounded-3xl p-4 md:p-5 shadow-sm space-y-4 mb-4">
+        <div class="flex items-center justify-between gap-3">
+            <div><p class="text-[11px] font-black uppercase tracking-wide text-sky-500">📖 Học liệu Cô Thỏ Ngọc</p><h3 class="font-black text-slate-800 text-lg mt-0.5">${title}</h3></div>
+            ${showListen ? listenBtn : ''}
+        </div>
+        ${body}
+    </section>`;
 }
 
 function formatPeriodSpan_(span) {
@@ -706,6 +797,14 @@ function renderGiaoAnSection_(unit, section, index) {
     </section>`;
 }
 
+
+function normalizeGiaoAnImagePath_(src) {
+    const s = String(src || '');
+    const m = s.match(/^assets\/giao-an\/hk\d+\/w(\d+)\/TV2_GA_HK\d+_W\d+_P([0-9_]+)_IMG(\d+)\.webp$/i);
+    if (!m) return s;
+    return `images/giao-an/GA_W${m[1]}_P${m[2]}_${m[3]}.webp`;
+}
+
 function renderGiaoAnActivity_(unit, a) {
     const type = a.activity_type || 'activity';
     const prompt = escapeHtml(a.prompt || '');
@@ -724,11 +823,12 @@ function renderGiaoAnActivity_(unit, a) {
     }
     if (type === 'listen') {
         const src = a.media?.audio || '';
-        return `<div class="${base} bg-purple-50/50 border-purple-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2"><p class="font-bold text-sm text-slate-700">🎧 ${prompt}</p><button onclick="playGiaoAnAudio('${escapeJsString_(src)}','${escapeJsString_(a.prompt || '')}')" class="px-3 py-2 bg-purple-100 hover:bg-purple-200 text-purple-700 rounded-xl font-extrabold text-xs shrink-0">🔊 Nghe cô đọc</button></div>`;
+        const fallback = getGiaoAnLearningAudioText_(unit) || a.prompt || '';
+        return `<div class="${base} bg-purple-50/50 border-purple-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2"><p class="font-bold text-sm text-slate-700">🎧 ${prompt}</p><button onclick="playGiaoAnAudio('${escapeJsString_(src)}','${escapeJsString_(fallback)}')" class="px-3 py-2 bg-purple-100 hover:bg-purple-200 text-purple-700 rounded-xl font-extrabold text-xs shrink-0">🔊 Nghe cô đọc</button></div>`;
     }
     if (type === 'observe') {
-        const src = a.media?.image || '';
-        const img = src ? `<div class="mt-2 rounded-xl overflow-hidden bg-white border border-sky-100"><img src="${escapeHtml(src)}" alt="Minh họa" class="max-h-64 w-full object-contain" onerror="this.parentElement.classList.add('hidden')"></div>` : '';
+        const src = normalizeGiaoAnImagePath_(a.media?.image || '');
+        const img = src ? `<div class="mt-2 rounded-xl overflow-hidden bg-white border border-sky-100"><img src="${escapeHtml(src)}" alt="Minh họa" class="w-full max-w-[820px] mx-auto max-h-[300px] md:max-h-[500px] object-contain" onerror="this.parentElement.classList.add('hidden')"></div>` : '';
         return `<div class="${base} bg-sky-50/40 border-sky-100"><p class="font-bold text-sm text-slate-700">🖼️ ${prompt}</p>${img}</div>`;
     }
     if (type === 'summary_card') return `<div class="${base} bg-amber-50 border-amber-200"><p class="font-black text-sm text-amber-900">💡 ${prompt}</p></div>`;
@@ -1006,11 +1106,38 @@ async function renderExamHubGrid() {
 // ==========================================
 // ĐIỀU HƯỚNG VIEW & BREADCRUMB
 // ==========================================
+function ensureGiaoAnBreadcrumbNavigation_() {
+    const tab2 = document.getElementById('header-level2-tab');
+    const tab3 = document.getElementById('header-level3-tab');
+
+    if (tab2 && !tab2.dataset.giaoAnBreadcrumbBound) {
+        tab2.dataset.giaoAnBreadcrumbBound = '1';
+        tab2.addEventListener('click', (event) => {
+            if (!inGiaoAnFlow) return;
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            openGiaoAnHub(activeGiaoAnContext?.semester || 1);
+        }, true);
+    }
+
+    if (tab3 && !tab3.dataset.giaoAnBreadcrumbBound) {
+        tab3.dataset.giaoAnBreadcrumbBound = '1';
+        tab3.addEventListener('click', (event) => {
+            if (!inGiaoAnFlow || !activeGiaoAnContext?.week) return;
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            openGiaoAnWeek(activeGiaoAnContext.semester || 1, activeGiaoAnContext.week);
+        }, true);
+    }
+}
+
 function updateNavTabs(level2Title, level2Icon, level3Title, level4Title) {
     const tab2 = document.getElementById('header-level2-tab');
     const tab3 = document.getElementById('header-level3-tab');
     const tab4 = document.getElementById('header-level4-tab');
     const homeBtn = document.getElementById('btn-header-home');
+
+    ensureGiaoAnBreadcrumbNavigation_();
 
     if (level2Title) {
         document.getElementById('header-level2-title').textContent = level2Title;
