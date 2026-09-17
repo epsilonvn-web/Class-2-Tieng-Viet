@@ -101,6 +101,16 @@
         }
 
         @media (max-width: 767px) {
+            /* Màn hình đăng nhập mobile: logo giữ nguyên ảnh vuông, không bo viền/khung/nền */
+            #screen-login > div:first-child,
+            #screen-login > div:first-child img {
+                border: 0 !important;
+                border-radius: 0 !important;
+                box-shadow: none !important;
+                background: transparent !important;
+                padding: 0 !important;
+            }
+
             .app-main-header {
                 display: grid !important;
                 grid-template-columns: auto minmax(0, 1fr) auto auto auto;
