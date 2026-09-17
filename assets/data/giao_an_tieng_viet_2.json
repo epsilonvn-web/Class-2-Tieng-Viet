@@ -62,7 +62,7 @@
                       "activity_type": "observe",
                       "prompt": "Quan sát tranh minh họa ngày khai giảng.",
                       "media": {
-                        "image": "images/giao-an/GA_W01_P01_02_01.jpg"
+                        "image": "assets/images/giao-an/GA_W01_P01_02_01.jpg"
                       },
                       "required": true
                     },
@@ -407,7 +407,7 @@
                       "activity_type": "observe",
                       "prompt": "Quan sát các tranh và nói: ở đâu, có ai, mọi người đang làm gì?",
                       "media": {
-                        "image": "images/giao-an/GA_W01_P04_01.jpg"
+                        "image": "assets/images/giao-an/GA_W01_P04_01.jpg"
                       },
                       "required": true
                     }
@@ -1215,7 +1215,7 @@
                       "prompt": "Quan sát tranh khởi động của bài “NIỀM VUI CỦA BI VÀ BỐNG”.",
                       "required": true,
                       "media": {
-                        "image": "images/giao-an/GA_W02_P01_02_01.jpg"
+                        "image": "assets/images/giao-an/GA_W02_P01_02_01.jpg"
                       }
                     },
                     {
@@ -1557,7 +1557,7 @@
                       "prompt": "Quan sát tranh minh họa của “NIỀM VUI CỦA BI VÀ BỐNG”.",
                       "required": true,
                       "media": {
-                        "image": "images/giao-an/GA_W02_P04_01.jpg"
+                        "image": "assets/images/giao-an/GA_W02_P04_01.jpg"
                       }
                     }
                   ]
@@ -1704,7 +1704,7 @@
                       "prompt": "Quan sát tranh khởi động của bài “LÀM VIỆC THẬT LÀ VUI”.",
                       "required": true,
                       "media": {
-                        "image": "images/giao-an/GA_W02_P05_06_01.jpg"
+                        "image": "assets/images/giao-an/GA_W02_P05_06_01.jpg"
                       }
                     },
                     {
@@ -2427,7 +2427,7 @@
                       "prompt": "Quan sát tranh khởi động của bài “EM CÓ XINH KHÔNG?”.",
                       "required": true,
                       "media": {
-                        "image": "images/giao-an/GA_W03_P01_02_01.jpg"
+                        "image": "assets/images/giao-an/GA_W03_P01_02_01.jpg"
                       }
                     },
                     {
@@ -2787,7 +2787,7 @@
                       "prompt": "Quan sát tranh minh họa của “EM CÓ XINH KHÔNG?”.",
                       "required": true,
                       "media": {
-                        "image": "images/giao-an/GA_W03_P04_01.jpg"
+                        "image": "assets/images/giao-an/GA_W03_P04_01.jpg"
                       }
                     }
                   ]
@@ -2933,7 +2933,7 @@
                       "prompt": "Quan sát tranh khởi động của bài “MỘT GIỜ HỌC”.",
                       "required": true,
                       "media": {
-                        "image": "images/giao-an/GA_W03_P05_06_01.jpg"
+                        "image": "assets/images/giao-an/GA_W03_P05_06_01.jpg"
                       }
                     },
                     {
@@ -3640,7 +3640,7 @@
                       "prompt": "Quan sát tranh khởi động của bài “CÂY XẤU HỔ”.",
                       "required": true,
                       "media": {
-                        "image": "images/giao-an/GA_W04_P01_02_01.jpg"
+                        "image": "assets/images/giao-an/GA_W04_P01_02_01.jpg"
                       }
                     },
                     {
@@ -3953,7 +3953,7 @@
                       "prompt": "Quan sát tranh minh họa của “CHÚ ĐỖ CON”.",
                       "required": true,
                       "media": {
-                        "image": "images/giao-an/GA_W04_P04_01.jpg"
+                        "image": "assets/images/giao-an/GA_W04_P04_01.jpg"
                       }
                     }
                   ]
@@ -4097,7 +4097,7 @@
                       "prompt": "Quan sát tranh khởi động của bài “CẦU THỦ DỰ BỊ”.",
                       "required": true,
                       "media": {
-                        "image": "images/giao-an/GA_W04_P05_06_01.jpg"
+                        "image": "assets/images/giao-an/GA_W04_P05_06_01.jpg"
                       }
                     },
                     {
@@ -4780,7 +4780,7 @@
                       "prompt": "Quan sát tranh khởi động của bài “CÔ GIÁO LỚP EM”.",
                       "required": true,
                       "media": {
-                        "image": "images/giao-an/GA_W05_P01_02_01.jpg"
+                        "image": "assets/images/giao-an/GA_W05_P01_02_01.jpg"
                       }
                     },
                     {
@@ -5144,7 +5144,7 @@
                       "prompt": "Quan sát tranh minh họa của “CẬU BÉ HAM HỌC”.",
                       "required": true,
                       "media": {
-                        "image": "images/giao-an/GA_W05_P04_01.jpg"
+                        "image": "assets/images/giao-an/GA_W05_P04_01.jpg"
                       }
                     }
                   ]
@@ -5289,7 +5289,7 @@
                       "prompt": "Quan sát tranh khởi động của bài “THỜI KHÓA BIỂU”.",
                       "required": true,
                       "media": {
-                        "image": "images/giao-an/GA_W05_P05_06_01.jpg"
+                        "image": "assets/images/giao-an/GA_W05_P05_06_01.jpg"
                       }
                     },
                     {
@@ -5972,7 +5972,7 @@
                       "prompt": "Quan sát tranh khởi động của bài “CÁI TRỐNG TRƯỜNG EM”.",
                       "required": true,
                       "media": {
-                        "image": "images/giao-an/GA_W06_P01_02_01.jpg"
+                        "image": "assets/images/giao-an/GA_W06_P01_02_01.jpg"
                       }
                     },
                     {
@@ -6289,7 +6289,7 @@
                       "prompt": "Quan sát tranh minh họa của “NGÔI TRƯỜNG CỦA EM”.",
                       "required": true,
                       "media": {
-                        "image": "images/giao-an/GA_W06_P04_01.jpg"
+                        "image": "assets/images/giao-an/GA_W06_P04_01.jpg"
                       }
                     }
                   ]
@@ -6436,7 +6436,7 @@
                       "prompt": "Quan sát tranh khởi động của bài “DANH SÁCH HỌC SINH”.",
                       "required": true,
                       "media": {
-                        "image": "images/giao-an/GA_W06_P05_06_01.jpg"
+                        "image": "assets/images/giao-an/GA_W06_P05_06_01.jpg"
                       }
                     },
                     {
@@ -7122,7 +7122,7 @@
                       "prompt": "Quan sát tranh khởi động của bài “YÊU LẮM TRƯỜNG ƠI!”.",
                       "required": true,
                       "media": {
-                        "image": "images/giao-an/GA_W07_P01_02_01.jpg"
+                        "image": "assets/images/giao-an/GA_W07_P01_02_01.jpg"
                       }
                     },
                     {
@@ -7440,7 +7440,7 @@
                       "prompt": "Quan sát tranh minh họa của “Kể chuyện Bữa ăn trưa”.",
                       "required": true,
                       "media": {
-                        "image": "images/giao-an/GA_W07_P04_01.jpg"
+                        "image": "assets/images/giao-an/GA_W07_P04_01.jpg"
                       }
                     }
                   ]
@@ -7586,7 +7586,7 @@
                       "prompt": "Quan sát tranh khởi động của bài “EM HỌC VẼ”.",
                       "required": true,
                       "media": {
-                        "image": "images/giao-an/GA_W07_P05_06_01.jpg"
+                        "image": "assets/images/giao-an/GA_W07_P05_06_01.jpg"
                       }
                     },
                     {
@@ -8261,7 +8261,7 @@
                       "prompt": "Quan sát tranh khởi động của bài “CUỐN SÁCH CỦA EM”.",
                       "required": true,
                       "media": {
-                        "image": "images/giao-an/GA_W08_P01_02_01.jpg"
+                        "image": "assets/images/giao-an/GA_W08_P01_02_01.jpg"
                       }
                     },
                     {
@@ -8576,7 +8576,7 @@
                       "prompt": "Quan sát tranh minh họa của “HỌA MI, VẸT VÀ QUẠ”.",
                       "required": true,
                       "media": {
-                        "image": "images/giao-an/GA_W08_P04_01.jpg"
+                        "image": "assets/images/giao-an/GA_W08_P04_01.jpg"
                       }
                     }
                   ]
@@ -8723,7 +8723,7 @@
                       "prompt": "Quan sát tranh khởi động của bài “KHI TRANG SÁCH MỞ RA”.",
                       "required": true,
                       "media": {
-                        "image": "images/giao-an/GA_W08_P05_06_01.jpg"
+                        "image": "assets/images/giao-an/GA_W08_P05_06_01.jpg"
                       }
                     },
                     {
@@ -10135,7 +10135,7 @@
                       "prompt": "Quan sát tranh khởi động của bài “GỌI BẠN”.",
                       "required": true,
                       "media": {
-                        "image": "images/giao-an/GA_W10_P01_02_01.jpg"
+                        "image": "assets/images/giao-an/GA_W10_P01_02_01.jpg"
                       }
                     },
                     {
@@ -10452,7 +10452,7 @@
                       "prompt": "Quan sát tranh minh họa của “KỂ CHUYỆN “GỌI BẠN””.",
                       "required": true,
                       "media": {
-                        "image": "images/giao-an/GA_W10_P04_01.jpg"
+                        "image": "assets/images/giao-an/GA_W10_P04_01.jpg"
                       }
                     }
                   ]
@@ -10599,7 +10599,7 @@
                       "prompt": "Quan sát tranh khởi động của bài “TỚ NHỚ CẬU”.",
                       "required": true,
                       "media": {
-                        "image": "images/giao-an/GA_W10_P05_06_01.jpg"
+                        "image": "assets/images/giao-an/GA_W10_P05_06_01.jpg"
                       }
                     },
                     {
@@ -11271,7 +11271,7 @@
                       "prompt": "Quan sát tranh khởi động của bài “CHỮ A VÀ NHỮNG NGƯỜI BẠN”.",
                       "required": true,
                       "media": {
-                        "image": "images/giao-an/GA_W11_P01_02_01.jpg"
+                        "image": "assets/images/giao-an/GA_W11_P01_02_01.jpg"
                       }
                     },
                     {
@@ -11629,7 +11629,7 @@
                       "prompt": "Quan sát tranh minh họa của “NIỀM VUI CỦA EM”.",
                       "required": true,
                       "media": {
-                        "image": "images/giao-an/GA_W11_P04_01.jpg"
+                        "image": "assets/images/giao-an/GA_W11_P04_01.jpg"
                       }
                     }
                   ]
@@ -11775,7 +11775,7 @@
                       "prompt": "Quan sát tranh khởi động của bài “NHÍM NÂU KẾT BẠN”.",
                       "required": true,
                       "media": {
-                        "image": "images/giao-an/GA_W11_P05_06_01.jpg"
+                        "image": "assets/images/giao-an/GA_W11_P05_06_01.jpg"
                       }
                     },
                     {
@@ -12446,7 +12446,7 @@
                       "prompt": "Quan sát tranh khởi động của bài “THẢ DIỀU”.",
                       "required": true,
                       "media": {
-                        "image": "images/giao-an/GA_W12_P01_02_01.jpg"
+                        "image": "assets/images/giao-an/GA_W12_P01_02_01.jpg"
                       }
                     },
                     {
@@ -12802,7 +12802,7 @@
                       "prompt": "Quan sát tranh minh họa của “CHÚNG MÌNH LÀ BẠN”.",
                       "required": true,
                       "media": {
-                        "image": "images/giao-an/GA_W12_P04_01.jpg"
+                        "image": "assets/images/giao-an/GA_W12_P04_01.jpg"
                       }
                     }
                   ]
@@ -12950,7 +12950,7 @@
                       "prompt": "Quan sát tranh khởi động của bài “TỚ LÀ LÊ-GÔ”.",
                       "required": true,
                       "media": {
-                        "image": "images/giao-an/GA_W12_P05_06_01.jpg"
+                        "image": "assets/images/giao-an/GA_W12_P05_06_01.jpg"
                       }
                     },
                     {
@@ -13659,7 +13659,7 @@
                       "prompt": "Quan sát tranh khởi động của bài “RỒNG RẮN LÊN MÂY”.",
                       "required": true,
                       "media": {
-                        "image": "images/giao-an/GA_W13_P01_02_01.jpg"
+                        "image": "assets/images/giao-an/GA_W13_P01_02_01.jpg"
                       }
                     },
                     {
@@ -13993,7 +13993,7 @@
                       "prompt": "Quan sát tranh minh họa của “BÚP BÊ BIẾT KHÓC”.",
                       "required": true,
                       "media": {
-                        "image": "images/giao-an/GA_W13_P04_01.jpg"
+                        "image": "assets/images/giao-an/GA_W13_P04_01.jpg"
                       }
                     }
                   ]
@@ -14137,7 +14137,7 @@
                       "prompt": "Quan sát tranh khởi động của bài “NẶN ĐỒ CHƠI”.",
                       "required": true,
                       "media": {
-                        "image": "images/giao-an/GA_W13_P05_06_01.jpg"
+                        "image": "assets/images/giao-an/GA_W13_P05_06_01.jpg"
                       }
                     },
                     {
@@ -14846,7 +14846,7 @@
                       "prompt": "Quan sát tranh khởi động của bài “SỰ TÍCH HOA TỈ MUỘI”.",
                       "required": true,
                       "media": {
-                        "image": "images/giao-an/GA_W14_P01_02_01.jpg"
+                        "image": "assets/images/giao-an/GA_W14_P01_02_01.jpg"
                       }
                     },
                     {
@@ -15162,7 +15162,7 @@
                       "prompt": "Quan sát tranh minh họa của “HAI ANH EM”.",
                       "required": true,
                       "media": {
-                        "image": "images/giao-an/GA_W14_P04_01.jpg"
+                        "image": "assets/images/giao-an/GA_W14_P04_01.jpg"
                       }
                     }
                   ]
@@ -15312,7 +15312,7 @@
                       "prompt": "Quan sát tranh khởi động của bài “EM MANG VỀ YÊU THƯƠNG”.",
                       "required": true,
                       "media": {
-                        "image": "images/giao-an/GA_W14_P05_06_01.jpg"
+                        "image": "assets/images/giao-an/GA_W14_P05_06_01.jpg"
                       }
                     },
                     {
@@ -15988,7 +15988,7 @@
                       "prompt": "Quan sát tranh khởi động của bài “MẸ”.",
                       "required": true,
                       "media": {
-                        "image": "images/giao-an/GA_W15_P01_02_01.jpg"
+                        "image": "assets/images/giao-an/GA_W15_P01_02_01.jpg"
                       }
                     },
                     {
@@ -16307,7 +16307,7 @@
                       "prompt": "Quan sát tranh minh họa của “SỰ TÍCH CÂY VÚ SỮA”.",
                       "required": true,
                       "media": {
-                        "image": "images/giao-an/GA_W15_P04_01.jpg"
+                        "image": "assets/images/giao-an/GA_W15_P04_01.jpg"
                       }
                     }
                   ]
@@ -16454,7 +16454,7 @@
                       "prompt": "Quan sát tranh khởi động của bài “TRÒ CHƠI CỦA BỐ”.",
                       "required": true,
                       "media": {
-                        "image": "images/giao-an/GA_W15_P05_06_01.jpg"
+                        "image": "assets/images/giao-an/GA_W15_P05_06_01.jpg"
                       }
                     },
                     {
@@ -17130,7 +17130,7 @@
                       "prompt": "Quan sát tranh khởi động của bài “BÀI 29: CÁNH CỦA NHỚ BÀ”.",
                       "required": true,
                       "media": {
-                        "image": "images/giao-an/GA_W16_P01_02_01.jpg"
+                        "image": "assets/images/giao-an/GA_W16_P01_02_01.jpg"
                       }
                     },
                     {
@@ -17447,7 +17447,7 @@
                       "prompt": "Quan sát tranh minh họa của “BÀ CHÁU (Theo Trần Hoài Dương)”.",
                       "required": true,
                       "media": {
-                        "image": "images/giao-an/GA_W16_P04_01.jpg"
+                        "image": "assets/images/giao-an/GA_W16_P04_01.jpg"
                       }
                     }
                   ]
@@ -17595,7 +17595,7 @@
                       "prompt": "Quan sát tranh khởi động của bài “BÀI 30: THƯƠNG ÔNG”.",
                       "required": true,
                       "media": {
-                        "image": "images/giao-an/GA_W16_P05_06_01.jpg"
+                        "image": "assets/images/giao-an/GA_W16_P05_06_01.jpg"
                       }
                     },
                     {
@@ -18306,7 +18306,7 @@
                       "prompt": "Quan sát tranh khởi động của bài “ÁNH SÁNG CỦA YÊU THƯƠNG”.",
                       "required": true,
                       "media": {
-                        "image": "images/giao-an/GA_W17_P01_02_01.jpg"
+                        "image": "assets/images/giao-an/GA_W17_P01_02_01.jpg"
                       }
                     },
                     {
@@ -18625,7 +18625,7 @@
                       "prompt": "Quan sát tranh minh họa của “ÁNH SÁNG CỦA YÊU THƯƠNG - NÓI VÀ NGHE”.",
                       "required": true,
                       "media": {
-                        "image": "images/giao-an/GA_W17_P04_01.jpg"
+                        "image": "assets/images/giao-an/GA_W17_P04_01.jpg"
                       }
                     }
                   ]
@@ -18776,7 +18776,7 @@
                       "prompt": "Quan sát tranh khởi động của bài “CHƠI CHONG CHÓNG.”.",
                       "required": true,
                       "media": {
-                        "image": "images/giao-an/GA_W17_P05_06_01.jpg"
+                        "image": "assets/images/giao-an/GA_W17_P05_06_01.jpg"
                       }
                     },
                     {
@@ -20049,7 +20049,7 @@
                       "prompt": "Quan sát tranh khởi động của bài “Chuyện bốn mùa”.",
                       "required": true,
                       "media": {
-                        "image": "images/giao-an/GA_W19_P01_02_01.jpg"
+                        "image": "assets/images/giao-an/GA_W19_P01_02_01.jpg"
                       }
                     },
                     {
@@ -20407,7 +20407,7 @@
                       "prompt": "Quan sát tranh minh họa của “CHUYỆN BỐN MÙA”.",
                       "required": true,
                       "media": {
-                        "image": "images/giao-an/GA_W19_P04_01.jpg"
+                        "image": "assets/images/giao-an/GA_W19_P04_01.jpg"
                       }
                     }
                   ]
@@ -20554,7 +20554,7 @@
                       "prompt": "Quan sát tranh khởi động của bài “MÙA NƯỚC NỔI”.",
                       "required": true,
                       "media": {
-                        "image": "images/giao-an/GA_W19_P05_06_01.jpg"
+                        "image": "assets/images/giao-an/GA_W19_P05_06_01.jpg"
                       }
                     },
                     {
@@ -21289,7 +21289,7 @@
                       "prompt": "Quan sát tranh khởi động của bài “HỌA MI HÓT”.",
                       "required": true,
                       "media": {
-                        "image": "images/giao-an/GA_W20_P01_02_01.jpg"
+                        "image": "assets/images/giao-an/GA_W20_P01_02_01.jpg"
                       }
                     },
                     {
@@ -21651,7 +21651,7 @@
                       "prompt": "Quan sát tranh minh họa của “HỒ NƯỚC VÀ MÂY”.",
                       "required": true,
                       "media": {
-                        "image": "images/giao-an/GA_W20_P04_01.jpg"
+                        "image": "assets/images/giao-an/GA_W20_P04_01.jpg"
                       }
                     }
                   ]
@@ -21798,7 +21798,7 @@
                       "prompt": "Quan sát tranh khởi động của bài “TẾT ĐẾN RỒI”.",
                       "required": true,
                       "media": {
-                        "image": "images/giao-an/GA_W20_P05_06_01.jpg"
+                        "image": "assets/images/giao-an/GA_W20_P05_06_01.jpg"
                       }
                     },
                     {
@@ -22512,7 +22512,7 @@
                       "prompt": "Quan sát tranh khởi động của bài “GIỌT NƯỚC VÀ BIỂN LỚN”.",
                       "required": true,
                       "media": {
-                        "image": "images/giao-an/GA_W21_P01_02_01.jpg"
+                        "image": "assets/images/giao-an/GA_W21_P01_02_01.jpg"
                       }
                     },
                     {
@@ -22852,7 +22852,7 @@
                       "prompt": "Quan sát tranh minh họa của “CHIẾC ĐÈN LỒNG”.",
                       "required": true,
                       "media": {
-                        "image": "images/giao-an/GA_W21_P04_01.jpg"
+                        "image": "assets/images/giao-an/GA_W21_P04_01.jpg"
                       }
                     }
                   ]
@@ -23001,7 +23001,7 @@
                       "prompt": "Quan sát tranh khởi động của bài “MÙA VÀNG”.",
                       "required": true,
                       "media": {
-                        "image": "images/giao-an/GA_W21_P05_06_01.jpg"
+                        "image": "assets/images/giao-an/GA_W21_P05_06_01.jpg"
                       }
                     },
                     {
@@ -23715,7 +23715,7 @@
                       "prompt": "Quan sát tranh khởi động của bài “HẠT THÓC”.",
                       "required": true,
                       "media": {
-                        "image": "images/giao-an/GA_W22_P01_02_01.jpg"
+                        "image": "assets/images/giao-an/GA_W22_P01_02_01.jpg"
                       }
                     },
                     {
@@ -24077,7 +24077,7 @@
                       "prompt": "Quan sát tranh minh họa của “SỰ TÍCH CÂY KHOAI LANG”.",
                       "required": true,
                       "media": {
-                        "image": "images/giao-an/GA_W22_P04_01.jpg"
+                        "image": "assets/images/giao-an/GA_W22_P04_01.jpg"
                       }
                     }
                   ]
@@ -24223,7 +24223,7 @@
                       "prompt": "Quan sát tranh khởi động của bài “LŨY TRE”.",
                       "required": true,
                       "media": {
-                        "image": "images/giao-an/GA_W22_P05_06_01.jpg"
+                        "image": "assets/images/giao-an/GA_W22_P05_06_01.jpg"
                       }
                     },
                     {
@@ -24958,7 +24958,7 @@
                       "prompt": "Quan sát tranh khởi động của bài “Vè Chim”.",
                       "required": true,
                       "media": {
-                        "image": "images/giao-an/GA_W23_P01_02_01.jpg"
+                        "image": "assets/images/giao-an/GA_W23_P01_02_01.jpg"
                       }
                     },
                     {
@@ -25313,7 +25313,7 @@
                       "prompt": "Quan sát tranh minh họa của “CẢM ƠN HỌA MI”.",
                       "required": true,
                       "media": {
-                        "image": "images/giao-an/GA_W23_P04_01.jpg"
+                        "image": "assets/images/giao-an/GA_W23_P04_01.jpg"
                       }
                     }
                   ]
@@ -25462,7 +25462,7 @@
                       "prompt": "Quan sát tranh khởi động của bài “KHỦNG LONG”.",
                       "required": true,
                       "media": {
-                        "image": "images/giao-an/GA_W23_P05_06_01.jpg"
+                        "image": "assets/images/giao-an/GA_W23_P05_06_01.jpg"
                       }
                     },
                     {
@@ -26182,7 +26182,7 @@
                       "prompt": "Quan sát tranh khởi động của bài “SỰ TÍCH CÂY THÌ LÀ”.",
                       "required": true,
                       "media": {
-                        "image": "images/giao-an/GA_W24_P01_02_01.jpg"
+                        "image": "assets/images/giao-an/GA_W24_P01_02_01.jpg"
                       }
                     },
                     {
@@ -26517,7 +26517,7 @@
                       "prompt": "Quan sát tranh minh họa của “SỰ TÍCH CÂY THÌ LÀ”.",
                       "required": true,
                       "media": {
-                        "image": "images/giao-an/GA_W24_P04_01.jpg"
+                        "image": "assets/images/giao-an/GA_W24_P04_01.jpg"
                       }
                     }
                   ]
@@ -26664,7 +26664,7 @@
                       "prompt": "Quan sát tranh khởi động của bài “BỜ TRE ĐÓN KHÁCH”.",
                       "required": true,
                       "media": {
-                        "image": "images/giao-an/GA_W24_P05_06_01.jpg"
+                        "image": "assets/images/giao-an/GA_W24_P05_06_01.jpg"
                       }
                     },
                     {
@@ -27339,7 +27339,7 @@
                       "prompt": "Quan sát tranh khởi động của bài “TIẾNG CHỔI TRE”.",
                       "required": true,
                       "media": {
-                        "image": "images/giao-an/GA_W25_P01_02_01.jpg"
+                        "image": "assets/images/giao-an/GA_W25_P01_02_01.jpg"
                       }
                     },
                     {
@@ -27707,7 +27707,7 @@
                       "prompt": "Quan sát tranh minh họa của “HẠT GIỐNG NHỎ”.",
                       "required": true,
                       "media": {
-                        "image": "images/giao-an/GA_W25_P04_01.jpg"
+                        "image": "assets/images/giao-an/GA_W25_P04_01.jpg"
                       }
                     }
                   ]
@@ -27854,7 +27854,7 @@
                       "prompt": "Quan sát tranh khởi động của bài “CỎ NON CƯỜI RỒI”.",
                       "required": true,
                       "media": {
-                        "image": "images/giao-an/GA_W25_P05_06_01.jpg"
+                        "image": "assets/images/giao-an/GA_W25_P05_06_01.jpg"
                       }
                     },
                     {
@@ -28582,7 +28582,7 @@
                       "prompt": "Quan sát tranh khởi động của bài “NHỮNG CON SAO BIỂN”.",
                       "required": true,
                       "media": {
-                        "image": "images/giao-an/GA_W26_P01_02_01.jpg"
+                        "image": "assets/images/giao-an/GA_W26_P01_02_01.jpg"
                       }
                     },
                     {
@@ -28942,7 +28942,7 @@
                       "prompt": "Quan sát tranh minh họa của “BẢO VỆ MÔI TRƯỜNG”.",
                       "required": true,
                       "media": {
-                        "image": "images/giao-an/GA_W26_P04_01.jpg"
+                        "image": "assets/images/giao-an/GA_W26_P04_01.jpg"
                       }
                     }
                   ]
@@ -29090,7 +29090,7 @@
                       "prompt": "Quan sát tranh khởi động của bài “TẠM BIỆT CÁNH CAM”.",
                       "required": true,
                       "media": {
-                        "image": "images/giao-an/GA_W26_P05_06_01.jpg"
+                        "image": "assets/images/giao-an/GA_W26_P05_06_01.jpg"
                       }
                     },
                     {
@@ -30504,7 +30504,7 @@
                       "prompt": "Quan sát tranh khởi động của bài “NHỮNG CUỐN SÁCH ĐỘC ĐÁO”.",
                       "required": true,
                       "media": {
-                        "image": "images/giao-an/GA_W28_P01_02_01.jpg"
+                        "image": "assets/images/giao-an/GA_W28_P01_02_01.jpg"
                       }
                     },
                     {
@@ -30856,7 +30856,7 @@
                       "prompt": "Quan sát tranh minh họa của “KỂ CHUYỆN LỚP HỌC VIẾT THƯ”.",
                       "required": true,
                       "media": {
-                        "image": "images/giao-an/GA_W28_P04_01.jpg"
+                        "image": "assets/images/giao-an/GA_W28_P04_01.jpg"
                       }
                     }
                   ]
@@ -31004,7 +31004,7 @@
                       "prompt": "Quan sát tranh khởi động của bài “THƯ VIỆN BIẾT ĐI”.",
                       "required": true,
                       "media": {
-                        "image": "images/giao-an/GA_W28_P05_06_01.jpg"
+                        "image": "assets/images/giao-an/GA_W28_P05_06_01.jpg"
                       }
                     },
                     {
@@ -31704,7 +31704,7 @@
                       "prompt": "Quan sát tranh khởi động của bài “CẢM ƠN ANH HÀ MÃ”.",
                       "required": true,
                       "media": {
-                        "image": "images/giao-an/GA_W29_P01_02_01.jpg"
+                        "image": "assets/images/giao-an/GA_W29_P01_02_01.jpg"
                       }
                     },
                     {
@@ -32070,7 +32070,7 @@
                       "prompt": "Quan sát tranh minh họa của “CẢM ƠN ANH HÀ MÃ”.",
                       "required": true,
                       "media": {
-                        "image": "images/giao-an/GA_W29_P04_01.jpg"
+                        "image": "assets/images/giao-an/GA_W29_P04_01.jpg"
                       }
                     }
                   ]
@@ -32218,7 +32218,7 @@
                       "prompt": "Quan sát tranh khởi động của bài “TỪ CHÚ BỒ CÂU ĐẾN IN-TƠ-NÉT”.",
                       "required": true,
                       "media": {
-                        "image": "images/giao-an/GA_W29_P05_06_01.jpg"
+                        "image": "assets/images/giao-an/GA_W29_P05_06_01.jpg"
                       }
                     },
                     {
@@ -32939,7 +32939,7 @@
                       "prompt": "Quan sát tranh khởi động của bài “MAI AN TIÊM”.",
                       "required": true,
                       "media": {
-                        "image": "images/giao-an/GA_W30_P01_02_01.jpg"
+                        "image": "assets/images/giao-an/GA_W30_P01_02_01.jpg"
                       }
                     },
                     {
@@ -33311,7 +33311,7 @@
                       "prompt": "Quan sát tranh minh họa của “MAI AN TIÊM”.",
                       "required": true,
                       "media": {
-                        "image": "images/giao-an/GA_W30_P04_01.jpg"
+                        "image": "assets/images/giao-an/GA_W30_P04_01.jpg"
                       }
                     }
                   ]
@@ -33460,7 +33460,7 @@
                       "prompt": "Quan sát tranh khởi động của bài “THƯ GỬI BỐ NGOÀI ĐẢO”.",
                       "required": true,
                       "media": {
-                        "image": "images/giao-an/GA_W30_P05_06_01.jpg"
+                        "image": "assets/images/giao-an/GA_W30_P05_06_01.jpg"
                       }
                     },
                     {
@@ -34160,7 +34160,7 @@
                       "prompt": "Quan sát tranh khởi động của bài “BÓP NÁT QUẢ CAM”.",
                       "required": true,
                       "media": {
-                        "image": "images/giao-an/GA_W31_P01_02_01.jpg"
+                        "image": "assets/images/giao-an/GA_W31_P01_02_01.jpg"
                       }
                     },
                     {
@@ -34477,7 +34477,7 @@
                       "prompt": "Quan sát tranh minh họa của “BÓP NÁT QUẢ CAM - NÓI VÀ NGHE”.",
                       "required": true,
                       "media": {
-                        "image": "images/giao-an/GA_W31_P04_01.jpg"
+                        "image": "assets/images/giao-an/GA_W31_P04_01.jpg"
                       }
                     }
                   ]
@@ -34627,7 +34627,7 @@
                       "prompt": "Quan sát tranh khởi động của bài “CHẾC RỄ ĐA TRÒN”.",
                       "required": true,
                       "media": {
-                        "image": "images/giao-an/GA_W31_P05_06_01.jpg"
+                        "image": "assets/images/giao-an/GA_W31_P05_06_01.jpg"
                       }
                     },
                     {
@@ -35348,7 +35348,7 @@
                       "prompt": "Quan sát tranh khởi động của bài “ĐẤT NƯỚC CHÚNG MÌNH”.",
                       "required": true,
                       "media": {
-                        "image": "images/giao-an/GA_W32_P01_02_01.jpg"
+                        "image": "assets/images/giao-an/GA_W32_P01_02_01.jpg"
                       }
                     },
                     {
@@ -35682,7 +35682,7 @@
                       "prompt": "Quan sát tranh minh họa của “THÁNH GIÓNG”.",
                       "required": true,
                       "media": {
-                        "image": "images/giao-an/GA_W32_P04_01.jpg"
+                        "image": "assets/images/giao-an/GA_W32_P04_01.jpg"
                       }
                     }
                   ]
@@ -35828,7 +35828,7 @@
                       "prompt": "Quan sát tranh khởi động của bài “TRÊN CÁC MIỀN ĐẤT NƯỚC”.",
                       "required": true,
                       "media": {
-                        "image": "images/giao-an/GA_W32_P05_06_01.jpg"
+                        "image": "assets/images/giao-an/GA_W32_P05_06_01.jpg"
                       }
                     },
                     {
@@ -36531,7 +36531,7 @@
                       "prompt": "Quan sát tranh khởi động của bài “CHUYỆN QUẢ BẦU”.",
                       "required": true,
                       "media": {
-                        "image": "images/giao-an/GA_W33_P01_02_01.jpg"
+                        "image": "assets/images/giao-an/GA_W33_P01_02_01.jpg"
                       }
                     },
                     {
@@ -36897,7 +36897,7 @@
                       "prompt": "Quan sát tranh minh họa của “CHUYỆN QUẢ BẦU”.",
                       "required": true,
                       "media": {
-                        "image": "images/giao-an/GA_W33_P04_01.jpg"
+                        "image": "assets/images/giao-an/GA_W33_P04_01.jpg"
                       }
                     }
                   ]
@@ -37043,7 +37043,7 @@
                       "prompt": "Quan sát tranh khởi động của bài “KHÁM PHÁ ĐÁY BIỂN Ở TRƯỜNG SA”.",
                       "required": true,
                       "media": {
-                        "image": "images/giao-an/GA_W33_P05_06_01.jpg"
+                        "image": "assets/images/giao-an/GA_W33_P05_06_01.jpg"
                       }
                     },
                     {
@@ -37772,7 +37772,7 @@
                       "prompt": "Quan sát tranh khởi động của bài “HỒ GƯƠM”.",
                       "required": true,
                       "media": {
-                        "image": "images/giao-an/GA_W34_P01_02_01.jpg"
+                        "image": "assets/images/giao-an/GA_W34_P01_02_01.jpg"
                       }
                     },
                     {
@@ -38123,7 +38123,7 @@
                       "prompt": "Quan sát tranh minh họa của “NÓI VỀ QUÊ HƯƠNG, ĐẤT NƯỚC EM”.",
                       "required": true,
                       "media": {
-                        "image": "images/giao-an/GA_W34_P04_01.jpg"
+                        "image": "assets/images/giao-an/GA_W34_P04_01.jpg"
                       }
                     }
                   ]
@@ -38270,7 +38270,7 @@
                       "prompt": "Quan sát tranh khởi động của bài “CÁNH ĐỒNG QUÊ EM”.",
                       "required": true,
                       "media": {
-                        "image": "images/giao-an/GA_W34_P05_06_01.jpg"
+                        "image": "assets/images/giao-an/GA_W34_P05_06_01.jpg"
                       }
                     },
                     {
