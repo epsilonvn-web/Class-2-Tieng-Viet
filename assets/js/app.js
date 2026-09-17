@@ -24,68 +24,12 @@ const SUBTOPIC_PALETTES = [
     { card: "bg-rose-50/80 hover:bg-rose-100 border-rose-300 text-rose-800", num: "text-rose-600", badge: "bg-white text-rose-600 border-rose-200" }
 ];
 
-// Lộ trình 24 tuần (Tỷ lệ Vàng 30/60) — mapping tới đúng tiểu mục con (tên "sub" đầy đủ, không phải mã X.Y)
-// Tuần 12 = Đấu trường thi Học kỳ I | Tuần 24 = Đấu trường thi Học kỳ II + Học sinh giỏi
-const roadmapConfig = {
-    1: { name: "Tuần 1: Ngôi nhà chữ Việt I - Bảng chữ cái & viết hoa đầu câu", focusSubIds: ["TV_2_M1_1", "TV_2_M1_2"], reviewSubIds: [], desc: "Bảng chữ cái Việt Nam, viết hoa đầu câu và đầu dòng thơ.", icon: "🔤" },
-    2: { name: "Tuần 2: Ngôi nhà chữ Việt II - Tên người & địa danh", focusSubIds: ["TV_2_M1_3", "TV_2_M1_4"], reviewSubIds: ["TV_2_M1_1", "TV_2_M1_2"], desc: "Luyện viết hoa tên người, địa danh và ôn nền tảng chữ cái.", icon: "✍️" },
-    3: { name: "Tuần 3: Hiệp sĩ âm đầu I - ch/tr & s/x", focusSubIds: ["TV_2_M2_1"], reviewTopicIds: [1], desc: "Phân biệt ch/tr và s/x trong từ, câu tự nhiên.", icon: "⚔️" },
-    4: { name: "Tuần 4: Hiệp sĩ âm đầu II - l/n & r/d/gi", focusSubIds: ["TV_2_M2_2"], reviewSubIds: ["TV_2_M2_1"], reviewTopicIds: [1], desc: "Phân biệt l/n và r/d/gi, đồng thời ôn âm đầu đã học.", icon: "⚔️" },
-    5: { name: "Tuần 5: Hiệp sĩ âm đầu III - c/k, g/gh, ng/ngh", focusSubIds: ["TV_2_M2_3", "TV_2_M2_4"], reviewSubIds: ["TV_2_M2_1", "TV_2_M2_2"], reviewTopicIds: [1], desc: "Luyện các quy tắc chính tả c/k, g/gh, ng/ngh.", icon: "⚔️" },
-    6: { name: "Tuần 6: Vương quốc vần & dấu - Âm cuối, vần phức hợp & hỏi/ngã", focusSubIds: ["TV_2_M3_1", "TV_2_M3_2", "TV_2_M3_3", "TV_2_M3_4", "TV_2_M3_5"], reviewTopicIds: [1, 2], desc: "Luyện c/t, n/ng, ch/nh, vần phức hợp và dấu hỏi/ngã.", icon: "🔮" },
-    7: { name: "Tuần 7: Ôn tập C1 - Chữ, âm đầu, vần & dấu", focusTopicIds: [1, 2, 3], desc: "Ôn đủ ba tầng: chữ/viết hoa → âm đầu → vần/dấu.", icon: "🎯" },
-    8: { name: "Tuần 8: Kho báu từ vựng - Gia đình, Trường học & Thiên nhiên", focusSubIds: ["TV_2_M4_1", "TV_2_M4_2", "TV_2_M4_3", "TV_2_M4_4"], reviewSubIds: [], desc: "Mở rộng vốn từ và nghĩa từ theo các chủ điểm gần gũi.", icon: "💰" },
-    9: { name: "Tuần 9: Từ chỉ sự vật & từ chỉ hoạt động", focusSubIds: ["TV_2_M5_1", "TV_2_M5_2"], reviewTopicIds: [4], desc: "Nhận diện và sử dụng từ chỉ sự vật, hoạt động/trạng thái.", icon: "🌳" },
-    10: { name: "Tuần 10: Từ chỉ đặc điểm & quan hệ nghĩa đơn giản", focusSubIds: ["TV_2_M5_3", "TV_2_M4_1", "TV_2_M4_2", "TV_2_M4_3", "TV_2_M4_4"], reviewSubIds: ["TV_2_M5_1", "TV_2_M5_2"], desc: "Luyện từ chỉ đặc điểm và nghĩa từ trong ngữ cảnh.", icon: "🌳" },
-    11: { name: "Tuần 11: Dấu câu, tạo câu & đoạn ngắn", focusSubIds: ["TV_2_M6_1", "TV_2_M6_2", "TV_2_M6_3"], reviewTopicIds: [5], desc: "Dùng dấu câu, sắp xếp từ thành câu và câu thành đoạn ngắn.", icon: "🖊️" },
-    12: { name: "Tuần 12: Đấu trường đánh giá số hóa HKI", isExam: true, desc: "13 câu - 40 phút - theo ma trận V6.1.", icon: "🏆" },
-    13: { name: "Tuần 13: Câu giới thiệu & câu nêu hoạt động", focusSubIds: ["TV_2_M7_1", "TV_2_M7_2"], reviewTopicIds: [5, 6], desc: "Nhận diện và tạo câu giới thiệu, câu nêu hoạt động.", icon: "💬" },
-    14: { name: "Tuần 14: Câu nêu đặc điểm & mở rộng câu", focusSubIds: ["TV_2_M7_3"], reviewSubIds: ["TV_2_M7_1", "TV_2_M7_2", "TV_2_M5_3"], desc: "Luyện câu nêu đặc điểm và ôn các kiểu câu đã học.", icon: "💬" },
-    15: { name: "Tuần 15: Đại sứ giao tiếp - Chào hỏi & nói lời phù hợp", focusSubIds: ["TV_2_M8_1"], reviewTopicIds: [6, 7], desc: "Luyện chào hỏi, cảm ơn, xin lỗi, mời, đề nghị và chúc mừng.", icon: "🤝" },
-    16: { name: "Tuần 16: Tin nhắn, thư/bưu thiếp & bảng biểu", focusSubIds: ["TV_2_M8_2", "TV_2_M8_3", "TV_2_M8_4"], reviewTopicIds: [6, 7], desc: "Luyện văn bản giao tiếp ngắn và đọc thông tin trực tiếp.", icon: "🤝" },
-    17: { name: "Tuần 17: Ôn tập giữa giai đoạn HKII", focusTopicIds: [7, 8], reviewTopicIds: [4, 5, 6], desc: "Trọng tâm câu và giao tiếp; nhắc lại từ vựng, từ ngữ và dấu câu.", icon: "🎯" },
-    18: { name: "Tuần 18: Đọc hiểu chuyên sâu - Thơ", focusSubIds: ["TV_2_M9_1"], reviewSubIds: [], desc: "Đọc thơ, tìm chi tiết, hình ảnh, cảm xúc và thông tin trực tiếp.", icon: "📖" },
-    19: { name: "Tuần 19: Đọc hiểu chuyên sâu - Truyện/văn xuôi & bài học", focusSubIds: ["TV_2_M9_2", "TV_2_M9_3"], reviewSubIds: ["TV_2_M9_1"], desc: "Đọc truyện/văn xuôi, suy luận và phản hồi văn bản.", icon: "📖" },
-    20: { name: "Tuần 20: PHẦN THÊM - Trí tuệ ngôn ngữ: Động vật & muông thú", focusSubIds: ["TV_2_M10_1", "TV_2_M10_2"], reviewSubIds: ["TV_2_M4_3", "TV_2_M5_1", "TV_2_M5_3"], desc: "Giải câu đố và suy luận bằng manh mối ngôn ngữ về động vật.", icon: "🧩" },
-    21: { name: "Tuần 21: PHẦN THÊM - Đồ dùng, cây trái & hoa", focusSubIds: ["TV_2_M10_3", "TV_2_M10_4"], reviewTopicIds: [4, 5], desc: "Suy luận qua mô tả đặc điểm, công dụng, cây trái và đồ dùng.", icon: "🧩" },
-    22: { name: "Tuần 22: PHẦN THÊM - IQ ngôn ngữ, đố chữ & bối cảnh ATGT", focusSubIds: ["TV_2_M10_5", "TV_2_M10_6"], reviewTopicIds: [1, 2, 3], desc: "Đố chữ, từ lạc nhóm và suy luận bằng lời; ATGT chỉ là bối cảnh.", icon: "🧩" },
-    23: { name: "Tuần 23: Ôn tập tổng hợp cuối năm", focusTopicIds: [1,2,3,4,5,6,7,8,9,10], desc: "Ôn toàn bộ TV_C1-TV_C6, bảo đảm độ phủ hợp lí.", icon: "🎓" },
-    24: { name: "Tuần 24: Đấu trường đánh giá số hóa cuối năm", isExam: true, desc: "13 câu - 40 phút - HKII/HSG theo ma trận V6.1.", icon: "🏆" }
-};
-
-
-const TOTAL_ROADMAP_WEEKS = 24;
-
-
-function getRoadmapCoord(weekNum) {
-    const cols = 6;
-    const colWidth = 140, rowHeight = 105;
-    const startX = 90, startY = 65;
-    const idx = weekNum - 1;
-    const row = Math.floor(idx / cols);
-    const posInRow = idx % cols;
-    const col = (row % 2 === 0) ? posInRow : (cols - 1 - posInRow);
-    return { x: startX + col * colWidth, y: startY + row * rowHeight };
-}
-
-function buildRoadmapPathD(totalWeeks) {
-    const pts = [];
-    for (let w = 1; w <= totalWeeks; w++) pts.push(getRoadmapCoord(w));
-    let d = `M ${pts[0].x},${pts[0].y}`;
-    for (let i = 1; i < pts.length; i++) {
-        const p0 = pts[i - 1], p1 = pts[i];
-        const midX = (p0.x + p1.x) / 2, midY = (p0.y + p1.y) / 2;
-        const dx = p1.x - p0.x, dy = p1.y - p0.y;
-        const len = Math.hypot(dx, dy) || 1;
-        const nx = -dy / len, ny = dx / len;
-        // Sóng uốn lượn xuống-lên LIÊN TỤC xuyên suốt toàn bộ đường đi (kể cả đoạn chuyển hàng),
-        // không để đoạn nào thẳng đơ xen giữa — giống hệt kiểu bản đồ lộ trình game (Duolingo-style).
-        const bend = (i % 2 === 0 ? 1 : -1) * 45;
-        const cx = midX + nx * bend, cy = midY + ny * bend;
-        d += ` Q ${cx},${cy} ${p1.x},${p1.y}`;
-    }
-    return d;
-}
+// ==========================================
+// V7: Roadmap học theo SGK được NHÚNG trong file dữ liệu Bài học.
+// Không còn roadmap 24 tuần cứng trong app.js.
+// ==========================================
+let roadmapConfig = {};
+const TOTAL_ROADMAP_WEEKS = 35;
 
 const examFileMap = {
     hocky1: { file: 'de_thi_tieng_viet_2.json', idPrefix: 'TV_2_M12_1', sheet: 'LichSuBaiThiHK1', label: 'Học kỳ 1', color: 'pink' },
@@ -507,25 +451,47 @@ const GIAO_AN_LESSON_TYPE = {
 async function loadGiaoAnData() {
     if (giaoAnDataCache) return giaoAnDataCache;
     const res = await fetch(GIAO_AN_DATA_FILE);
-    if (!res.ok) throw new Error('Không thể tải dữ liệu Giáo án');
+    if (!res.ok) throw new Error('Không thể tải dữ liệu Bài học');
     giaoAnDataCache = await res.json();
+    hydrateRoadmapConfigV7_(giaoAnDataCache);
     return giaoAnDataCache;
 }
 
+function hydrateRoadmapConfigV7_(data) {
+    const cfg = {};
+    (data?.roadmap || []).forEach(w => {
+        cfg[Number(w.week)] = {
+            week: Number(w.week),
+            semester: Number(w.semester),
+            theme: w.theme || '',
+            lessons: w.lessons || [],
+            weekly_practice: w.weekly_practice || {},
+            name: `Tuần ${w.week}: ${w.theme || 'Luyện tập'}`,
+            icon: '🎯'
+        };
+    });
+    roadmapConfig = cfg;
+}
+
 function getGiaoAnSemester_(data, semesterNumber) {
-    return (data?.semesters || []).find(s => Number(s.semester) === Number(semesterNumber)) || null;
+    const sem = Number(semesterNumber);
+    const weeks = (data?.roadmap || []).filter(w => Number(w.semester) === sem);
+    if (!weeks.length) return null;
+    return { semester: sem, weeks, week_from: weeks[0].week, week_to: weeks[weeks.length - 1].week };
 }
 
 function findGiaoAnWeek_(data, semesterNumber, weekNumber) {
-    const sem = getGiaoAnSemester_(data, semesterNumber);
-    return (sem?.weeks || []).find(w => Number(w.week) === Number(weekNumber)) || null;
+    return (data?.roadmap || []).find(w => Number(w.semester) === Number(semesterNumber) && Number(w.week) === Number(weekNumber)) || null;
 }
 
 function findGiaoAnUnit_(data, unitId) {
-    for (const sem of (data?.semesters || [])) {
-        for (const week of (sem.weeks || [])) {
-            const unit = (week.units || []).find(u => String(u.unit_id) === String(unitId));
-            if (unit) return { sem, week, unit };
+    for (const w of (data?.roadmap || [])) {
+        for (const l of (w.lessons || [])) {
+            const contentId = `${l.lesson_id}_content`;
+            const practiceId = `${l.lesson_id}_practice`;
+            if (unitId === contentId || unitId === practiceId || unitId === l.lesson_id) {
+                return { week: w, lesson: l, cardType: unitId === practiceId ? 'practice' : 'content' };
+            }
         }
     }
     return null;
@@ -540,20 +506,24 @@ function getGiaoAnCompletedSet_() {
     try {
         const raw = JSON.parse(localStorage.getItem(getGiaoAnProgressKey_()) || '[]');
         return new Set(Array.isArray(raw) ? raw : []);
-    } catch (e) { return new Set(); }
+    } catch (e) {
+        return new Set();
+    }
 }
 
 function saveGiaoAnCompletedSet_(setObj) {
-    localStorage.setItem(getGiaoAnProgressKey_(), JSON.stringify([...setObj]));
+    try {
+        localStorage.setItem(getGiaoAnProgressKey_(), JSON.stringify([...setObj]));
+    } catch (e) {
+        console.warn('[Bài học] Không thể lưu tiến độ local:', e);
+    }
 }
 
 async function openGiaoAnHub(semesterNumber = 1) {
     stopSpeaking();
     clearInterval(quizTimerInterval);
-    // Giáo án là nội dung Premium giống Tiến trình tuần và Mini Game:
-    // chỉ Admin / Trial / VIP được truy cập.
     if (!hasPremiumAccess()) {
-        showPremiumGate('Giáo án', '📘');
+        showPremiumGate('Bài học', '📖');
         return;
     }
     inGiaoAnFlow = true;
@@ -563,17 +533,37 @@ async function openGiaoAnHub(semesterNumber = 1) {
     activeTopicId = null;
     pendingTopicQuiz = null;
     activeGiaoAnContext = { semester: Number(semesterNumber) || 1, week: null, unitId: null };
-    updateNavTabs('Giáo án', '📘', null);
+    applyV7Labels_();
+    updateNavTabs('Bài học', '📖', null);
     switchAppView('view-giao-an-hub');
-    showLoadingOverlay('Đang mở Giáo án Tiếng Việt 2...');
+    showLoadingOverlay('Đang mở Bài học Tiếng Việt 2...');
     try {
         const data = await loadGiaoAnData();
         renderGiaoAnHub_(data, activeGiaoAnContext.semester);
     } catch (err) {
-        alert(`Không thể mở Giáo án: ${err.message}`);
-    } finally {
-        hideLoadingOverlay();
+        alert(`Không thể mở Bài học: ${err.message}`);
+    } finally { hideLoadingOverlay(); }
+}
+
+function applyV7Labels_() {
+    const gaBtn = document.getElementById('btn-giao-an-header');
+    if (gaBtn) {
+        gaBtn.title = 'Bài học';
+        const desktop = gaBtn.querySelector('.hidden.md\\:flex');
+        if (desktop) desktop.innerHTML = '<span>Bài</span><span>học</span>';
     }
+    const pBtn = document.getElementById('btn-progress-header');
+    if (pBtn) {
+        pBtn.title = 'Luyện tuần';
+        const desktop = pBtn.querySelector('.hidden.md\\:flex');
+        if (desktop) desktop.innerHTML = '<span>Luyện</span><span>tuần</span>';
+    }
+    const hubTitle = document.querySelector('#view-giao-an-hub h2');
+    if (hubTitle) hubTitle.innerHTML = '<span>📖</span><span>Bài học Tiếng Việt 2</span>';
+    const hubSub = document.getElementById('giao-an-hub-subtitle');
+    if (hubSub) hubSub.textContent = 'Học theo chương trình Kết nối tri thức · gọn, dễ hiểu, có audio và ví dụ mở rộng';
+    const weekHint = document.querySelector('#view-giao-an-week h2 + p');
+    if (weekHint) weekHint.textContent = 'Mỗi bài là một mạch 3 trang: Bài đọc → Câu hỏi → Tổng kết.';
 }
 
 function renderGiaoAnHub_(data, semesterNumber) {
@@ -581,28 +571,23 @@ function renderGiaoAnHub_(data, semesterNumber) {
     const grid = document.getElementById('giao-an-week-grid');
     const subtitle = document.getElementById('giao-an-hub-subtitle');
     if (!tabs || !grid) return;
-
-    tabs.innerHTML = (data.semesters || []).map(sem => {
-        const active = Number(sem.semester) === Number(semesterNumber);
-        return `<button onclick="openGiaoAnHub(${sem.semester})" class="px-4 py-2 rounded-xl text-xs md:text-sm font-extrabold border transition-all ${active ? 'bg-sky-500 text-white border-sky-500 shadow-md' : 'bg-white text-sky-700 border-sky-200 hover:bg-sky-50'}">Học kỳ ${sem.semester}</button>`;
+    const semesters = [1,2].filter(sem => (data?.roadmap || []).some(w => Number(w.semester) === sem));
+    tabs.innerHTML = semesters.map(sem => {
+        const active = Number(sem) === Number(semesterNumber);
+        return `<button onclick="openGiaoAnHub(${sem})" class="semester-switch-btn ${active ? 'is-active' : 'is-inactive'}">Học kỳ ${sem}</button>`;
     }).join('');
-
     const sem = getGiaoAnSemester_(data, semesterNumber);
     if (!sem) { grid.innerHTML = '<p class="text-slate-400 font-bold">Chưa có dữ liệu học kỳ này.</p>'; return; }
-    if (subtitle) subtitle.textContent = `Học kỳ ${sem.semester} · Tuần ${sem.week_from}-${sem.week_to} · mô phỏng các tiết học theo Kết nối tri thức`;
-
+    if (subtitle) subtitle.textContent = `Học kỳ ${sem.semester} · ${sem.weeks.length} tuần thực học · bỏ các tuần ôn tập riêng`;
     const completed = getGiaoAnCompletedSet_();
-    grid.innerHTML = (sem.weeks || []).map(w => {
-        const units = w.units || [];
-        const done = units.filter(u => completed.has(u.unit_id)).length;
-        const pct = units.length ? Math.round(done * 100 / units.length) : 0;
-        return `<button onclick="openGiaoAnWeek(${sem.semester}, ${w.week})" class="text-left pastel-card p-3.5 border-2 border-sky-100 hover:border-sky-300 transition-all group min-h-[118px]">
-            <div class="flex items-center justify-between gap-2">
-                <div class="flex items-center gap-2"><span class="text-2xl group-hover:scale-110 transition-transform">📅</span><span class="font-black text-sky-700">Tuần ${w.week}</span></div>
-                <span class="text-[10px] font-black px-2 py-0.5 rounded-full bg-sky-50 text-sky-700 border border-sky-100">${units.length} bài/tiết</span>
-            </div>
-            <p class="text-xs text-slate-500 font-bold mt-2">${done}/${units.length} đã hoàn thành</p>
-            <div class="w-full h-2 bg-sky-100 rounded-full mt-2 overflow-hidden"><div class="h-full bg-sky-400 rounded-full" style="width:${pct}%"></div></div>
+    grid.innerHTML = sem.weeks.map(w => {
+        const cards = (w.lessons || []).length;
+        const done = (w.lessons || []).reduce((n,l) => n + (completed.has(`${l.lesson_id}_done`) ? 1 : 0), 0);
+        const pct = cards ? Math.round(done * 100 / cards) : 0;
+        return `<button onclick="openGiaoAnWeek(${sem.semester}, ${w.week})" class="text-left bg-gradient-to-br from-white via-pink-50/70 to-purple-50/70 p-3.5 border-2 border-pink-200 hover:border-purple-300 hover:shadow-md transition-colors min-h-[118px] rounded-[24px]">
+            <div class="flex items-center gap-2"><span class="text-2xl">📅</span><span class="font-black text-[17px] md:text-lg text-purple-700">Tuần ${w.week}</span></div>
+            <p class="text-xs text-slate-600 font-bold mt-2 line-clamp-2">${escapeHtml(w.theme || '')}</p>
+            <div class="w-full h-2 bg-pink-100 rounded-full mt-2 overflow-hidden"><div class="h-full bg-gradient-to-r from-pink-400 to-purple-500 rounded-full" style="width:${pct}%"></div></div>
         </button>`;
     }).join('');
 }
@@ -610,173 +595,195 @@ function renderGiaoAnHub_(data, semesterNumber) {
 async function openGiaoAnWeek(semesterNumber, weekNumber) {
     stopSpeaking();
     inGiaoAnFlow = true;
-    activeGiaoAnContext = { semester: Number(semesterNumber), week: Number(weekNumber), unitId: null };
-    updateNavTabs('Giáo án', '📘', `Tuần ${weekNumber}`);
+    activeGiaoAnContext = { semester:Number(semesterNumber), week:Number(weekNumber), unitId:null };
+    applyV7Labels_();
+    updateNavTabs('Bài học','📖',`Tuần ${weekNumber}`);
     switchAppView('view-giao-an-week');
-    showLoadingOverlay(`Đang mở Giáo án Tuần ${weekNumber}...`);
+    showLoadingOverlay(`Đang mở Bài học Tuần ${weekNumber}...`);
     try {
         const data = await loadGiaoAnData();
         const week = findGiaoAnWeek_(data, semesterNumber, weekNumber);
         renderGiaoAnWeek_(week);
-    } catch (err) {
-        alert(`Không thể mở tuần học: ${err.message}`);
-    } finally { hideLoadingOverlay(); }
+    } catch (err) { alert(`Không thể mở tuần học: ${err.message}`); }
+    finally { hideLoadingOverlay(); }
 }
 
 function renderGiaoAnWeek_(week) {
     const title = document.getElementById('giao-an-week-title');
     const list = document.getElementById('giao-an-unit-list');
     if (!week || !list) return;
-    if (title) title.textContent = `Tuần ${week.week}`;
+    if (title) {
+        title.textContent = `Tuần ${week.week} · ${week.theme || ''}`;
+        title.className = 'text-lg md:text-xl font-black text-purple-700';
+    }
     const completed = getGiaoAnCompletedSet_();
-    list.innerHTML = (week.units || []).map((u, idx) => {
-        const meta = GIAO_AN_LESSON_TYPE[u.lesson_type] || { label: u.lesson_type || 'Bài học', icon: '📘', cls: 'sky' };
-        const span = Array.isArray(u.period_span) ? u.period_span : [];
-        const periodText = span.length > 1 && span[0] !== span[span.length - 1] ? `Tiết ${span[0]}-${span[span.length - 1]}` : `Tiết ${span[0] || idx + 1}`;
-        const done = completed.has(u.unit_id);
-        const firstObj = (u.objectives || [])[0] || 'Học theo tiến trình giáo án.';
-        return `<button onclick="openGiaoAnUnit('${u.unit_id}')" class="w-full text-left bg-white border-2 ${done ? 'border-emerald-200' : 'border-sky-100'} hover:border-sky-300 rounded-2xl p-3.5 shadow-sm transition-all group">
-            <div class="flex items-start justify-between gap-3">
-                <div class="flex items-start gap-3 min-w-0">
-                    <div class="w-10 h-10 rounded-xl bg-${meta.cls}-50 border border-${meta.cls}-100 flex items-center justify-center text-xl shrink-0">${meta.icon}</div>
-                    <div class="min-w-0">
-                        <div class="flex flex-wrap items-center gap-1.5"><span class="font-black text-slate-800 text-sm md:text-base">${escapeHtml(u.title)}</span><span class="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-slate-50 text-slate-500 border border-slate-200">${periodText}</span></div>
-                        <div class="text-[11px] font-extrabold text-${meta.cls}-600 mt-0.5">${meta.label}</div>
-                        <p class="text-xs text-slate-500 font-semibold mt-1 line-clamp-2">${escapeHtml(firstObj)}</p>
-                    </div>
-                </div>
-                <span class="shrink-0 text-sm">${done ? '✅' : '›'}</span>
-            </div>
+    list.innerHTML = (week.lessons || []).map((l, idx) => {
+        const done = completed.has(`${l.lesson_id}_done`);
+        const isFirst = Number(l.lesson_no) === 1;
+        const tone = isFirst
+          ? {bg:'bg-gradient-to-br from-pink-50 via-white to-rose-50', border:'border-pink-200 hover:border-pink-400', icon:'bg-pink-100 border-pink-200', label:'text-pink-600', strip:'from-pink-400 to-rose-400'}
+          : {bg:'bg-gradient-to-br from-purple-50 via-white to-violet-50', border:'border-purple-200 hover:border-purple-400', icon:'bg-purple-100 border-purple-200', label:'text-purple-700', strip:'from-purple-400 to-indigo-400'};
+        return `<button onclick="openBaiHocCardV8_(${week.week},${l.lesson_no},1)" class="relative overflow-hidden w-full text-left ${tone.bg} border-2 ${done?'border-emerald-300':tone.border} rounded-3xl p-4 shadow-sm hover:shadow-md transition-shadow min-h-[132px]">
+          <div class="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r ${tone.strip}"></div>
+          <div class="flex items-start gap-3 mt-1"><div class="w-12 h-12 rounded-2xl ${tone.icon} border flex items-center justify-center text-2xl">${isFirst?'📖':'📚'}</div><div class="min-w-0 flex-1"><div class="text-[11px] font-black ${tone.label}">BÀI ${l.lesson_no} · 3 TRANG</div><div class="font-black text-slate-800 mt-1 text-base">${escapeHtml(l.source_title || `Bài ${idx+1}`)}</div><div class="text-xs text-slate-500 font-semibold mt-1">Bài đọc → Câu hỏi → Tổng kết</div></div><span class="text-lg">${done?'✅':'›'}</span></div>
         </button>`;
     }).join('');
 }
 
-async function openGiaoAnUnit(unitId) {
+async function openBaiHocCardV8_(weekNumber, lessonNo, pageNo = 1) {
     stopSpeaking();
-    inGiaoAnFlow = true;
-    showLoadingOverlay('Đang mở tiết học...');
+    showLoadingOverlay('Đang mở bài học...');
     try {
         const data = await loadGiaoAnData();
-        const found = findGiaoAnUnit_(data, unitId);
-        if (!found) throw new Error('Không tìm thấy bài học');
-        activeGiaoAnContext = { semester: Number(found.sem.semester), week: Number(found.week.week), unitId: String(unitId) };
-        updateNavTabs('Giáo án', '📘', `Tuần ${found.week.week}`, found.unit.title);
-        renderGiaoAnLesson_(found.unit, found.week.week);
+        const week = (data.roadmap || []).find(w => Number(w.week) === Number(weekNumber));
+        const lesson = (week?.lessons || []).find(l => Number(l.lesson_no) === Number(lessonNo));
+        if (!week || !lesson) throw new Error('Không tìm thấy nội dung');
+        const safePage = Math.min(3, Math.max(1, Number(pageNo)||1));
+        activeGiaoAnContext = { semester:Number(week.semester), week:Number(week.week), unitId:`${lesson.lesson_id}_p${safePage}`, lessonId:lesson.lesson_id, lessonNo:Number(lessonNo), pageNo:safePage };
+        updateNavTabs('Bài học','📖',`Tuần ${week.week}`,`${lesson.source_title} · Trang ${safePage}/3`);
+        renderBaiHocLessonV8_(lesson, week, safePage);
         switchAppView('view-giao-an-lesson');
-    } catch (err) {
-        alert(`Không thể mở bài học: ${err.message}`);
-    } finally { hideLoadingOverlay(); }
+    } catch (err) { alert(`Không thể mở bài học: ${err.message}`); }
+    finally { hideLoadingOverlay(); }
 }
 
-function renderGiaoAnLesson_(unit, weekNumber) {
-    const meta = GIAO_AN_LESSON_TYPE[unit.lesson_type] || { label: 'Bài học', icon: '📘', cls: 'sky' };
+// Alias cũ để các link/breadcrumb không hỏng.
+async function openBaiHocCardV7_(weekNumber, lessonNo, cardType) {
+    return openBaiHocCardV8_(weekNumber, lessonNo, cardType === 'practice' ? 2 : 1);
+}
+async function openGiaoAnUnit(unitId) {
+    const data = await loadGiaoAnData();
+    const found = findGiaoAnUnit_(data, unitId);
+    if (!found) return alert('Không tìm thấy bài học');
+    return openBaiHocCardV8_(found.week.week, found.lesson.lesson_no, 1);
+}
+
+function renderBaiHocLessonV8_(lesson, week, pageNo) {
     const title = document.getElementById('giao-an-lesson-title');
     const metaEl = document.getElementById('giao-an-lesson-meta');
     const objectives = document.getElementById('giao-an-objectives');
     const sections = document.getElementById('giao-an-sections');
-    const practiceBtn = document.getElementById('giao-an-extra-practice-btn');
+    const objectiveBox = objectives?.closest('div');
+    if (objectiveBox) objectiveBox.classList.add('hidden');
+    const legacy = document.getElementById('giao-an-legacy-actions'); if (legacy) legacy.classList.add('hidden');
     if (!sections) return;
-
-    const displayTitle = unit.display_title || unit.title;
-    if (title) title.textContent = displayTitle;
-    if (metaEl) metaEl.innerHTML = `${meta.icon} ${meta.label} · Tuần ${weekNumber} · ${formatPeriodSpan_(unit.period_span)}`;
-
-    // Child-facing opening: keep curriculum objectives in JSON, but do not show teacher-style wording here.
-    if (objectives) {
-        const intro = unit.lesson_intro || {};
-        const today = Array.isArray(intro.today) && intro.today.length ? intro.today : (unit.objectives || []).slice(0, 4);
-        objectives.innerHTML = today.map(x => `<li>${escapeHtml(x)}</li>`).join('');
-        const objectiveBox = objectives.closest('div');
-        if (objectiveBox) {
-            const heading = objectiveBox.querySelector('h3, h4, p.font-black, p.font-extrabold');
-            if (heading) heading.textContent = '🎯 Hôm nay con sẽ';
-        }
-    }
-
-    const introHtml = renderGiaoAnIntro_(unit);
-    const materialHtml = renderGiaoAnLearningMaterial_(unit);
-    const flowHtml = (unit.sections || []).map((s, idx) => renderGiaoAnSection_(unit, s, idx)).join('');
-    sections.innerHTML = `${introHtml}${materialHtml}${flowHtml}`;
-
-    if (practiceBtn) {
-        const canPractice = unit.extra_practice && Array.isArray(unit.extra_practice.sub_ids) && unit.extra_practice.sub_ids.length;
-        practiceBtn.classList.toggle('hidden', !canPractice);
-        if (canPractice) practiceBtn.textContent = `🧩 ${unit.extra_practice.label || 'Luyện thêm'}`;
-    }
-    updateGiaoAnCompleteButton_(unit.unit_id);
+    if (title) title.textContent = lesson.source_title || 'Bài học';
+    if (metaEl) metaEl.innerHTML = `📖 Bài ${lesson.lesson_no} · Tuần ${week.week} · ${escapeHtml(week.theme || '')}`;
+    const pages = lesson.pages || [];
+    const page = pages.find(p=>Number(p.page_no)===Number(pageNo)) || pages[pageNo-1] || {};
+    const body = page.page_type === 'questions' ? renderBaiHocQuestionsPageV8_(page)
+              : page.page_type === 'summary' ? renderBaiHocSummaryPageV8_(page, lesson)
+              : renderBaiHocReadingPageV8_(page, lesson);
+    sections.innerHTML = `${renderBaiHocPageTabsV8_(week, lesson, pageNo)}${body}${renderBaiHocBottomNavV8_(week, lesson, pageNo)}`;
 }
 
-function renderGiaoAnIntro_(unit) {
-    const intro = unit.lesson_intro || {};
-    if (!intro.hook && !intro.remember) return '';
-    const remember = intro.remember ? `<div class="mt-3 rounded-xl bg-amber-50 border border-amber-100 px-3 py-2 text-sm font-bold text-amber-900">${escapeHtml(intro.remember)}</div>` : '';
-    return `<section class="rounded-3xl border-2 border-sky-100 bg-gradient-to-br from-sky-50 via-white to-amber-50 p-4 md:p-5 shadow-sm mb-4">
-        <div class="flex items-start gap-3">
-            <div class="text-3xl shrink-0">🐰</div>
-            <div class="min-w-0">
-                <p class="font-black text-slate-800 text-base md:text-lg leading-relaxed">${escapeHtml(intro.hook || 'Cùng Cô Thỏ Ngọc bắt đầu bài học nhé!')}</p>
-                ${remember}
-            </div>
-        </div>
-    </section>`;
+function renderBaiHocPageTabsV8_(week, lesson, pageNo) {
+    const labels=[['📖','Bài đọc'],['❓','Câu hỏi'],['🌟','Tổng kết']];
+    return `<div class="sticky top-0 z-10 -mx-1 mb-3 px-1 py-1.5 bg-white/95 backdrop-blur rounded-2xl"><div class="grid grid-cols-3 gap-2">${labels.map((x,i)=>{const n=i+1,active=n===Number(pageNo);return `<button onclick="openBaiHocCardV8_(${week.week},${lesson.lesson_no},${n})" class="h-10 rounded-xl border font-black text-xs ${active?'bg-gradient-to-r from-pink-500 to-purple-500 text-white border-purple-400 shadow-md':'bg-pink-50/70 text-purple-700 border-pink-200 hover:bg-purple-50'}">${x[0]} ${x[1]}</button>`}).join('')}</div></div>`;
 }
 
-function getGiaoAnLearningAudioText_(unit) {
-    const m = unit && unit.learning_material ? unit.learning_material : {};
-    if (m.audio_text) return String(m.audio_text);
-    if (m.text) return String(m.text);
-    if (Array.isArray(m.paragraphs)) return m.paragraphs.join(' ');
-    if (Array.isArray(m.lines)) return m.lines.join(' ');
-    if (m.model) return String(m.model);
-    if (m.intro) return String(m.intro);
-    if (Array.isArray(m.sentences)) return m.sentences.join(' ');
-    return unit?.display_title || unit?.title || '';
+function resolveGiaoAnMediaSrc_(src) {
+    return normalizeGiaoAnImagePath_(src);
 }
 
-function renderGiaoAnLearningMaterial_(unit) {
-    const m = unit.learning_material || null;
-    if (!m) return '';
-    const kind = m.kind || 'text';
-    const listenBtn = `<button onclick="speakVietnamese(getGiaoAnLearningAudioText_(window.__gaCurrentUnit || {}), 0.94)" class="px-3 py-2 rounded-xl bg-purple-100 hover:bg-purple-200 text-purple-700 font-extrabold text-xs">🔊 Cô đọc</button>`;
-    window.__gaCurrentUnit = unit;
+function renderBaiHocReadingPageV8_(p, lesson) {
+    const m = p.material || {};
+    const imgSrc = resolveGiaoAnMediaSrc_(p.image || m.image || '');
 
-    let body = '';
-    if (kind === 'story') {
-        body = (m.paragraphs || []).map(p => `<p class="text-[15px] md:text-base leading-7 text-slate-700 font-semibold">${escapeHtml(p)}</p>`).join('');
-    } else if (kind === 'poem') {
-        body = `<div class="text-center space-y-1.5 py-1">${(m.lines || []).map(x => `<p class="text-[15px] md:text-base leading-7 text-slate-700 font-bold">${escapeHtml(x)}</p>`).join('')}</div>`;
-    } else if (kind === 'table') {
-        body = `<div class="overflow-x-auto"><table class="w-full text-sm"><tbody>${(m.rows || []).map(r => `<tr class="border-b border-sky-50"><td class="py-2 pr-3 font-black text-sky-700">${escapeHtml(r[0])}</td><td class="py-2 text-slate-700 font-semibold">${escapeHtml(r[1])}</td></tr>`).join('')}</tbody></table></div>`;
-    } else if (kind === 'handwriting') {
-        body = `<div class="text-center"><div class="text-7xl md:text-8xl font-black text-sky-700 leading-none">${escapeHtml(m.letter || '')}</div><div class="flex flex-wrap justify-center gap-2 mt-4">${(m.examples || []).map(x=>`<span class="px-3 py-1.5 rounded-xl bg-white border border-sky-100 font-black text-slate-700">${escapeHtml(x)}</span>`).join('')}</div>${m.application_sentence ? `<p class="mt-4 text-base font-bold text-slate-700">${escapeHtml(m.application_sentence)}</p>`:''}</div>`;
-    } else if (kind === 'dictation') {
-        body = `<div class="rounded-2xl bg-amber-50 border border-amber-100 p-3"><p class="text-sm font-bold text-slate-700">👂 Nghe trước, chưa cần nhìn đáp án. Khi soát bài con mới mở phần từ cần chú ý.</p><div class="flex flex-wrap gap-2 mt-3">${(m.focus_words || []).map(x=>`<button onclick="speakVietnamese('${escapeJsString_(x)}',0.9)" class="px-3 py-1.5 rounded-full bg-white border border-amber-200 text-amber-800 font-extrabold text-xs">🔊 ${escapeHtml(x)}</button>`).join('')}</div></div>`;
-    } else if (kind === 'examples') {
-        const cards=[];
-        if (m.things?.length) cards.push(['🎒 Sự vật',m.things]);
-        if (m.actions?.length) cards.push(['⚽ Hoạt động',m.actions]);
-        if (m.descriptions?.length) cards.push(['🌈 Đặc điểm',m.descriptions]);
-        if (m.sentences?.length) cards.push(['💬 Câu mẫu',m.sentences]);
-        body = `<div class="grid md:grid-cols-2 gap-3">${cards.map(([h,arr])=>`<div class="rounded-2xl bg-white border border-sky-100 p-3"><p class="font-black text-slate-800 mb-2">${h}</p><div class="flex flex-wrap gap-2">${arr.map(x=>`<button onclick="speakVietnamese('${escapeJsString_(x)}',0.92)" class="px-2.5 py-1.5 rounded-full bg-sky-50 text-sky-800 font-bold text-xs">🔊 ${escapeHtml(x)}</button>`).join('')}</div></div>`).join('')}</div>`;
-    } else if (kind === 'speaking') {
-        body = `<div class="space-y-3"><p class="text-sm font-bold text-slate-700">${escapeHtml(m.scenario || '')}</p><div class="flex flex-wrap gap-2">${(m.guides || []).map(x=>`<span class="px-3 py-1.5 rounded-full bg-emerald-50 border border-emerald-100 text-emerald-800 font-bold text-xs">${escapeHtml(x)}</span>`).join('')}</div>${m.model?`<div class="rounded-xl bg-white border border-emerald-100 p-3 text-sm font-semibold text-slate-700">🐰 Ví dụ: ${escapeHtml(m.model)}</div>`:''}</div>`;
-    } else if (kind === 'writing_model') {
-        body = `<div class="space-y-3"><div class="grid gap-2">${(m.prompts || []).map((x,i)=>`<div class="rounded-xl bg-white border border-amber-100 px-3 py-2 text-sm font-bold text-slate-700">${i+1}. ${escapeHtml(x)}</div>`).join('')}</div>${m.model?`<div class="rounded-xl bg-amber-50 border border-amber-100 p-3"><p class="text-xs font-black text-amber-800 mb-1">✏️ Cô viết mẫu</p><p class="text-sm font-semibold text-slate-700 leading-relaxed">${escapeHtml(m.model)}</p></div>`:''}</div>`;
-    } else if (kind === 'review') {
-        body = `<div class="grid gap-2">${(m.prompts || []).map((x,i)=>`<div class="rounded-xl bg-white border border-indigo-100 px-3 py-2 text-sm font-bold text-slate-700">${i+1}. ${escapeHtml(x)}</div>`).join('')}</div>`;
+    let material = '';
+    if (m.type === 'story') {
+      material = `<div class="space-y-3">${(m.paragraphs||[]).map(x =>
+        `<p class="text-[17px] md:text-[18px] leading-8 text-slate-800 font-semibold">${escapeHtml(x)}</p>`
+      ).join('')}</div>`;
+    } else if (m.type === 'poem') {
+      material = `<div class="space-y-2">${(m.lines||[]).map(x =>
+        `<p class="text-[17px] md:text-[18px] leading-8 text-slate-800 font-bold">${escapeHtml(x)}</p>`
+      ).join('')}</div>`;
     } else {
-        body = `<p class="text-sm font-semibold text-slate-700">${escapeHtml(m.text || m.model || '')}</p>`;
+      material = `<p class="text-[17px] md:text-[18px] leading-8 text-slate-800 font-semibold">${escapeHtml(m.text || '')}</p>`;
     }
 
-    const title = escapeHtml(m.title || unit.display_title || unit.title || 'Học liệu của Cô Thỏ Ngọc');
-    const showListen = ['story','poem','table','speaking','writing_model'].includes(kind);
-    return `<section class="bg-white border-2 border-sky-100 rounded-3xl p-4 md:p-5 shadow-sm space-y-4 mb-4">
-        <div class="flex items-center justify-between gap-3">
-            <div><p class="text-[11px] font-black uppercase tracking-wide text-sky-500">📖 Học liệu Cô Thỏ Ngọc</p><h3 class="font-black text-slate-800 text-lg mt-0.5">${title}</h3></div>
-            ${showListen ? listenBtn : ''}
+    const audioText = (m.paragraphs||m.lines||[]).join(' ') || m.text || p.intro || lesson.source_title;
+
+    const words = (p.words||[]).map(x => `
+      <button onclick="speakVietnamese('${escapeJsString_(x.word)}',0.9)"
+              class="px-3 py-2 rounded-xl bg-purple-50 border border-purple-100 text-purple-700 font-black text-[16px] md:text-[17px] leading-7 text-left">
+        🔊 ${escapeHtml(x.word)}
+        <span class="font-semibold text-slate-500">· ${escapeHtml(x.meaning||'')}</span>
+      </button>`).join('');
+
+    const topBar = `
+      <div class="w-full flex items-center gap-3 mb-3">
+        <div class="flex-1 min-w-0 rounded-2xl bg-gradient-to-r from-pink-50 to-purple-50 border border-pink-200 px-4 py-2.5 text-center">
+          <p class="font-black text-slate-800 text-[17px] md:text-[19px] leading-7">
+            🐰 ${escapeHtml(p.intro || 'Cùng cô đọc bài nhé!')}
+          </p>
         </div>
-        ${body}
-    </section>`;
+        <button onclick="speakVietnamese('${escapeJsString_(audioText)}',0.94)"
+                class="shrink-0 h-[48px] px-4 rounded-2xl bg-purple-100 border border-purple-200 text-purple-700 font-black text-[16px] md:text-[17px] shadow-sm">
+          🔊 Cô đọc
+        </button>
+      </div>`;
+
+    const imagePanel = imgSrc ? `
+      <div class="bh8-picture-panel self-center">
+        <div class="overflow-hidden rounded-[22px] border-2 border-pink-100 bg-white shadow-sm">
+          <img src="${escapeHtml(imgSrc)}"
+               alt="Tranh minh họa ${escapeHtml(lesson.source_title||'bài học')}"
+               class="block w-full h-auto max-h-[560px] object-contain bg-pink-50/20"
+               onerror="this.closest('.bh8-picture-panel').style.display='none'">
+        </div>
+      </div>` : '';
+
+    const readingPanel = `
+      <div class="min-w-0">
+        <h3 class="font-black text-[22px] md:text-[24px] text-slate-900 leading-tight mb-3">
+          ${escapeHtml(lesson.source_title||'')}
+        </h3>
+
+        <div class="space-y-3">${material}</div>
+
+        ${words ? `
+          <div class="flex flex-wrap gap-2 mt-4 pt-3 border-t border-pink-100">
+            ${words}
+          </div>` : ''}
+      </div>`;
+
+    return `
+      ${topBar}
+      <div class="bh8-reading-layout grid grid-cols-1 md:grid-cols-[50%_50%] gap-3 md:gap-4 items-center">
+        ${imagePanel}
+        ${readingPanel}
+      </div>`;
+}
+
+function renderBaiHocQuestionsPageV8_(p) {
+    const examples=(p.extra_examples||[]).map(x=>`<div class="rounded-xl bg-white border border-purple-100 px-3 py-2 text-[15px] md:text-base font-semibold text-slate-700 leading-7">✨ ${escapeHtml(x)}</div>`).join('');
+    const items=(p.items||[]).map((x,i)=>{
+      if (x.type==='choice') return `<div class="rounded-2xl bg-pink-50/70 border border-pink-100 p-3"><div class="font-black text-[15px] md:text-base text-slate-700 mb-2 leading-7">${i+1}. ${escapeHtml(x.prompt)}</div>${(x.options||[]).map((op,j)=>`<button onclick="this.parentElement.querySelectorAll('button').forEach(b=>b.classList.remove('bg-emerald-100','border-emerald-300','bg-rose-50','border-rose-200')); if(${j}===${Number(x.answer||0)}){this.classList.add('bg-emerald-100','border-emerald-300')}else{this.classList.add('bg-rose-50','border-rose-200')}" class="w-full text-left px-3 py-2.5 my-1 rounded-xl bg-white border border-pink-100 font-bold text-[15px] md:text-base leading-7">${String.fromCharCode(65+j)}. ${escapeHtml(op)}</button>`).join('')}</div>`;
+      return `<div class="rounded-2xl ${i%2?'bg-purple-50':'bg-emerald-50'} border ${i%2?'border-purple-100':'border-emerald-100'} p-3"><div class="font-bold text-[15px] md:text-base text-slate-700 leading-7">${i+1}. ${x.type==='speak'?'🎙️':'💭'} ${escapeHtml(x.prompt||'')}</div></div>`;
+    }).join('');
+    return `<div class="space-y-3"><section class="rounded-2xl bg-gradient-to-r from-purple-50 to-pink-50 border border-purple-200 p-3"><div class="font-black text-purple-700 mb-1">🐰 Nhớ lại bài đọc trước nhé</div><p class="font-bold text-slate-700 text-[15px] md:text-base leading-7">${escapeHtml(p.recall||'Con có thể quay lại Trang 1 bất cứ lúc nào để tìm chi tiết nhé!')}</p></section><section class="space-y-3">${items}</section>${examples?`<section class="grid gap-2"><div class="font-black text-purple-700 text-[15px] md:text-base">🌈 Mở rộng thêm</div>${examples}</section>`:''}</div>`;
+}
+
+function renderBaiHocSummaryPageV8_(p, lesson) {
+    const pts=(p.key_points||[]).map(x=>`<li>${escapeHtml(x)}</li>`).join('');
+    const words=(p.words||[]).map(x=>`<span class="inline-flex px-3 py-2 rounded-full bg-pink-50 border border-pink-100 text-pink-700 font-black text-[15px] md:text-base">${escapeHtml(x.word)}${x.meaning?` · <span class="ml-1 text-slate-500 font-semibold">${escapeHtml(x.meaning)}</span>`:''}</span>`).join('');
+    const conn=(p.connections||[]).map(x=>`<div class="rounded-xl bg-white border border-purple-100 px-3 py-2 text-[15px] md:text-base font-semibold text-slate-700 leading-7">🔗 ${escapeHtml(x)}</div>`).join('');
+    return `<div class="space-y-3"><section class="rounded-3xl bg-gradient-to-br from-amber-50 via-pink-50 to-purple-50 border-2 border-amber-200 p-4 md:p-5"><div class="text-[11px] font-black text-amber-600">🌟 TRANG 3 · TỔNG KẾT</div><h3 class="font-black text-xl text-purple-800 mt-1">Con đã học được gì?</h3><ul class="list-disc pl-5 mt-3 space-y-2 text-[15px] md:text-base text-slate-700 font-semibold leading-7">${pts}</ul></section>${words?`<section class="rounded-2xl bg-white border border-pink-100 p-4"><div class="font-black text-pink-700 mb-2">💬 Từ hay cần nhớ</div><div class="flex flex-wrap gap-2">${words}</div></section>`:''}${conn?`<section class="rounded-2xl bg-purple-50/60 border border-purple-100 p-4"><div class="font-black text-purple-700 mb-2">🌈 Liên hệ thêm</div><div class="grid gap-2">${conn}</div></section>`:''}<section class="rounded-2xl bg-emerald-50 border border-emerald-100 p-4"><div class="font-black text-emerald-700">🎙️ Trước khi xong bài</div><p class="text-[15px] md:text-base font-semibold text-slate-700 mt-1 leading-7">${escapeHtml(p.finish_prompt||'Con hãy nói lại một điều con nhớ nhất nhé!')}</p></section><button onclick="markCurrentBaiHocLessonCompleteV8_()" class="w-full py-3 rounded-2xl bg-gradient-to-r from-pink-500 to-purple-500 text-white font-black shadow-md hover:brightness-105">✅ Hoàn thành bài ${lesson.lesson_no}</button></div>`;
+}
+
+function renderBaiHocBottomNavV8_(week, lesson, pageNo) {
+    const prev = Number(pageNo)>1 ? `<button onclick="openBaiHocCardV8_(${week.week},${lesson.lesson_no},${Number(pageNo)-1})" class="px-4 py-2.5 rounded-xl bg-white border border-purple-200 text-purple-700 font-black text-xs">← Trang trước</button>` : '<span></span>';
+    const next = Number(pageNo)<3 ? `<button onclick="openBaiHocCardV8_(${week.week},${lesson.lesson_no},${Number(pageNo)+1})" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-pink-500 to-purple-500 text-white font-black text-xs shadow-sm">Trang tiếp →</button>` : `<button onclick="openBaiHocCardV8_(${week.week},${lesson.lesson_no},1)" class="px-4 py-2.5 rounded-xl bg-purple-50 border border-purple-200 text-purple-700 font-black text-xs">↺ Xem lại bài đọc</button>`;
+    return `<div class="flex items-center justify-between gap-3 pt-1">${prev}<div class="text-[11px] font-black text-slate-400">${pageNo}/3</div>${next}</div>`;
+}
+
+function markCurrentBaiHocLessonCompleteV8_() {
+    const id = activeGiaoAnContext?.lessonId;
+    if (!id) return;
+    const set = getGiaoAnCompletedSet_(); set.add(`${id}_done`); saveGiaoAnCompletedSet_(set);
+    const btn = event?.currentTarget; if (btn) { btn.textContent='✅ Đã hoàn thành bài học'; btn.classList.add('from-emerald-500','to-teal-500'); }
 }
 
 function formatPeriodSpan_(span) {
@@ -811,40 +818,40 @@ function renderGiaoAnActivity_(unit, a) {
     const base = 'rounded-xl border p-3';
     if (type === 'tap_word') {
         const chips = (a.items || []).map(item => `<button type="button" onclick="this.classList.toggle('bg-pink-500');this.classList.toggle('text-white');this.classList.toggle('border-pink-500')" class="px-3 py-1.5 rounded-full bg-white border border-pink-200 text-pink-700 font-extrabold text-xs transition-all">${escapeHtml(item)}</button>`).join('');
-        return `<div class="${base} bg-pink-50/50 border-pink-100"><p class="font-bold text-sm text-slate-700">👆 ${prompt}</p><div class="flex flex-wrap gap-2 mt-2">${chips}</div></div>`;
+        return `<div class="${base} bg-pink-50/50 border-pink-100"><p class="font-bold text-[15px] md:text-base text-slate-700 leading-7">👆 ${prompt}</p><div class="flex flex-wrap gap-2 mt-2">${chips}</div></div>`;
     }
     if (type === 'single_choice') {
         const opts = (a.options || []).map((op, idx) => `<button onclick="handleGiaoAnChoice('${unit.unit_id}','${a.activity_id}',${idx})" class="ga-choice w-full text-left px-3 py-2 rounded-xl bg-white border border-sky-200 hover:bg-sky-50 text-sm font-bold">${String.fromCharCode(65+idx)}. ${escapeHtml(op)}</button>`).join('');
-        return `<div id="ga-act-${safeDomId_(unit.unit_id)}-${safeDomId_(a.activity_id)}" class="${base} bg-sky-50/50 border-sky-100"><p class="font-bold text-sm text-slate-700">❓ ${prompt}</p><div class="grid gap-2 mt-2">${opts}</div><div class="ga-feedback hidden mt-2 text-xs font-extrabold"></div></div>`;
+        return `<div id="ga-act-${safeDomId_(unit.unit_id)}-${safeDomId_(a.activity_id)}" class="${base} bg-sky-50/50 border-sky-100"><p class="font-bold text-[15px] md:text-base text-slate-700 leading-7">❓ ${prompt}</p><div class="grid gap-2 mt-2">${opts}</div><div class="ga-feedback hidden mt-2 text-xs font-extrabold"></div></div>`;
     }
     if (type === 'self_check') {
         const checks = (a.checks || []).map(x => `<label class="flex items-start gap-2 text-xs font-bold text-slate-600"><input type="checkbox" class="mt-0.5 accent-emerald-500"> <span>${escapeHtml(x)}</span></label>`).join('');
-        return `<div class="${base} bg-emerald-50/50 border-emerald-100"><p class="font-bold text-sm text-slate-700">✅ ${prompt}</p><div class="grid gap-1.5 mt-2">${checks}</div></div>`;
+        return `<div class="${base} bg-emerald-50/50 border-emerald-100"><p class="font-bold text-[15px] md:text-base text-slate-700 leading-7">✅ ${prompt}</p><div class="grid gap-1.5 mt-2">${checks}</div></div>`;
     }
     if (type === 'listen') {
         const src = a.media?.audio || '';
         const fallback = getGiaoAnLearningAudioText_(unit) || a.prompt || '';
-        return `<div class="${base} bg-purple-50/50 border-purple-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2"><p class="font-bold text-sm text-slate-700">🎧 ${prompt}</p><button onclick="playGiaoAnAudio('${escapeJsString_(src)}','${escapeJsString_(fallback)}')" class="px-3 py-2 bg-purple-100 hover:bg-purple-200 text-purple-700 rounded-xl font-extrabold text-xs shrink-0">🔊 Nghe cô đọc</button></div>`;
+        return `<div class="${base} bg-purple-50/50 border-purple-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2"><p class="font-bold text-[15px] md:text-base text-slate-700 leading-7">🎧 ${prompt}</p><button onclick="playGiaoAnAudio('${escapeJsString_(src)}','${escapeJsString_(fallback)}')" class="px-3 py-2 bg-purple-100 hover:bg-purple-200 text-purple-700 rounded-xl font-extrabold text-xs shrink-0">🔊 Nghe cô đọc</button></div>`;
     }
     if (type === 'observe') {
         const src = normalizeGiaoAnImagePath_(a.media?.image || '');
         const img = src ? `<div class="mt-2 rounded-xl overflow-hidden bg-white border border-sky-100"><img src="${escapeHtml(src)}" alt="Minh họa" class="w-full max-w-[820px] mx-auto max-h-[300px] md:max-h-[500px] object-contain" onerror="this.parentElement.classList.add('hidden')"></div>` : '';
-        return `<div class="${base} bg-sky-50/40 border-sky-100"><p class="font-bold text-sm text-slate-700">🖼️ ${prompt}</p>${img}</div>`;
+        return `<div class="${base} bg-sky-50/40 border-sky-100"><p class="font-bold text-[15px] md:text-base text-slate-700 leading-7">🖼️ ${prompt}</p>${img}</div>`;
     }
     if (type === 'summary_card') return `<div class="${base} bg-amber-50 border-amber-200"><p class="font-black text-sm text-amber-900">💡 ${prompt}</p></div>`;
-    if (type === 'write_offline') return `<div class="${base} bg-amber-50/50 border-amber-100"><p class="font-bold text-sm text-slate-700">✍️ ${prompt}</p><p class="text-[11px] text-amber-700 font-bold mt-1">Con thực hành vào vở/bảng như một tiết học trên lớp nhé.</p></div>`;
-    if (type === 'read_aloud') return `<div class="${base} bg-rose-50/50 border-rose-100"><p class="font-bold text-sm text-slate-700">📣 ${prompt}</p></div>`;
-    if (type === 'speak') return `<div class="${base} bg-emerald-50/50 border-emerald-100"><p class="font-bold text-sm text-slate-700">🎙️ ${prompt}</p></div>`;
+    if (type === 'write_offline') return `<div class="${base} bg-amber-50/50 border-amber-100"><p class="font-bold text-[15px] md:text-base text-slate-700 leading-7">✍️ ${prompt}</p><p class="text-[11px] text-amber-700 font-bold mt-1">Con thực hành vào vở/bảng như một tiết học trên lớp nhé.</p></div>`;
+    if (type === 'read_aloud') return `<div class="${base} bg-rose-50/50 border-rose-100"><p class="font-bold text-[15px] md:text-base text-slate-700 leading-7">📣 ${prompt}</p></div>`;
+    if (type === 'speak') return `<div class="${base} bg-emerald-50/50 border-emerald-100"><p class="font-bold text-[15px] md:text-base text-slate-700 leading-7">🎙️ ${prompt}</p></div>`;
     if (type === 'sequence') {
         const items = (a.items || []).map((x,i) => `<span class="px-2.5 py-1 rounded-lg bg-white border border-indigo-100 text-xs font-extrabold text-indigo-700">${String(x).startsWith('IMG_') ? `Tranh ${i+1}` : escapeHtml(x)}</span>`).join('');
-        return `<div class="${base} bg-indigo-50/50 border-indigo-100"><p class="font-bold text-sm text-slate-700">🔢 ${prompt}</p><div class="flex flex-wrap gap-2 mt-2">${items}</div></div>`;
+        return `<div class="${base} bg-indigo-50/50 border-indigo-100"><p class="font-bold text-[15px] md:text-base text-slate-700 leading-7">🔢 ${prompt}</p><div class="flex flex-wrap gap-2 mt-2">${items}</div></div>`;
     }
     if (type === 'match') {
         const groups = [...new Set((a.pairs || []).map(p => p.group))];
         const rows = (a.pairs || []).map((p,i) => `<div class="flex items-center gap-2"><span class="flex-1 text-xs font-bold text-slate-700">${escapeHtml(p.item)}</span><select data-correct="${escapeHtml(p.group)}" class="ga-match-select px-2 py-1.5 rounded-lg border border-indigo-200 bg-white text-xs font-bold"><option value="">Chọn nhóm</option>${groups.map(g=>`<option value="${escapeHtml(g)}">${escapeHtml(g)}</option>`).join('')}</select></div>`).join('');
-        return `<div id="ga-act-${safeDomId_(unit.unit_id)}-${safeDomId_(a.activity_id)}" class="${base} bg-indigo-50/50 border-indigo-100"><p class="font-bold text-sm text-slate-700">🔗 ${prompt}</p><div class="grid gap-2 mt-2">${rows}</div><button onclick="checkGiaoAnMatch('${unit.unit_id}','${a.activity_id}')" class="mt-2 px-3 py-1.5 bg-indigo-500 text-white rounded-lg text-xs font-extrabold">Kiểm tra</button><div class="ga-feedback hidden mt-2 text-xs font-extrabold"></div></div>`;
+        return `<div id="ga-act-${safeDomId_(unit.unit_id)}-${safeDomId_(a.activity_id)}" class="${base} bg-indigo-50/50 border-indigo-100"><p class="font-bold text-[15px] md:text-base text-slate-700 leading-7">🔗 ${prompt}</p><div class="grid gap-2 mt-2">${rows}</div><button onclick="checkGiaoAnMatch('${unit.unit_id}','${a.activity_id}')" class="mt-2 px-3 py-1.5 bg-indigo-500 text-white rounded-lg text-xs font-extrabold">Kiểm tra</button><div class="ga-feedback hidden mt-2 text-xs font-extrabold"></div></div>`;
     }
-    return `<div class="${base} bg-slate-50 border-slate-200"><p class="font-bold text-sm text-slate-700">📘 ${prompt}</p></div>`;
+    return `<div class="${base} bg-slate-50 border-slate-200"><p class="font-bold text-[15px] md:text-base text-slate-700 leading-7">📘 ${prompt}</p></div>`;
 }
 
 function safeDomId_(s) { return String(s || '').replace(/[^a-zA-Z0-9_-]/g, '_'); }
@@ -917,34 +924,21 @@ function markCurrentGiaoAnComplete() {
     saveGiaoAnCompletedSet_(completed);
     updateGiaoAnCompleteButton_(unitId);
     const el = document.getElementById('giao-an-complete-note');
-    if (el) { el.textContent = 'Đã hoàn thành tiết học trên thiết bị này ✅'; el.classList.remove('hidden'); }
+    if (el) { el.textContent = 'Đã hoàn thành phần này trên thiết bị ✅'; el.classList.remove('hidden'); }
 }
 
 function updateGiaoAnCompleteButton_(unitId) {
     const btn = document.getElementById('giao-an-complete-btn');
     if (!btn) return;
     const done = getGiaoAnCompletedSet_().has(unitId);
-    btn.textContent = done ? '✅ Đã hoàn thành tiết học' : '✓ Hoàn thành tiết học';
+    btn.textContent = done ? '✅ Đã hoàn thành' : '✓ Hoàn thành phần này';
     btn.classList.toggle('bg-emerald-500', done);
     btn.classList.toggle('bg-sky-500', !done);
 }
 
 async function startGiaoAnExtraPractice() {
-    const data = await loadGiaoAnData();
-    const found = findGiaoAnUnit_(data, activeGiaoAnContext.unitId);
-    if (!found || !found.unit.extra_practice) return;
-    await fetchAllTopicsData();
-    const subIds = found.unit.extra_practice.sub_ids || [];
-    const count = Number(found.unit.extra_practice.suggested_count || 5);
-    const pool = (allQuestionsFlatCache || []).filter(q => subIds.includes(q.sub_id));
-    if (!pool.length) return alert('Kho luyện thêm cho bài này đang được bổ sung.');
-    const qs = shuffleArray(pool).slice(0, Math.min(count, pool.length));
-    activeExamContext = null;
-    activeRoadmapContext = null;
-    pendingTopicQuiz = null;
-    practiceCycleRawPool = [...pool];
-    updateNavTabs('Giáo án', '📘', `Tuần ${found.week.week}`, `${found.unit.title} · Luyện thêm`);
-    startTopicQuiz(0, `${found.unit.title} - Luyện thêm`, qs, null);
+    // V7: Luyện cùng cô đã là ô riêng trong Bài học; Luyện tuần là module đánh giá riêng.
+    if (activeGiaoAnContext.week) openGiaoAnWeek(activeGiaoAnContext.semester, activeGiaoAnContext.week);
 }
 
 async function startRandomExam(categoryKey) {
@@ -1417,7 +1411,14 @@ async function tryAutoLogin() {
         currentUser = { ...result.student, isGuest: false, token: result.token || saved.token };
         currentSessionPin = '';
         savePersistentSession_();
-        enterDashboard(true);
+
+        // Chỉ đồng bộ lại thông tin tài khoản/quyền sau khi restoreSession thành công.
+        // TUYỆT ĐỐI không gọi enterDashboard() ở đây, vì phản hồi mạng có thể về muộn
+        // sau khi bé đã mở một bài học; enterDashboard() sẽ gọi goHome() và làm bé
+        // bị văng khỏi bài đang học về trang chủ.
+        updateUserInfoBox();
+        renderDashboardGrid();
+        renderExamHubGrid();
         return true;
     } catch (err) {
         // Mất mạng tạm thời không làm bé bị đăng xuất. Phiên đã lưu vẫn được giữ lại.
@@ -1576,7 +1577,7 @@ function updateUserInfoBox() {
     box.innerHTML = `
         <div class="flex items-center space-x-2">
             <div class="text-right">
-                <div class="${isAdmin ? 'text-amber-600' : 'text-pink-600'} font-extrabold text-xs md:text-sm leading-tight">${escapeHtml(currentUser.hoTen)}</div>
+                <div class="${isAdmin ? 'text-amber-600' : 'text-pink-600'} font-extrabold text-sm md:text-base leading-tight">${escapeHtml(currentUser.hoTen)}</div>
                 <div class="${tierClass} font-semibold text-[10px]">${escapeHtml(tier)} · ID ${escapeHtml(currentUser.maHS)}</div>
             </div>
             ${isAdmin ? '<button onclick="openAdminAccounts()" title="Quản lý tài khoản" class="h-9 px-3 flex items-center justify-center bg-amber-100 hover:bg-amber-200 text-amber-700 rounded-xl border border-amber-200 text-xs font-extrabold pastel-btn"><i class="fa-solid fa-users-gear mr-1"></i>Quản lý</button>' : ''}
@@ -1597,7 +1598,7 @@ function clickProgressOrExam(type) {
     // Khách và Regular đều dùng chung popup Premium để thông báo nhất quán.
     if (type === 'progress') {
         if (!hasPremiumAccess()) {
-            showPremiumGate('Bản đồ tuần', '🗺️');
+            showPremiumGate('Luyện tuần', '🎯');
             return;
         }
         openRoadmap();
@@ -1712,8 +1713,9 @@ function selectSubtopic(idx) {
 function handleNextExamFromReport() {
     stopSpeaking();
     if (activeRoadmapContext) {
+        const sem = Number(activeRoadmapContext.week) <= 17 ? 1 : 2;
         activeRoadmapContext = null;
-        openRoadmap();
+        openRoadmap(sem);
     } else if (activeExamContext) {
         activeExamContext = null;
         openExamHub();
@@ -1722,116 +1724,145 @@ function handleNextExamFromReport() {
     }
 }
 
-function openRoadmap() {
+function getLuyenTuanProgressKey_() {
+    const id = currentUser?.maHS || 'KHACH';
+    return `tv2_v7_luyen_tuan_unlocked_v2_${String(id).toUpperCase()}`;
+}
+
+function getLearningWeekNumbersV7_(data) {
+    return (data?.roadmap || []).map(w => Number(w.week)).filter(Number.isFinite).sort((a,b)=>a-b);
+}
+
+function getUnlockedLearningWeekV7_(data) {
+    const weeks = getLearningWeekNumbersV7_(data);
+    if (!weeks.length) return 1;
+    const firstWeek = weeks[0];
+    let localWeek = firstWeek;
+    try {
+        const saved = Number(localStorage.getItem(getLuyenTuanProgressKey_()) || firstWeek);
+        if (Number.isFinite(saved)) localWeek = saved;
+    } catch (e) {}
+    // V7: mở khóa CHỈ theo kết quả Luyện tuần. Không dùng tuanHienTai cũ của tài khoản,
+    // vì trường này thuộc cơ chế Tiến trình cũ và có thể làm mở toàn bộ tuần.
+    let unlocked = firstWeek;
+    for (const w of weeks) {
+        if (w <= localWeek) unlocked = w;
+        else break;
+    }
+    return unlocked;
+}
+
+function saveUnlockedLearningWeekV7_(week) {
+    const n = Number(week);
+    if (!Number.isFinite(n)) return;
+    try { localStorage.setItem(getLuyenTuanProgressKey_(), String(n)); } catch (e) {}
+}
+
+function isLearningWeekUnlockedV7_(data, weekNum) {
+    return Number(weekNum) <= Number(getUnlockedLearningWeekV7_(data));
+}
+
+function getNextLearningWeekV7_(data, weekNum) {
+    return getLearningWeekNumbersV7_(data).find(w => w > Number(weekNum)) || null;
+}
+
+async function openRoadmap(semesterNumber = 1) {
     stopSpeaking();
     inMiniGameFlow = false;
     inGiaoAnFlow = false;
-    updateNavTabs("Bản đồ tiến trình tuần", "🗺️", null);
-    renderRoadmapSVG();
+    applyV7Labels_();
+    updateNavTabs('Luyện tuần','🎯',null);
     switchAppView('view-roadmap');
+    showLoadingOverlay('Đang mở Luyện tuần...');
+    try {
+        const data = await loadGiaoAnData();
+        renderLuyenTuanGridV7_(data, semesterNumber);
+    } catch (err) { alert(`Không thể mở Luyện tuần: ${err.message}`); }
+    finally { hideLoadingOverlay(); }
 }
 
-function wrapCaptionLines(text, maxLen = 24, maxLines = 3) {
-    const words = String(text || '').split(' ');
-    const lines = [''];
-    for (const w of words) {
-        const cur = lines[lines.length - 1];
-        const candidate = (cur + ' ' + w).trim();
-        if (candidate.length <= maxLen) {
-            lines[lines.length - 1] = candidate;
-        } else if (lines.length < maxLines) {
-            lines.push(w);
-        } else {
-            lines[lines.length - 1] = candidate;
-        }
-    }
-    while (lines.length < maxLines) lines.push('');
-    if (lines[maxLines - 1].length > maxLen) {
-        lines[maxLines - 1] = lines[maxLines - 1].slice(0, maxLen - 1) + '…';
-    }
-    return lines.slice(0, maxLines);
-}
-
-function renderRoadmapSVG() {
+function renderLuyenTuanGridV7_(data, semesterNumber) {
+    const view = document.getElementById('view-roadmap');
     const container = document.getElementById('roadmap-svg-container');
-    if (!container) return;
-    const tuanHienTai = Number(currentUser?.tuanHienTai) || 1;
+    if (!view || !container) return;
+    const h2=view.querySelector('h2'); if(h2) { h2.innerHTML='<span>🎯</span><span>Luyện tuần</span>'; h2.className='text-base md:text-lg font-extrabold text-purple-700 flex items-center space-x-2'; }
+    const p=view.querySelector('h2 + p'); if(p) p.textContent='20 câu mỗi tuần · đạt từ 80% để mở tuần thực học tiếp theo · đánh giá theo 6 năng lực.';
+    const history=view.querySelector('button[onclick*="LichSuTienTrinhTuan"] span'); if(history) history.textContent='📊 Lịch sử Luyện tuần';
+    const weeks=(data.roadmap||[]).filter(w=>Number(w.semester)===Number(semesterNumber));
+    const unlockedWeek = getUnlockedLearningWeekV7_(data);
+    const tabHost=document.getElementById('roadmap-semester-tabs');
+    if(tabHost) tabHost.innerHTML=[1,2].map(s=>`<button onclick="openRoadmap(${s})" class="semester-switch-btn ${Number(s)===Number(semesterNumber)?'is-active':'is-inactive'}">Học kỳ ${s}</button>`).join('');
+    const grid=`<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">${weeks.map((w,idx)=>{
+        const unlocked = Number(w.week) <= Number(unlockedWeek);
+        const alt = idx % 2 === 0;
+        const stateCls = unlocked
+            ? (alt ? 'bg-gradient-to-br from-pink-50 via-white to-fuchsia-50 border-pink-200 hover:border-fuchsia-400' : 'bg-gradient-to-br from-purple-50 via-white to-indigo-50 border-purple-200 hover:border-indigo-400')
+            : 'bg-gradient-to-br from-slate-50 to-purple-50/40 border-slate-200 opacity-65 cursor-not-allowed';
+        const action = unlocked ? `onclick="selectRoadmapWeek(${w.week})"` : `onclick="showLockedLuyenTuanV7_(${w.week})"`;
+        const accent = unlocked ? (alt ? 'text-fuchsia-700' : 'text-purple-700') : 'text-slate-500';
+        return `<button ${action} class="relative text-left border-2 ${stateCls} rounded-2xl p-3.5 shadow-sm ${unlocked?'hover:shadow-md cursor-pointer':''} transition-shadow min-h-[138px]">
+            <div class="absolute top-0 left-0 right-0 h-1.5 rounded-t-2xl ${unlocked ? (alt?'bg-gradient-to-r from-pink-400 to-fuchsia-500':'bg-gradient-to-r from-purple-400 to-indigo-500') : 'bg-slate-300'}"></div>
+            ${unlocked ? '' : '<span class="absolute top-3 right-3 text-base">🔒</span>'}
+            <div class="flex justify-between items-start gap-2 mt-1"><span class="text-2xl">${unlocked?'🎯':'🔐'}</span><span class="text-[10px] font-black ${unlocked?'bg-white text-purple-700 border-purple-100':'bg-slate-100 text-slate-500 border-slate-200'} border px-2 py-0.5 rounded-full">20 câu</span></div>
+            <div class="font-black ${accent} mt-2">Tuần ${w.week}</div>
+            <div class="text-xs font-semibold text-slate-600 mt-1 line-clamp-2">${escapeHtml(w.theme||'')}</div>
+            <div class="text-[10px] font-extrabold mt-2 ${unlocked?'text-emerald-600':'text-slate-400'}">${unlocked?'✓ Đã mở':'🔒 Cần ≥ 80% tuần trước'}</div>
+        </button>`;
+    }).join('')}</div>`;
+    container.className='w-full bg-gradient-to-br from-pink-50/70 via-white to-purple-50/70 rounded-3xl border-2 border-pink-200 p-3 md:p-4 shadow-sm';
+    container.innerHTML=`<div class="w-full">${grid}</div>`;
+}
+function showLockedLuyenTuanV7_(weekNum) {
+    alert(`🔒 Luyện tuần ${weekNum} chưa mở. Bé cần đạt từ 80% ở tuần thực học trước để mở khóa tuần tiếp theo nhé!`);
+}
 
-    let nodesHtml = '';
-    for (let w = 1; w <= TOTAL_ROADMAP_WEEKS; w++) {
-        const item = roadmapConfig[w];
-        const coord = getRoadmapCoord(w);
-        const isDone = w < tuanHienTai;
-        const isCurrent = w === tuanHienTai;
-        const isLocked = w > tuanHienTai;
-
-        let nodeColor = isDone ? "#10b981" : (isCurrent ? "#ec4899" : "#cbd5e1");
-        let strokeColor = isDone ? "#34d399" : (isCurrent ? "#f43f5e" : "#94a3b8");
-        let badgeHtml = '';
-
-        if (isDone) {
-            badgeHtml = `<text x="${coord.x}" y="${coord.y + 40}" text-anchor="middle" font-size="16" fill="#f59e0b">⭐⭐⭐</text>`;
-        } else if (isCurrent) {
-            badgeHtml = `<text x="${coord.x}" y="${coord.y + 40}" text-anchor="middle" font-size="12" font-weight="900" fill="#ec4899">Đang học</text>`;
-        } else {
-            badgeHtml = `<text x="${coord.x}" y="${coord.y + 38}" text-anchor="middle" font-size="14" fill="#94a3b8">🔒 Khóa</text>`;
-        }
-
-        const cursorCls = isLocked ? "cursor-not-allowed opacity-60" : "cursor-pointer hover:scale-105 transition-transform";
-        const animCls = isCurrent ? "node-current" : "";
-
-        nodesHtml += `
-            <g class="${cursorCls} ${animCls}" onclick="selectRoadmapWeek(${w})" id="svg-node-week-${w}">
-                <circle cx="${coord.x}" cy="${coord.y}" r="40" fill="#ffffff" stroke="${strokeColor}" stroke-width="4" filter="drop-shadow(0 4px 6px rgba(0,0,0,0.08))"/>
-                <circle cx="${coord.x}" cy="${coord.y}" r="34" fill="${nodeColor}" opacity="${isLocked ? '0.25' : '0.15'}"/>
-                <text x="${coord.x}" y="${coord.y - 4}" text-anchor="middle" font-size="24">${item.icon || '🔢'}</text>
-                <text x="${coord.x}" y="${coord.y + 18}" text-anchor="middle" font-size="13" font-weight="800" fill="${isLocked ? '#64748b' : '#1e293b'}">Tuần ${w}</text>
-                ${badgeHtml}
-            </g>
-        `;
+function getQuestionsForWeekV7_(weekConfig) {
+    if (!weekConfig || !allQuestionsFlatCache) return [];
+    const wp=weekConfig.weekly_practice || {};
+    const subIds=wp.sub_ids || [];
+    const topicIds=(wp.topic_ids || []).map(Number);
+    let scoped=allQuestionsFlatCache.filter(q => (subIds.length && subIds.includes(q.sub_id)) || (topicIds.length && topicIds.includes(Number(q.source_topic_id))));
+    if (!scoped.length) scoped=[...allQuestionsFlatCache];
+    // Candidate pool ~30; then pick 20 with diversity across the 6 skill tags available in that week's pool.
+    const candidate=shuffleArray(scoped).slice(0, Math.min(Number(wp.candidate_pool_target||30), scoped.length));
+    const bySkill={}; candidate.forEach(q=>{ const m=String(q.skill_tag||'C1').match(/C([1-6])/i); const k=m?'C'+m[1]:'C1'; (bySkill[k] ||= []).push(q); });
+    const selected=[], used=new Set();
+    const skills=['C1','C2','C3','C4','C5','C6'];
+    let progress=true;
+    while(selected.length < Number(wp.question_count||20) && progress){
+      progress=false;
+      for(const k of skills){
+        const arr=bySkill[k]||[];
+        while(arr.length && used.has(arr[0].question_id)) arr.shift();
+        if(arr.length && selected.length < Number(wp.question_count||20)) { const q=arr.shift(); used.add(q.question_id); selected.push(q); progress=true; }
+      }
     }
-
-    const pathD = buildRoadmapPathD(TOTAL_ROADMAP_WEEKS);
-    const svgHtml = `
-        <svg viewBox="0 0 900 460" class="w-full max-h-[74vh] select-none" xmlns="http://www.w3.org/2000/svg">
-            <path d="${pathD}" fill="none" stroke="#fbcfe8" stroke-width="12" stroke-dasharray="14,14" stroke-linecap="round"/>
-            <path d="${pathD}" fill="none" stroke="#f472b6" stroke-width="4" stroke-dasharray="14,14" stroke-linecap="round"/>
-            ${nodesHtml}
-        </svg>
-    `;
-    container.innerHTML = svgHtml;
+    if(selected.length < Number(wp.question_count||20)) {
+      for(const q of candidate){ if(!used.has(q.question_id)){ selected.push(q); used.add(q.question_id); if(selected.length>=Number(wp.question_count||20)) break; } }
+    }
+    return shuffleArray(selected.slice(0, Number(wp.question_count||20)));
 }
 
 async function selectRoadmapWeek(weekNum) {
     stopSpeaking();
-    const config = roadmapConfig[weekNum];
-    if (!config) return;
-    
-    const tuanHienTai = Number(currentUser?.tuanHienTai) || 1;
-    if (weekNum > tuanHienTai) {
-        return alert(`Tuần ${weekNum} đang bị khóa. Bé hãy hoàn thành Tuần ${tuanHienTai} đạt từ 80% trở lên để mở khóa nhé!`);
-    }
-
-    if (config.isExam) return openExamHub();
-
-    activeRoadmapContext = { week: weekNum, topicId: (config.focusSubIds && config.focusSubIds[0]) || `W${weekNum}`, chuDe: config.name };
-    pendingTopicQuiz = null; activeExamContext = null;
-    const topicLabel = config.name.replace(/^Tuần\s*\d+:\s*/i, '');
-    updateNavTabs("Tiến trình tuần", "📅", `Tuần ${weekNum}`, topicLabel);
-
-    showLoadingOverlay(`Đang bốc 30 câu hỏi Tuần ${weekNum} (tỷ lệ 3:4:3)...`);
+    showLoadingOverlay(`Đang chuẩn bị 20 câu Luyện tuần ${weekNum}...`);
     try {
+        const data = await loadGiaoAnData();
+        const config = (data.roadmap || []).find(w => Number(w.week) === Number(weekNum));
+        if (!config) throw new Error('Không tìm thấy tuần học');
+        if (!isLearningWeekUnlockedV7_(data, weekNum)) {
+            showLockedLuyenTuanV7_(weekNum);
+            return;
+        }
         await fetchAllTopicsData();
-        hideLoadingOverlay();
-
-        const weekQuestions = getQuestionsForWeek343(weekNum);
-        if (!weekQuestions.length) return alert('Tuần này đang chuẩn bị thêm câu hỏi, bé quay lại sau nhé!');
-
-        startTopicQuiz(weekNum, config.name, weekQuestions, null);
-    } catch (err) {
-        hideLoadingOverlay();
-        alert(`Lỗi tải dữ liệu tuần: ${err.message}`);
-    }
+        const weekQuestions = getQuestionsForWeekV7_(config);
+        if (!weekQuestions.length) throw new Error('Kho câu hỏi phù hợp tuần này chưa đủ dữ liệu');
+        activeRoadmapContext = { week:Number(weekNum), topicId:`W${weekNum}`, chuDe:`Luyện tuần ${weekNum} · ${config.theme||''}` };
+        pendingTopicQuiz = null; activeExamContext = null;
+        updateNavTabs('Luyện tuần','🎯',`Tuần ${weekNum}`,config.theme||'');
+        startTopicQuiz(weekNum, activeRoadmapContext.chuDe, weekQuestions, null);
+    } catch (err) { alert(`Không thể mở Luyện tuần: ${err.message}`); }
+    finally { hideLoadingOverlay(); }
 }
 
 // ==========================================
@@ -1941,7 +1972,7 @@ function loadQuestion() {
 
     const practiceSpeakerBtnHtml = !isEvaluationMode ? `
         <div class="flex items-center justify-center mt-1 mb-1">
-            <button onclick="speakCurrentQuestion()" class="px-4 py-1.5 bg-pink-50 hover:bg-pink-100 text-pink-700 border border-pink-200 rounded-2xl text-xs md:text-sm font-extrabold flex items-center space-x-1.5 pastel-btn shadow-xs">
+            <button onclick="speakCurrentQuestion()" class="px-4 py-1.5 bg-pink-50 hover:bg-pink-100 text-pink-700 border border-pink-200 rounded-2xl text-sm md:text-base font-extrabold flex items-center space-x-1.5 pastel-btn shadow-xs">
                 <i class="fa-solid fa-volume-high text-pink-600"></i>
                 <span>Nghe câu hỏi</span>
             </button>
@@ -1975,7 +2006,7 @@ function loadQuestion() {
             html += `
                 <div class="mt-4 inline-flex items-center space-x-1.5 bg-pink-50 border border-pink-200 rounded-full px-3.5 py-1.5">
                     <span>🐰</span>
-                    <span class="text-xs md:text-sm font-extrabold text-rose-600">${escapeHtml(q.mascot_text)}</span>
+                    <span class="text-sm md:text-base font-extrabold text-rose-600">${escapeHtml(q.mascot_text)}</span>
                 </div>`;
         }
     } else {
@@ -2277,7 +2308,7 @@ function triggerSubmitQuizPrompt() {
     }
 }
 
-function showResultScreen() {
+async function showResultScreen() {
     stopSpeaking();
     clearInterval(quizTimerInterval);
 
@@ -2320,7 +2351,7 @@ function showResultScreen() {
     const totalQ = activeQuestionsList.length;
     const percent = Math.round((correctCount / totalQ) * 100);
 
-    // Tiến trình tuần: điểm tính riêng theo công thức 10/tổng số câu (không dùng điểm từng câu để tránh lệch)
+    // Luyện tuần: điểm tính riêng theo công thức 10/tổng số câu (không dùng điểm từng câu để tránh lệch)
     const displayScore = activeRoadmapContext
         ? Math.round((correctCount * 10 / totalQ) * 10) / 10
         : score;
@@ -2337,7 +2368,7 @@ function showResultScreen() {
 
     const nextActionLabel = document.getElementById('report-next-action-label');
     if (nextActionLabel) {
-        nextActionLabel.textContent = activeRoadmapContext ? '🔙 Quay lại tiến trình tuần' : '🚀 Làm đề thi tiếp theo';
+        nextActionLabel.textContent = activeRoadmapContext ? '🔙 Quay lại Luyện tuần' : '🚀 Làm đề thi tiếp theo';
     }
 
     const historyBtn = document.getElementById('report-history-btn');
@@ -2351,6 +2382,15 @@ function showResultScreen() {
     if (percent >= 80) {
         confetti({ particleCount: 130, spread: 85, origin: { y: 0.6 } });
         playAudio('win');
+        if (activeRoadmapContext) {
+            try {
+                const data = await loadGiaoAnData();
+                const nextWeek = getNextLearningWeekV7_(data, activeRoadmapContext.week);
+                if (nextWeek) saveUnlockedLearningWeekV7_(nextWeek);
+            } catch (e) {
+                console.warn('[Luyện tuần] Không thể cập nhật mở khóa local:', e);
+            }
+        }
     }
 
     if (currentUser && !currentUser.isGuest) {
@@ -2574,10 +2614,15 @@ async function saveWeeklyProgressToSheet(percent, starCount, scoreVal) {
             console.error('[Lưu tiến trình tuần THẤT BẠI]', res?.error || res);
         }
         if (percent >= 80) {
-            const nextWeek = week + 1;
-            if (nextWeek > (Number(currentUser.tuanHienTai) || 1) && nextWeek <= TOTAL_ROADMAP_WEEKS) {
-                currentUser.tuanHienTai = nextWeek;
-                setTimeout(() => alert(`🎉 Chúc mừng bé đạt ${percent}% điểm! Tuần ${nextWeek} đã được mở khóa trên bản đồ!`), 500);
+            try {
+                const data = await loadGiaoAnData();
+                const nextWeek = getNextLearningWeekV7_(data, week);
+                if (nextWeek) {
+                    saveUnlockedLearningWeekV7_(nextWeek);
+                    setTimeout(() => alert(`🎉 Chúc mừng bé đạt ${percent}%! Luyện tuần ${nextWeek} đã được mở khóa.`), 500);
+                }
+            } catch (e) {
+                console.warn('[Luyện tuần] Đã đạt chuẩn nhưng chưa xác định được tuần kế tiếp:', e);
             }
         }
     } catch (e) {
@@ -2587,7 +2632,7 @@ async function saveWeeklyProgressToSheet(percent, starCount, scoreVal) {
 
 async function openHistoryModal(sheetName = 'LichSuTienTrinhTuan') {
     if (!currentUser || currentUser.isGuest) {
-        showLoginRequiredGate('Lịch sử tiến trình', '📊');
+        showLoginRequiredGate('Lịch sử Luyện tuần', '📊');
         return;
     }
 
@@ -2728,7 +2773,7 @@ function renderHistoryReport(rows, sheetName) {
     const touchedSkills = [];
 
     if (rows.length && isWeekly) {
-        // Tiến trình tuần: % = tổng số câu đúng / tổng số câu đã làm THẬT của nhóm kỹ năng đó
+        // Luyện tuần: % = tổng số câu đúng / tổng số câu đã làm THẬT của nhóm kỹ năng đó
         skillKeys.forEach((k) => {
             let sumCorrect = 0, sumTotal = 0;
             rows.forEach(r => {
@@ -3661,6 +3706,7 @@ document.addEventListener('visibilitychange', () => {
 window.addEventListener('pagehide', stopAllAudio);
 
 document.addEventListener('DOMContentLoaded', () => {
+    applyV7Labels_();
     updateUserInfoBox();
     renderDashboardGrid();
     goHome();
