@@ -1106,38 +1106,11 @@ async function renderExamHubGrid() {
 // ==========================================
 // ĐIỀU HƯỚNG VIEW & BREADCRUMB
 // ==========================================
-function ensureGiaoAnBreadcrumbNavigation_() {
-    const tab2 = document.getElementById('header-level2-tab');
-    const tab3 = document.getElementById('header-level3-tab');
-
-    if (tab2 && !tab2.dataset.giaoAnBreadcrumbBound) {
-        tab2.dataset.giaoAnBreadcrumbBound = '1';
-        tab2.addEventListener('click', (event) => {
-            if (!inGiaoAnFlow) return;
-            event.preventDefault();
-            event.stopImmediatePropagation();
-            openGiaoAnHub(activeGiaoAnContext?.semester || 1);
-        }, true);
-    }
-
-    if (tab3 && !tab3.dataset.giaoAnBreadcrumbBound) {
-        tab3.dataset.giaoAnBreadcrumbBound = '1';
-        tab3.addEventListener('click', (event) => {
-            if (!inGiaoAnFlow || !activeGiaoAnContext?.week) return;
-            event.preventDefault();
-            event.stopImmediatePropagation();
-            openGiaoAnWeek(activeGiaoAnContext.semester || 1, activeGiaoAnContext.week);
-        }, true);
-    }
-}
-
 function updateNavTabs(level2Title, level2Icon, level3Title, level4Title) {
     const tab2 = document.getElementById('header-level2-tab');
     const tab3 = document.getElementById('header-level3-tab');
     const tab4 = document.getElementById('header-level4-tab');
     const homeBtn = document.getElementById('btn-header-home');
-
-    ensureGiaoAnBreadcrumbNavigation_();
 
     if (level2Title) {
         document.getElementById('header-level2-title').textContent = level2Title;
@@ -1155,6 +1128,45 @@ function updateNavTabs(level2Title, level2Icon, level3Title, level4Title) {
         document.getElementById('header-level3-title').textContent = level3Title;
         tab3.classList.remove('hidden');
         tab3.classList.add('flex');
+
+        // Trong luồng Giáo án, breadcrumb Tuần là một tab đang active:
+        // tô sáng giống tab Giáo án và cho phép bấm để quay lại danh sách tiết của tuần.
+        const level3Chip = tab3.querySelector('div');
+        if (level3Chip) {
+            const activeWeek = inGiaoAnFlow && activeGiaoAnContext && activeGiaoAnContext.week;
+            level3Chip.classList.remove(
+                'bg-purple-50', 'border-purple-200', 'text-purple-700', 'shadow-inner',
+                'bg-gradient-to-r', 'from-purple-500', 'to-violet-500', 'text-white',
+                'border-purple-400', 'shadow-sm', 'cursor-pointer'
+            );
+
+            if (activeWeek) {
+                level3Chip.classList.add(
+                    'bg-gradient-to-r', 'from-purple-500', 'to-violet-500',
+                    'text-white', 'border-purple-400', 'shadow-sm', 'cursor-pointer'
+                );
+                level3Chip.setAttribute('role', 'button');
+                level3Chip.setAttribute('tabindex', '0');
+                level3Chip.title = `Quay lại Tuần ${activeGiaoAnContext.week}`;
+                level3Chip.onclick = () => openGiaoAnWeek(
+                    activeGiaoAnContext.semester || 1,
+                    activeGiaoAnContext.week
+                );
+                level3Chip.onkeydown = (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        level3Chip.click();
+                    }
+                };
+            } else {
+                level3Chip.classList.add('bg-purple-50', 'border-purple-200', 'text-purple-700', 'shadow-inner');
+                level3Chip.removeAttribute('role');
+                level3Chip.removeAttribute('tabindex');
+                level3Chip.removeAttribute('title');
+                level3Chip.onclick = null;
+                level3Chip.onkeydown = null;
+            }
+        }
     } else {
         tab3.classList.add('hidden');
         tab3.classList.remove('flex');
