@@ -309,7 +309,22 @@
             .page-break-2 { page-break-before: always; break-before: page; page-break-after: always; break-after: page; }
             .page-break-3 { page-break-before: always; break-before: page; }
         }
-    </style>
+    
+        .main-module-tab{
+            position:relative; min-height:46px; padding:7px 8px; border-radius:14px;
+            border:1.5px solid #f5c5df; background:linear-gradient(180deg,#fff,#fff8fc);
+            color:#7e3bb8; font-weight:900; font-size:13px; line-height:1.05;
+            display:flex; align-items:center; justify-content:center; gap:6px;
+            box-shadow:0 2px 7px rgba(109,40,217,.07); transition:box-shadow .18s,border-color .18s,background .18s,color .18s;
+        }
+        .main-module-tab:hover{border-color:#e879f9;box-shadow:0 0 13px rgba(217,70,239,.22);}
+        .main-module-tab.is-active{
+            color:#fff; border-color:#d946ef;
+            background:linear-gradient(135deg,#ec4899 0%,#a855f7 55%,#7c3aed 100%);
+            box-shadow:0 5px 14px rgba(168,85,247,.28);
+        }
+        @media (min-width:768px){.main-module-tab{min-height:50px;font-size:14px;}}
+</style>
 </head>
 <body class="p-1 md:p-2 w-full">
 
@@ -434,34 +449,20 @@
 
                     <div id="user-info-box" class="text-xs font-bold text-gray-600 text-right"></div>
 
-                    <button id="btn-giao-an-header" onclick="openGiaoAnHub(1)" title="Bài học" class="relative overflow-visible h-10 md:h-12 w-10 md:w-auto md:min-w-[76px] px-0 md:px-3 bg-gradient-to-r from-sky-500 to-cyan-500 text-white font-extrabold rounded-xl text-xs md:text-sm shadow-md hover:from-sky-600 hover:to-cyan-600 flex items-center justify-center shrink-0 transition-shadow duration-200 hover:shadow-[0_0_14px_rgba(14,165,233,0.65)]">
-                        <span class="md:hidden relative inline-flex w-6 h-6 items-center justify-center" aria-hidden="true">
-                            <i class="fa-solid fa-book-open text-[17px]"></i>
-                            <i class="fa-solid fa-pen-nib absolute -right-0.5 -bottom-0.5 text-[9px] -rotate-12 drop-shadow"></i>
-                        </span>
-                        <span class="hidden md:flex flex-col items-center justify-center leading-[1.05]">
-                            <span>Bài</span><span>học</span>
-                        </span>
-                        <span id="giao-an-lock-icon" class="hidden absolute -top-2 -right-1 text-[11px] leading-none drop-shadow-sm">🔒</span>
-                    </button>
-
-                    <button id="btn-progress-header" onclick="clickProgressOrExam('progress')" title="Luyện tuần" class="relative overflow-visible h-10 md:h-12 w-10 md:w-auto md:min-w-[84px] px-0 md:px-3 bg-gradient-to-r from-purple-500 to-indigo-500 text-white font-extrabold rounded-xl text-xs md:text-sm shadow-md hover:from-purple-600 hover:to-indigo-600 flex items-center justify-center shrink-0 transition-shadow duration-200 hover:shadow-[0_0_14px_rgba(129,74,240,0.65)]">
-                        <i class="fa-solid fa-map-location-dot md:hidden text-[17px]" aria-hidden="true"></i>
-                        <span class="hidden md:flex flex-col items-center justify-center leading-[1.05]">
-                            <span>Luyện</span><span>tuần</span>
-                        </span>
-                        <span id="roadmap-lock-icon" class="hidden absolute -top-2 -right-1 text-[11px] leading-none drop-shadow-sm">🔒</span>
-                    </button>
-
-                    <button id="btn-minigame-header" onclick="openMiniGameHub()" title="Mini game" class="relative overflow-visible h-10 md:h-12 w-10 md:w-auto md:min-w-[76px] px-0 md:px-3 bg-gradient-to-r from-teal-500 to-emerald-500 text-white font-extrabold rounded-xl text-xs md:text-sm shadow-md hover:from-teal-600 hover:to-emerald-600 flex items-center justify-center shrink-0 transition-shadow duration-200 hover:shadow-[0_0_14px_rgba(20,184,166,0.65)]">
-                        <i class="fa-solid fa-gamepad md:hidden text-[17px]" aria-hidden="true"></i>
-                        <span class="hidden md:flex flex-col items-center justify-center leading-[1.05]">
-                            <span>Mini</span><span>game</span>
-                        </span>
-                        <span id="minigame-lock-icon" class="hidden absolute -top-2 -right-1 text-[11px] leading-none drop-shadow-sm">🔒</span>
-                    </button>
                 </div>
             </header>
+
+            <!-- ĐIỀU HƯỚNG CHÍNH 6 TAB -->
+            <nav id="main-module-tabs" class="w-full bg-white/95 border-2 border-pink-200 rounded-2xl p-1.5 shadow-sm" aria-label="Điều hướng chính">
+                <div class="grid grid-cols-3 md:grid-cols-6 gap-1.5">
+                    <button id="main-tab-discover" onclick="openMainTab('discover')" class="main-module-tab" data-tab="discover"><span class="text-lg">🧭</span><span>Khám phá</span></button>
+                    <button id="main-tab-lessons" onclick="openMainTab('lessons')" class="main-module-tab" data-tab="lessons"><span class="text-lg">📖</span><span>Bài học</span><span id="giao-an-lock-icon" class="hidden absolute -top-1 -right-1 text-[10px]">🔒</span></button>
+                    <button id="main-tab-exercises" onclick="openMainTab('exercises')" class="main-module-tab" data-tab="exercises"><span class="text-lg">✏️</span><span>Bài tập</span><span id="roadmap-lock-icon" class="hidden absolute -top-1 -right-1 text-[10px]">🔒</span></button>
+                    <button id="main-tab-review" onclick="openMainTab('review')" class="main-module-tab" data-tab="review"><span class="text-lg">🧠</span><span>Ôn tập</span><span id="review-lock-icon" class="hidden absolute -top-1 -right-1 text-[10px]">🔒</span></button>
+                    <button id="main-tab-exams" onclick="openMainTab('exams')" class="main-module-tab" data-tab="exams"><span class="text-lg">🏆</span><span>Đề thi</span><span id="exam-lock-icon" class="hidden absolute -top-1 -right-1 text-[10px]">🔒</span></button>
+                    <button id="main-tab-games" onclick="openMainTab('games')" class="main-module-tab" data-tab="games"><span class="text-lg">🎮</span><span>Mini games</span><span id="minigame-lock-icon" class="hidden absolute -top-1 -right-1 text-[10px]">🔒</span></button>
+                </div>
+            </nav>
 
             <main id="app-viewport" class="w-full">
                 
@@ -579,7 +580,7 @@
                             
                             <button id="btn-roadmap-history" onclick="openHistoryModal('LichSuTienTrinhTuan')" class="hidden px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 rounded-xl text-sm font-extrabold items-center space-x-1.5 transition-shadow duration-200 hover:shadow-[0_0_10px_rgba(99,102,241,0.5)] shadow-xs">
                                 <i class="fa-solid fa-chart-line"></i>
-                                <span>Lịch sử Luyện tuần</span>
+                                <span>Lịch sử Bài tập</span>
                             </button>
 
                             <button onclick="speakCurrentQuestion()" class="px-3 py-1.5 bg-pink-50 hover:bg-pink-100 text-pink-700 border border-pink-200 rounded-xl text-sm font-extrabold flex items-center space-x-1.5 transition-all pastel-btn shadow-xs">
@@ -633,7 +634,7 @@
                         <div class="flex flex-col sm:flex-row items-center justify-between w-full px-2 mb-2 gap-2">
                             <div>
                                 <h2 class="text-base md:text-lg font-extrabold text-indigo-600 flex items-center space-x-2">
-                                    <span>🗺️</span><span>Luyện tuần</span>
+                                    <span>🗺️</span><span>Bài tập</span>
                                 </h2>
                                 <p class="text-[11px] md:text-xs text-gray-500 font-bold">20 câu mỗi tuần · đạt từ 80% để mở tuần tiếp theo · đánh giá theo 6 năng lực</p>
                             </div>
@@ -642,7 +643,7 @@
                                 <div id="roadmap-semester-tabs" class="flex items-center gap-3"></div>
                                 <button onclick="openHistoryModal('LichSuTienTrinhTuan')" class="px-3 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-extrabold rounded-xl border border-indigo-200 text-xs pastel-btn flex items-center space-x-1.5 shadow-sm">
                                     <i class="fa-solid fa-chart-line text-indigo-600"></i>
-                                    <span>📊 Lịch sử Luyện tuần</span>
+                                    <span>📊 Lịch sử Bài tập</span>
                                 </button>
                             </div>
                         </div>
@@ -964,7 +965,7 @@
     </footer>
 
     <!-- NẠP ENGINE JAVASCRIPT ĐỒNG BỘ -->
-    <script src="assets/js/app.js?v=8.3.1"></script>
+    <script src="assets/js/app.js?v=9.0.0"></script>
 
     <script>
         if ('serviceWorker' in navigator) {
