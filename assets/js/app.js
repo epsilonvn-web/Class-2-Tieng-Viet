@@ -1237,7 +1237,7 @@ function goHome() {
     activeRoadmapContext = null;
     activeTopicId = null;
     pendingTopicQuiz = null;
-    updateNavTabs(null, null, null);
+    updateNavTabs('Khám phá', '🧭', null);
     setMainTabActive_('discover');
     switchAppView('view-dashboard-grid');
 }
