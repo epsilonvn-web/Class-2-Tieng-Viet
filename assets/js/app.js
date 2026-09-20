@@ -1098,6 +1098,16 @@ async function renderExamHubGrid() {
 // ==========================================
 // ĐIỀU HƯỚNG VIEW & BREADCRUMB
 // ==========================================
+// Mục truyện có thể tạo breadcrumb cấp 5 động. Khi rời cây truyện,
+// chỉ cần ẩn cấp 5 nếu nó đã tồn tại. Bản trước gọi hàm này nhưng thiếu định nghĩa,
+// làm updateNavTabs() phát sinh ReferenceError và khiến các card/tab không mở được.
+function hideStoryLevel5_() {
+    const tab5 = document.getElementById('header-level5-tab');
+    if (!tab5) return;
+    tab5.classList.add('hidden');
+    tab5.classList.remove('flex');
+}
+
 function updateNavTabs(level2Title, level2Icon, level3Title, level4Title) {
     hideStoryLevel5_();
     const tab2 = document.getElementById('header-level2-tab');
