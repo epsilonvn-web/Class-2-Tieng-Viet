@@ -1202,26 +1202,9 @@ function switchAppView(viewId) {
         if (id === viewId) el.classList.remove('hidden');
         else el.classList.add('hidden');
     });
-    setAppShellRootMode_(isRootViewForShell_(viewId));
 }
 
 let currentMainTab = 'discover';
-let rootTabPresentationOverride_ = false;
-
-
-function setAppShellRootMode_(isRoot) {
-    const mainBanner = document.getElementById('app-main-banner');
-    const contextBanner = document.getElementById('app-context-banner');
-    if (!mainBanner || !contextBanner) return;
-    mainBanner.classList.toggle('hidden', !isRoot);
-    contextBanner.classList.toggle('hidden', !!isRoot);
-}
-
-function isRootViewForShell_(viewId) {
-    if (['view-dashboard-grid','view-bai-hoc-hub','view-roadmap','view-minigame-hub','view-exam-hub'].includes(viewId)) return true;
-    if (viewId === 'view-lecture' && currentMainTab === 'review' && rootTabPresentationOverride_) return true;
-    return false;
-}
 
 function setMainTabActive_(tabName) {
     currentMainTab = tabName || 'discover';
@@ -1240,7 +1223,6 @@ function refreshMainTabLocks_() {
 
 function openReviewTab() {
     if (!hasPremiumAccess()) { showPremiumGate('Ôn tập', '🧠'); return; }
-    rootTabPresentationOverride_ = true;
     setMainTabActive_('review');
     openTopic(11, '11. Ôn tập tổng hợp', '🧠');
 }
@@ -1260,7 +1242,6 @@ function openMainTab(tabName) {
 }
 
 function goHome() {
-    rootTabPresentationOverride_ = false;
     stopSpeaking();
     inStoryFlow = false;
     clearInterval(quizTimerInterval);
@@ -1642,7 +1623,7 @@ function updateUserInfoBox() {
                 <div class="${isAdmin ? 'text-amber-600' : 'text-pink-600'} font-extrabold text-sm md:text-base leading-tight">${escapeHtml(currentUser.hoTen)}</div>
                 <div class="${tierClass} font-semibold text-[10px]">${escapeHtml(tier)} · ID ${escapeHtml(currentUser.maHS)}</div>
             </div>
-            ${isAdmin ? '<button onclick="openAdminAccounts()" title="Quản lý tài khoản" class="h-9 px-3 flex items-center justify-center bg-amber-100 hover:bg-amber-200 text-amber-700 rounded-xl border border-amber-200 text-xs font-extrabold pastel-btn"><i class="fa-solid fa-users-gear mr-1"></i><span class="admin-manage-label">Quản lý</span></button>' : ''}
+            ${isAdmin ? '<button onclick="openAdminAccounts()" title="Quản lý tài khoản" class="h-9 px-3 flex items-center justify-center bg-amber-100 hover:bg-amber-200 text-amber-700 rounded-xl border border-amber-200 text-xs font-extrabold pastel-btn"><i class="fa-solid fa-users-gear mr-1"></i>Quản lý</button>' : ''}
             <button onclick="logout()" title="Đăng xuất" class="w-8 h-8 flex items-center justify-center bg-rose-100 hover:bg-rose-200 text-rose-500 rounded-xl border border-rose-200 text-xs transition-shadow duration-200 hover:shadow-[0_0_12px_rgba(244,63,94,0.55)]"><i class="fa-solid fa-right-from-bracket"></i></button>
         </div>`;
 }
@@ -1678,7 +1659,6 @@ function clickProgressOrExam(type) {
 // CHỦ ĐỀ 1: BẢNG CHỮ CÁI TƯƠNG TÁC (1.1 ĐẾN 1.4)
 // ==========================================
 function openTopic(topicNum, topicName, icon) {
-    if (!(Number(topicNum) === 11 && currentMainTab === 'review')) rootTabPresentationOverride_ = false;
     stopSpeaking();
     inMiniGameFlow = false;
     inBaiHocFlow = false;
@@ -1764,7 +1744,6 @@ function speakLecture() {
 }
 
 function selectSubtopic(idx) {
-    rootTabPresentationOverride_ = false;
     stopSpeaking();
     if (!pendingTopicQuiz) return;
     const { topicNum, topicName, questions, groups, groupMap, groupLabels } = pendingTopicQuiz;
