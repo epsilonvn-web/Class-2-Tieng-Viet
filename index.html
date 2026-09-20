@@ -523,6 +523,7 @@
                 </nav>
 
                 <div id="header-info-zone" class="flex items-center">
+                    <button id="btn-toggle-autospeech" type="button" class="hidden" aria-hidden="true" tabindex="-1"><i class="fa-solid fa-volume-high"></i></button>
                     <div id="header-star-box" class="flex flex-col space-y-0.5 bg-pink-50/90 px-1.5 md:px-2.5 py-1 rounded-xl border border-pink-200 shadow-inner">
                         <div class="flex items-center justify-between space-x-2 font-extrabold">
                             <span class="px-1.5 py-0.5 bg-emerald-500 text-white rounded text-[10px] shadow-sm flex items-center justify-center"><i class="fa-solid fa-star md:mr-0.5"></i><span class="hidden md:inline"> Đúng</span></span>
@@ -1061,7 +1062,35 @@
     </footer>
 
     <!-- NẠP ENGINE JAVASCRIPT ĐỒNG BỘ -->
-    <script src="assets/js/app.js?v=10.0-tv2-new-ui"></script>
+    <script src="assets/js/app.js?v=10.0-tv2-ui-safe"></script>
+
+    <script>
+        // UI shell observer: presentation only. Không can thiệp engine TV2.
+        (() => {
+            const ROOT_VIEWS = new Set(['view-dashboard-grid','view-bai-hoc-hub','view-roadmap','view-minigame-hub','view-exam-hub']);
+            const viewIds = [
+                'view-dashboard-grid','view-bai-hoc-hub','view-bai-hoc-lesson','view-lecture','view-quiz',
+                'view-roadmap','view-minigame-hub','view-game-play','view-exam-hub','view-result'
+            ];
+            function isVisible(el){ return !!el && !el.classList.contains('hidden'); }
+            function syncShell(){
+                const mainBanner = document.getElementById('app-main-banner');
+                const contextBanner = document.getElementById('app-context-banner');
+                if (!mainBanner || !contextBanner) return;
+                const visibleId = viewIds.find(id => isVisible(document.getElementById(id))) || 'view-dashboard-grid';
+                const reviewActive = document.getElementById('main-tab-review')?.classList.contains('is-active');
+                const isRoot = ROOT_VIEWS.has(visibleId) || (visibleId === 'view-lecture' && reviewActive);
+                mainBanner.classList.toggle('hidden', !isRoot);
+                contextBanner.classList.toggle('hidden', isRoot);
+            }
+            window.addEventListener('DOMContentLoaded', () => {
+                const target = document.getElementById('app-viewport');
+                if (target) new MutationObserver(syncShell).observe(target, {subtree:true, attributes:true, attributeFilter:['class']});
+                document.getElementById('main-module-tabs')?.addEventListener('click', () => setTimeout(syncShell, 0));
+                syncShell();
+            });
+        })();
+    </script>
 
     <script>
         if ('serviceWorker' in navigator) {
