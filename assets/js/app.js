@@ -12,7 +12,8 @@ const TOPICS_CONFIG = [
     { id: 8, title: "8. Đại sứ giao tiếp", desc: "Lời nói/lời đáp, tin nhắn, thư ngắn, bưu thiếp và bảng biểu", icon: "🤝", color: "sky" },
     { id: 9, title: "9. Nhà thông thái nhỏ", desc: "Đọc hiểu thơ, truyện, văn bản thông tin và suy luận", icon: "📖", color: "fuchsia" },
     { id: 10, title: "10. Trí tuệ Trạng Nguyên", desc: "Câu đố, suy luận bằng lời và trò chơi ngôn ngữ tăng hứng thú", icon: "🧩", color: "yellow" },
-    { id: 11, title: "11. Ôn tập tổng hợp", desc: "Ôn tích lũy Học kỳ I, Học kỳ II và cả năm", icon: "📚", color: "violet" }
+    { id: 11, title: "11. Ôn tập tổng hợp", desc: "Ôn tích lũy Học kỳ I, Học kỳ II và cả năm", icon: "📚", color: "violet" },
+    { id: 12, title: "12. Truyện dân gian & cổ tích", desc: "240 truyện Việt Nam & thế giới", icon: "📚", color: "fuchsia", isStoryLibrary: true }
 ];
 
 const SUBTOPIC_PALETTES = [
@@ -199,7 +200,15 @@ function normalizeTopic(t) {
             ...q,
             source_topic_id: topicId,
             skill_tag: q.skill_tag || skillTag
-        }))
+        })),
+        // Metadata cho module Truyện dân gian & cổ tích. Hai JSON truyện vẫn là kho độc lập dùng chung TV1-TV2-TV3.
+        data_file: t.data_file ?? '',
+        data_files: (t.data_files && typeof t.data_files === 'object') ? { ...t.data_files } : {},
+        vietnam_data_file: t.vietnam_data_file ?? t.data_files?.vietnam ?? '',
+        world_data_file: t.world_data_file ?? t.data_files?.world ?? '',
+        story_count: Number(t.story_count ?? 0),
+        vietnam_count: Number(t.vietnam_count ?? 0),
+        world_count: Number(t.world_count ?? 0)
     };
 }
 
@@ -390,18 +399,21 @@ async function renderDashboardGrid() {
     try { topicsData = await fetchAllTopicsData(); } catch (e) {}
 
     let html = '';
-    TOPICS_CONFIG.filter(t => Number(t.id) <= 10).forEach(t => {
+    TOPICS_CONFIG.filter(t => Number(t.id) <= 10 || Number(t.id) === 12).forEach(t => {
         const topicObj = topicsData.find(item => Number(item.topic_id) === Number(t.id));
         const totalCount = topicObj && topicObj.questions ? topicObj.questions.length : 0;
-        const countLabel = totalCount > 0 ? `${totalCount} câu` : 'Đang cập nhật';
+        const countLabel = Number(t.id) === 12 ? '240 truyện' : (totalCount > 0 ? `${totalCount} câu` : 'Đang cập nhật');
 
         const iconHtml = t.isCustomTextIcon 
             ? `<div class="w-8 h-8 bg-rose-100 rounded-xl flex items-center justify-center text-[11px] font-black text-rose-600 shadow-inner group-hover:scale-110 transition-transform shrink-0 tracking-tight">S/X</div>`
             : `<div class="w-8 h-8 bg-${t.color}-100 rounded-xl flex items-center justify-center text-sm font-extrabold text-${t.color}-600 shadow-inner group-hover:scale-110 transition-transform shrink-0">${t.icon}</div>`;
 
         const premiumLocked = t.id === 11 && !hasPremiumAccess();
+        const cardAction = Number(t.id) === 12
+            ? `openThoNhacMenu()`
+            : `openTopic(${t.id}, '${t.title}', '${t.icon}')`;
         html += `
-            <div onclick="openTopic(${t.id}, '${t.title}', '${t.icon}')" class="pastel-card p-3 flex flex-col justify-between cursor-pointer hover:border-${t.color}-400 transition-all group min-h-[92px] relative">
+            <div onclick="${cardAction}" class="pastel-card p-3 flex flex-col justify-between cursor-pointer hover:border-${t.color}-400 transition-all group min-h-[92px] relative">
                 ${premiumLocked ? '<span class="absolute top-2 right-2 text-slate-400 text-xs"><i class="fa-solid fa-lock"></i></span>' : ''}
                 <div class="flex items-center space-x-2.5">
                     ${iconHtml}
@@ -415,7 +427,7 @@ async function renderDashboardGrid() {
         `;
     });
 
-    // Khám phá chỉ hiển thị 10 chuyên đề học tự do; Ôn tập và Đề thi đã có tab riêng.
+    // Khám phá hiển thị 10 chuyên đề học tự do + mục 12 Truyện dân gian & cổ tích; Ôn tập và Đề thi có tab riêng.
     container.innerHTML = html;
 }
 
@@ -1087,6 +1099,7 @@ async function renderExamHubGrid() {
 // ĐIỀU HƯỚNG VIEW & BREADCRUMB
 // ==========================================
 function updateNavTabs(level2Title, level2Icon, level3Title, level4Title) {
+    hideStoryLevel5_();
     const tab2 = document.getElementById('header-level2-tab');
     const tab3 = document.getElementById('header-level3-tab');
     const tab4 = document.getElementById('header-level4-tab');
@@ -1183,7 +1196,7 @@ function switchAppView(viewId) {
     appViewEpoch++;
     stopAllAudio();
     if (viewId !== 'view-game-play') activeMiniGameId = null;
-    ['view-dashboard-grid', 'view-bai-hoc-hub', 'view-bai-hoc-week', 'view-bai-hoc-lesson', 'view-lecture', 'view-quiz', 'view-roadmap', 'view-minigame-hub', 'view-game-play', 'view-exam-hub', 'view-result'].forEach(id => {
+    ['view-dashboard-grid', 'view-bai-hoc-hub', 'view-bai-hoc-week', 'view-bai-hoc-lesson', 'view-lecture', 'view-quiz', 'view-roadmap', 'view-minigame-hub', 'view-game-play', 'view-exam-hub', 'view-result', 'view-story-library'].forEach(id => {
         const el = document.getElementById(id);
         if (!el) return;
         if (id === viewId) el.classList.remove('hidden');
@@ -1230,6 +1243,7 @@ function openMainTab(tabName) {
 
 function goHome() {
     stopSpeaking();
+    inStoryFlow = false;
     clearInterval(quizTimerInterval);
     inMiniGameFlow = false;
     inBaiHocFlow = false;
@@ -1237,7 +1251,7 @@ function goHome() {
     activeRoadmapContext = null;
     activeTopicId = null;
     pendingTopicQuiz = null;
-    updateNavTabs('Khám phá', '🧭', null);
+    updateNavTabs(null, null, null);
     setMainTabActive_('discover');
     switchAppView('view-dashboard-grid');
 }
@@ -1654,6 +1668,13 @@ function openTopic(topicNum, topicName, icon) {
     }
     if (Number(topicNum) === 11) setMainTabActive_('review');
     activeTopicId = topicNum; activeExamContext = null; activeRoadmapContext = null;
+
+    // Mục 12 dùng module thư viện truyện riêng; không đi qua quiz engine.
+    if (Number(topicNum) === 12) {
+        openThoNhacMenu();
+        return;
+    }
+
     updateNavTabs(topicName, icon || '🐰', null);
 
     showLoadingOverlay(`Đang tải chủ đề "${topicName}"...`);
@@ -1682,6 +1703,7 @@ function setSubtopicGridColumns(count) {
 }
 
 function showLectureAndSubtopics(topicNum, topicName, topicObj) {
+    if (typeof setLectureUtilityVisibility_ === 'function') setLectureUtilityVisibility_(true, true);
     pendingTopicQuiz = { topicNum, topicName, questions: topicObj.questions };
     
     document.getElementById('lecture-title').textContent = topicObj.lecture_title || topicName;
@@ -3730,6 +3752,330 @@ async function openGamePlay(gameId) {
     }
 
 }
+
+
+// ==========================================
+// CHỦ ĐỀ 12: TRUYỆN DÂN GIAN & CỔ TÍCH - DÙNG CHUNG TV1-TV2-TV3
+// - 120 truyện Việt Nam + 120 truyện thế giới.
+// - Hai JSON là kho dùng chung; không sửa nội dung, không tách file.
+// - Tên người kể nằm trong app.js của từng chương trình.
+// ==========================================
+const STORY_NARRATOR_NAME = 'Cô Thỏ Ngọc';
+let activeThoNhacTopic_ = null; // giữ tên biến cũ để tương thích nếu có link cũ
+let activeFairyConfig_ = null;
+const activeFairyLibraries_ = { vietnam: null, world: null };
+let activeFairyLibraryKey_ = null;
+let activeFairyCategoryId_ = null;
+let activeStoryId_ = null;
+let activeStoryAnswers_ = {};
+let inStoryFlow = false;
+
+const FAIRY_LIBRARY_META_ = {
+    vietnam: {
+        label: '1. Truyện dân gian & cổ tích Việt Nam',
+        shortLabel: 'Việt Nam',
+        flag: '🇻🇳',
+        color: 'rose',
+        fallbackFile: 'truyen_dan_gian_co_tich_viet_nam_120.json',
+        fallbackCount: 120
+    },
+    world: {
+        label: '2. Truyện dân gian & cổ tích thế giới',
+        shortLabel: 'Thế giới',
+        flag: '🌍',
+        color: 'purple',
+        fallbackFile: 'truyen_dan_gian_co_tich_the_gioi_120.json',
+        fallbackCount: 120
+    }
+};
+
+// Breadcrumb riêng của cây Khám phá: Home không tính; sau Home tối đa 4 cấp nội dung.
+// Không lặp lại tên tab chính "Khám phá" vì hàng menu bên dưới đã thể hiện trạng thái active.
+function ensureStoryHeaderLevel5_() {
+    const tabs = document.getElementById('header-learning-tabs');
+    if (!tabs || document.getElementById('header-level5-tab')) return;
+    const tab5 = document.createElement('div');
+    tab5.id = 'header-level5-tab';
+    tab5.className = 'hidden items-center space-x-1';
+    tab5.innerHTML = `
+        <span class="text-pink-300 font-bold text-xs">/</span>
+        <div class="h-10 px-2.5 bg-sky-50 border border-sky-200 text-sky-700 font-extrabold rounded-xl text-xs md:text-sm truncate shadow-inner flex items-center">
+            <span id="header-level5-title" class="truncate">Mục sâu</span>
+        </div>`;
+    tabs.appendChild(tab5);
+}
+
+function ensureStoryBreadcrumbStyle_() {
+    ensureStoryHeaderLevel5_();
+    if (document.getElementById('tv2-story-breadcrumb-style')) return;
+    const style = document.createElement('style');
+    style.id = 'tv2-story-breadcrumb-style';
+    style.textContent = `
+        #header-learning-tabs { min-width:0 !important; max-width:648px !important; flex:0 1 648px !important; overflow:hidden !important; }
+        #header-level2-tab,#header-level3-tab,#header-level4-tab,#header-level5-tab { width:158px !important; min-width:158px !important; max-width:158px !important; flex:0 0 158px !important; overflow:hidden !important; }
+        #header-level2-tab > button { width:100% !important; min-width:0 !important; max-width:100% !important; justify-content:flex-start !important; overflow:hidden !important; }
+        #header-level3-tab > div,#header-level4-tab > div,#header-level5-tab > div { flex:1 1 auto !important; width:auto !important; min-width:0 !important; max-width:none !important; overflow:hidden !important; }
+        #header-level2-title,#header-level3-title,#header-level4-title,#header-level5-title { display:block !important; min-width:0 !important; overflow:hidden !important; text-overflow:ellipsis !important; white-space:nowrap !important; }
+        @media (max-width:1050px) {
+            #header-learning-tabs { max-width:544px !important; flex-basis:544px !important; }
+            #header-level2-tab,#header-level3-tab,#header-level4-tab,#header-level5-tab { width:132px !important; min-width:132px !important; max-width:132px !important; flex-basis:132px !important; }
+        }
+        @media (max-width:767px) {
+            #header-learning-tabs { max-width:100% !important; flex:1 1 auto !important; overflow-x:auto !important; overflow-y:hidden !important; }
+            #header-level2-tab,#header-level3-tab,#header-level4-tab,#header-level5-tab { width:112px !important; min-width:112px !important; max-width:112px !important; flex-basis:112px !important; }
+        }
+    `;
+    document.head.appendChild(style);
+}
+
+function updateDiscoverBreadcrumb_(topicTitle = null, topicIcon = '🌸', subTitle = null, leafTitle = null, deepTitle = null) {
+    ensureStoryBreadcrumbStyle_();
+    const tab2 = document.getElementById('header-level2-tab');
+    const tab3 = document.getElementById('header-level3-tab');
+    const tab4 = document.getElementById('header-level4-tab');
+    const tab5 = document.getElementById('header-level5-tab');
+    const homeBtn = document.getElementById('btn-header-home');
+    if (!tab2 || !tab3 || !tab4) return;
+
+    if (topicTitle) {
+        document.getElementById('header-level2-title').textContent = topicTitle;
+        document.getElementById('header-level2-icon').textContent = topicIcon || '🌸';
+        tab2.classList.remove('hidden'); tab2.classList.add('flex');
+        homeBtn?.classList.add('opacity-80','hover:opacity-100');
+    } else { tab2.classList.add('hidden'); tab2.classList.remove('flex'); }
+
+    if (subTitle) {
+        document.getElementById('header-level3-title').textContent = subTitle;
+        tab3.classList.remove('hidden'); tab3.classList.add('flex');
+    } else { tab3.classList.add('hidden'); tab3.classList.remove('flex'); }
+
+    if (leafTitle) {
+        document.getElementById('header-level4-title').textContent = leafTitle;
+        tab4.classList.remove('hidden'); tab4.classList.add('flex');
+    } else { tab4.classList.add('hidden'); tab4.classList.remove('flex'); }
+
+    if (tab5) {
+        if (deepTitle) {
+            document.getElementById('header-level5-title').textContent = deepTitle;
+            tab5.classList.remove('hidden'); tab5.classList.add('flex');
+        } else { tab5.classList.add('hidden'); tab5.classList.remove('flex'); }
+    }
+}
+
+function setBreadcrumbAction_(level, handler, tooltip = '') {
+    const tab = document.getElementById(`header-level${level}-tab`);
+    if (!tab) return;
+    const target = level === 2 ? tab.querySelector('button') : tab.querySelector('div');
+    if (!target) return;
+    target.onclick = null; target.onkeydown = null;
+    target.classList.remove('cursor-pointer','hover:bg-purple-100','hover:bg-amber-100','hover:brightness-95','transition-colors');
+    target.removeAttribute('role'); target.removeAttribute('tabindex'); target.removeAttribute('title');
+    if (typeof handler !== 'function') return;
+    target.setAttribute('role','button'); target.setAttribute('tabindex','0');
+    if (tooltip) target.setAttribute('title',tooltip);
+    target.classList.add('cursor-pointer','hover:brightness-95','transition-colors');
+    target.onclick = e => { e?.preventDefault?.(); handler(); };
+    target.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handler(); } };
+}
+
+function setFairyBreadcrumbActions_(libraryKey = null, categoryId = null, storyId = null) {
+    setBreadcrumbAction_(2, () => openThoNhacMenu(), 'Về Mục 12 - Kho truyện');
+    if (libraryKey) setBreadcrumbAction_(3, () => openFairyLibrary_(libraryKey), 'Về kho truyện này');
+    else setBreadcrumbAction_(3, null);
+    if (libraryKey && categoryId) {
+        setBreadcrumbAction_(4, () => { activeFairyLibraryKey_ = libraryKey; openFairyCategory_(categoryId); }, 'Về chủ đề / series này');
+    } else setBreadcrumbAction_(4, null);
+    if (storyId) {
+        setBreadcrumbAction_(5, () => { if (String(activeStoryId_ || '') !== String(storyId)) openThoNhacStory_(storyId); }, 'Truyện hiện tại');
+    } else setBreadcrumbAction_(5, null);
+}
+
+function setFairyLectureLayout_(mode = 'normal') {
+    const view = document.getElementById('view-lecture');
+    if (!view) return;
+    const mainWrap = view.querySelector(':scope > div:first-child');
+    const contentEl = document.getElementById('lecture-content');
+    const contentWrap = contentEl?.parentElement || null;
+    const listEl = document.getElementById('lecture-subtopics-list');
+    const listWrap = listEl?.parentElement || null;
+
+    if (mode === 'normal') {
+        view.style.minHeight=''; view.style.paddingTop=''; view.style.paddingBottom=''; view.style.justifyContent='';
+        if (mainWrap) mainWrap.style.maxWidth='';
+        if (contentEl) { contentEl.style.whiteSpace=''; contentEl.style.lineHeight=''; contentEl.style.margin=''; contentEl.style.padding=''; contentEl.style.width=''; }
+        if (contentWrap) { contentWrap.style.display=''; contentWrap.style.padding=''; contentWrap.style.marginBottom=''; contentWrap.style.background=''; contentWrap.style.border=''; contentWrap.style.height=''; contentWrap.style.minHeight=''; contentWrap.style.alignItems=''; contentWrap.style.justifyContent=''; }
+        if (listWrap) { listWrap.style.paddingTop=''; listWrap.style.borderTopWidth=''; }
+        return;
+    }
+    if (contentEl) { contentEl.style.whiteSpace='normal'; contentEl.style.lineHeight='normal'; contentEl.style.margin='0'; contentEl.style.padding='0'; contentEl.style.width='100%'; }
+    view.style.minHeight='0px'; view.style.paddingTop='4px'; view.style.paddingBottom='4px'; view.style.justifyContent='flex-start';
+    if (mainWrap) mainWrap.style.maxWidth='72rem';
+    if (listWrap) { listWrap.style.paddingTop='2px'; listWrap.style.borderTopWidth='0px'; }
+    if (contentWrap) {
+        if (mode === 'categories' || mode === 'story-list') contentWrap.style.display='none';
+        else {
+            contentWrap.style.display = mode === 'home' ? 'flex' : '';
+            contentWrap.style.padding = mode === 'story' ? '0px' : (mode === 'home' ? '2px 8px' : '4px 8px');
+            contentWrap.style.marginBottom='2px'; contentWrap.style.minHeight='0px';
+            contentWrap.style.height = mode === 'home' ? (window.innerWidth < 640 ? '104px' : '92px') : '';
+            contentWrap.style.alignItems = mode === 'home' ? 'center' : '';
+            contentWrap.style.justifyContent = mode === 'home' ? 'center' : '';
+            if (mode === 'story') { contentWrap.style.background='transparent'; contentWrap.style.border='0'; }
+            else { contentWrap.style.background=''; contentWrap.style.border=''; }
+        }
+    }
+}
+
+function setLectureUtilityVisibility_(showSpeak = true, showMix = true) {
+    const view = document.getElementById('view-lecture');
+    if (!view) return;
+    const speakBtn = view.querySelector('button[onclick="speakLecture()"]');
+    if (speakBtn) speakBtn.classList.toggle('hidden', !showSpeak);
+    const bottomWrap = view.querySelector(':scope > div:last-child');
+    if (bottomWrap) bottomWrap.classList.toggle('hidden', !showMix);
+    if (showSpeak || showMix) setFairyLectureLayout_('normal');
+}
+
+async function getFairyConfig_() {
+    if (activeFairyConfig_) return activeFairyConfig_;
+    try {
+        const topics = await fetchAllTopicsData();
+        activeFairyConfig_ = topics.find(t => Number(t.topic_id) === 12) || {};
+    } catch (e) { activeFairyConfig_ = {}; }
+    return activeFairyConfig_;
+}
+
+function fairyDataFile_(libraryKey, cfg = activeFairyConfig_ || {}) {
+    if (libraryKey === 'vietnam') return cfg.vietnam_data_file || cfg.data_files?.vietnam || FAIRY_LIBRARY_META_.vietnam.fallbackFile;
+    return cfg.world_data_file || cfg.data_files?.world || FAIRY_LIBRARY_META_.world.fallbackFile;
+}
+
+async function loadFairyLibrary_(libraryKey) {
+    if (!FAIRY_LIBRARY_META_[libraryKey]) throw new Error('Kho truyện không hợp lệ');
+    if (activeFairyLibraries_[libraryKey]) return activeFairyLibraries_[libraryKey];
+    const cfg = await getFairyConfig_();
+    const file = fairyDataFile_(libraryKey, cfg);
+    const res = await fetch(`assets/data/${file}`, { cache:'no-store' });
+    if (!res.ok) throw new Error(`Không thể tải ${file}`);
+    const data = await res.json();
+    if (!data || !Array.isArray(data.categories) || !Array.isArray(data.stories)) throw new Error(`Dữ liệu ${file} không đúng cấu trúc`);
+    activeFairyLibraries_[libraryKey] = data;
+    return data;
+}
+
+function fairyStoryCount_(libraryKey, cfg = activeFairyConfig_ || {}) {
+    if (libraryKey === 'vietnam') return Number(cfg.vietnam_count || FAIRY_LIBRARY_META_.vietnam.fallbackCount);
+    return Number(cfg.world_count || FAIRY_LIBRARY_META_.world.fallbackCount);
+}
+function fairyCategoryById_(data, categoryId) { return (data?.categories || []).find(c => String(c.id) === String(categoryId)) || null; }
+function fairyStoriesInCategory_(data, categoryId) { return (data?.stories || []).filter(s => String(s.category_id) === String(categoryId)); }
+function fairyStoryById_(data, storyId) { return (data?.stories || []).find(s => String(s.id) === String(storyId)) || null; }
+
+async function openThoNhacMenu() {
+    stopSpeaking(); inStoryFlow = true; setMainTabActive_('discover');
+    activeTopicId=12; activeExamContext=null; activeRoadmapContext=null; pendingTopicQuiz=null;
+    activeFairyLibraryKey_=null; activeFairyCategoryId_=null; activeStoryId_=null; activeStoryAnswers_={};
+    updateDiscoverBreadcrumb_('12. Truyện dân gian & cổ tích','📚',null);
+    setFairyBreadcrumbActions_(null,null,null);
+    setLectureUtilityVisibility_(false,false);
+    showLoadingOverlay('Đang mở thư viện truyện...');
+    try { const cfg=await getFairyConfig_(); renderFairyHome_(cfg); switchAppView('view-lecture'); }
+    catch(err){ alert(`Không thể mở thư viện truyện: ${err.message}`); }
+    finally { hideLoadingOverlay(); }
+}
+
+function renderFairyHome_(cfg = {}) {
+    setFairyLectureLayout_('home');
+    const vnCount=fairyStoryCount_('vietnam',cfg), worldCount=fairyStoryCount_('world',cfg);
+    const titleEl=document.getElementById('lecture-title'), contentEl=document.getElementById('lecture-content'), listEl=document.getElementById('lecture-subtopics-list');
+    if (titleEl) titleEl.textContent='12. Truyện dân gian & cổ tích';
+    if (contentEl) contentEl.innerHTML=`<div class="max-w-4xl mx-auto text-center leading-tight py-0"><div class="font-black text-purple-700 text-xl md:text-2xl">Thư viện kể chuyện của ${STORY_NARRATOR_NAME}</div><div class="text-sm md:text-[15px] text-slate-600 font-extrabold mt-0.5">${vnCount+worldCount} truyện · nghe kể · hiểu chuyện · trả lời 3 câu hỏi</div></div>`;
+    const lectureView=document.getElementById('view-lecture'); if(lectureView) lectureView.dataset.audioText=''; if(!listEl)return;
+    listEl.className='grid grid-cols-1 sm:grid-cols-2 gap-2 w-full max-w-4xl';
+    listEl.innerHTML=`
+        <button onclick="openFairyLibrary_('vietnam')" class="p-2.5 bg-gradient-to-br from-rose-50 via-white to-amber-50 border-2 border-rose-200 rounded-2xl text-left pastel-btn shadow-sm hover:border-rose-300"><div class="flex items-center justify-between gap-3"><div class="min-w-0"><div class="font-black text-rose-700 text-base md:text-lg leading-snug">1. Truyện dân gian & cổ tích Việt Nam</div><div class="text-sm md:text-[15px] text-slate-600 font-semibold mt-0.5">Chọn chủ đề trước, rồi nghe từng câu chuyện.</div></div><span class="shrink-0 px-2.5 py-1 rounded-full bg-white border border-rose-200 text-rose-600 text-sm font-black">${vnCount} truyện</span></div></button>
+        <button onclick="openFairyLibrary_('world')" class="p-2.5 bg-gradient-to-br from-purple-50 via-white to-sky-50 border-2 border-purple-200 rounded-2xl text-left pastel-btn shadow-sm hover:border-purple-300"><div class="flex items-center justify-between gap-3"><div class="min-w-0"><div class="font-black text-purple-700 text-base md:text-lg leading-snug">2. Truyện dân gian & cổ tích thế giới</div><div class="text-sm md:text-[15px] text-slate-600 font-semibold mt-0.5">Ưu tiên theo series, sau đó là các nhóm truyện nổi tiếng.</div></div><span class="shrink-0 px-2.5 py-1 rounded-full bg-white border border-purple-200 text-purple-600 text-sm font-black">${worldCount} truyện</span></div></button>`;
+}
+
+async function openFairyLibrary_(libraryKey) {
+    stopSpeaking(); inStoryFlow=true;
+    const meta=FAIRY_LIBRARY_META_[libraryKey]; if(!meta)return;
+    activeFairyLibraryKey_=libraryKey; activeFairyCategoryId_=null; activeStoryId_=null; activeStoryAnswers_={};
+    showLoadingOverlay(`Đang tải kho truyện ${meta.shortLabel}...`);
+    try { const data=await loadFairyLibrary_(libraryKey); renderFairyCategories_(libraryKey,data); switchAppView('view-lecture'); }
+    catch(err){ alert(`Không thể mở kho truyện ${meta.shortLabel}: ${err.message}`); }
+    finally{ hideLoadingOverlay(); }
+}
+
+function renderFairyCategories_(libraryKey,data) {
+    setLectureUtilityVisibility_(false,false); setFairyLectureLayout_('categories');
+    const meta=FAIRY_LIBRARY_META_[libraryKey];
+    const titleEl=document.getElementById('lecture-title'), contentEl=document.getElementById('lecture-content'), listEl=document.getElementById('lecture-subtopics-list');
+    updateDiscoverBreadcrumb_('12. Truyện dân gian & cổ tích','📚',meta.label.replace(/^[12]\.\s*/,'')); setFairyBreadcrumbActions_(libraryKey,null,null);
+    if(titleEl) titleEl.textContent=meta.label; if(contentEl) contentEl.innerHTML=''; const lectureView=document.getElementById('view-lecture'); if(lectureView) lectureView.dataset.audioText=''; if(!listEl)return;
+    const categories=Array.isArray(data?.categories)?data.categories:[];
+    listEl.className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 w-full max-w-6xl';
+    listEl.innerHTML=categories.map((cat,idx)=>{const count=Number(cat.story_count||fairyStoriesInCategory_(data,cat.id).length||0);const palette=SUBTOPIC_PALETTES[idx%SUBTOPIC_PALETTES.length];return `<button onclick="openFairyCategory_('${String(cat.id).replace(/'/g,"\\'")}')" class="p-2.5 ${palette.card} border-2 rounded-xl text-left pastel-btn shadow-sm"><div class="flex items-start justify-between gap-2.5"><div class="min-w-0"><div class="font-black text-[17px] md:text-[19px] leading-tight">${escapeHtml(cat.name||'Chủ đề truyện')}</div><div class="text-sm md:text-[15px] opacity-85 font-semibold mt-0.5 leading-snug line-clamp-2">${escapeHtml(cat.description||'')}</div></div><span class="shrink-0 bg-white/90 px-2.5 py-1 rounded-full text-sm font-black border border-current/10">${count}</span></div></button>`;}).join('') + `<button onclick="openThoNhacMenu()" class="sm:col-span-2 lg:col-span-3 py-2 bg-slate-50 border border-slate-200 text-slate-600 rounded-xl text-xs font-black pastel-btn">← Hai kho truyện</button>`;
+}
+
+async function openFairyCategory_(categoryId) {
+    stopSpeaking(); if(!activeFairyLibraryKey_) return openThoNhacMenu();
+    const data=await loadFairyLibrary_(activeFairyLibraryKey_); const cat=fairyCategoryById_(data,categoryId); if(!cat)return;
+    activeFairyCategoryId_=String(categoryId); activeStoryId_=null; activeStoryAnswers_={}; renderFairyStoryList_(activeFairyLibraryKey_,data,cat);
+}
+
+function renderFairyStoryList_(libraryKey,data,cat) {
+    setLectureUtilityVisibility_(false,false); setFairyLectureLayout_('story-list');
+    const meta=FAIRY_LIBRARY_META_[libraryKey], items=fairyStoriesInCategory_(data,cat.id);
+    const titleEl=document.getElementById('lecture-title'), contentEl=document.getElementById('lecture-content'), listEl=document.getElementById('lecture-subtopics-list');
+    updateDiscoverBreadcrumb_('12. Truyện dân gian & cổ tích','📚',meta.label.replace(/^[12]\.\s*/,''),cat.name||'Danh sách truyện'); setFairyBreadcrumbActions_(libraryKey,cat.id,null);
+    if(titleEl) titleEl.textContent=cat.name||'Danh sách truyện'; if(contentEl) contentEl.innerHTML=''; const lectureView=document.getElementById('view-lecture'); if(lectureView) lectureView.dataset.audioText=''; if(!listEl)return;
+    listEl.className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 w-full max-w-5xl';
+    listEl.innerHTML=items.map((story,idx)=>`<button onclick="openThoNhacStory_('${String(story.id).replace(/'/g,"\\'")}')" class="p-2 bg-white border border-purple-100 hover:border-pink-300 rounded-xl text-left pastel-btn shadow-sm"><div class="flex items-start gap-2.5"><span class="shrink-0 w-7 h-7 rounded-lg bg-purple-50 text-purple-600 border border-purple-100 flex items-center justify-center text-xs font-black">${idx+1}</span><div class="min-w-0"><div class="font-black text-purple-700 text-[15px] md:text-[17px] leading-snug">${escapeHtml(story.title||'Câu chuyện')}</div><div class="text-[13px] md:text-sm text-slate-500 font-semibold mt-0.5">${escapeHtml(story.theme||'')}</div></div></div></button>`).join('') + `<button onclick="openFairyLibrary_('${libraryKey}')" class="sm:col-span-2 lg:col-span-3 py-2 bg-slate-50 border border-slate-200 text-slate-600 rounded-xl text-xs font-black pastel-btn">← Các chủ đề / series</button>`;
+}
+
+function splitStoryParagraphs_(content) { return String(content||'').split(/\n+/).map(p=>p.trim()).filter(Boolean); }
+
+async function openThoNhacStory_(storyId) {
+    stopSpeaking(); inStoryFlow=true; if(!activeFairyLibraryKey_) return openThoNhacMenu();
+    const data=await loadFairyLibrary_(activeFairyLibraryKey_), story=fairyStoryById_(data,storyId); if(!story)return;
+    activeStoryId_=String(story.id); activeFairyCategoryId_=String(story.category_id); activeStoryAnswers_={};
+    const cat=fairyCategoryById_(data,story.category_id)||{id:story.category_id,name:'Danh sách truyện'};
+    const groupItems=fairyStoriesInCategory_(data,story.category_id), pos=Math.max(0,groupItems.findIndex(s=>String(s.id)===String(story.id)));
+    const prevStory=groupItems[pos>0?pos-1:groupItems.length-1]||story, nextStory=groupItems[pos<groupItems.length-1?pos+1:0]||story, meta=FAIRY_LIBRARY_META_[activeFairyLibraryKey_];
+    updateDiscoverBreadcrumb_('12. Truyện dân gian & cổ tích','📚',meta.label.replace(/^[12]\.\s*/,''),cat.name||meta.shortLabel,story.title||'Câu chuyện');
+    setFairyBreadcrumbActions_(activeFairyLibraryKey_,cat.id,story.id); setLectureUtilityVisibility_(false,false); setFairyLectureLayout_('story');
+    const titleEl=document.getElementById('lecture-title'), contentEl=document.getElementById('lecture-content'), listEl=document.getElementById('lecture-subtopics-list');
+    if(titleEl) titleEl.textContent=story.title||'Câu chuyện';
+    const paragraphs=splitStoryParagraphs_(story.content), sourceLine=[story.series,story.source_family,story.country].filter(Boolean).join(' · ');
+    if(contentEl) contentEl.innerHTML=`<div class="max-w-5xl mx-auto rounded-2xl bg-gradient-to-br from-white via-pink-50/30 to-purple-50/40 border-2 border-purple-100 px-3 md:px-4 py-2.5 shadow-sm text-left"><div class="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-2 mb-1.5"><div class="min-w-0"><div class="font-black text-xl md:text-2xl text-purple-800 leading-tight">${escapeHtml(story.title||'')}</div><div class="mt-0.5 flex flex-wrap gap-1.5 text-[12px] md:text-[13px] font-extrabold"><span class="px-2.5 py-1 rounded-full bg-white border border-purple-100 text-purple-600 leading-none">${escapeHtml(cat.name||'')}</span>${story.theme?`<span class="px-2.5 py-1 rounded-full bg-white border border-amber-100 text-amber-700 leading-none">${escapeHtml(story.theme)}</span>`:''}</div></div><button onclick="speakActiveFairyStory_()" class="shrink-0 h-[44px] px-3 rounded-xl bg-gradient-to-r from-pink-500 to-purple-500 text-white text-sm md:text-base font-black shadow-sm pastel-btn flex items-center justify-center gap-1.5"><i class="fa-solid fa-volume-high text-base md:text-lg"></i><span>Nghe ${STORY_NARRATOR_NAME} kể</span></button></div><div class="max-h-[56vh] overflow-y-auto pr-1 story-reader-scroll"><div class="text-[16px] md:text-[17px] leading-[1.6] text-slate-800 font-semibold select-text">${paragraphs.map(p=>`<p class="mb-1.5 last:mb-0">${escapeHtml(p)}</p>`).join('')}</div>${sourceLine?`<div class="mt-2 pt-1.5 border-t border-purple-100 text-xs md:text-[13px] text-slate-500 font-semibold">${escapeHtml(sourceLine)}</div>`:''}<div id="story-comprehension-box" class="mt-2">${renderStoryQuestions_(story)}</div></div></div>`;
+    const lectureView=document.getElementById('view-lecture'); if(lectureView) lectureView.dataset.audioText=`${story.title||''}. ${story.content||''}`;
+    if(listEl){listEl.className='grid grid-cols-3 gap-2 w-full max-w-2xl';listEl.innerHTML=`<button onclick="openThoNhacStory_('${String(prevStory.id).replace(/'/g,"\\'")}')" class="h-[44px] px-3 py-2 bg-gradient-to-r from-white to-purple-50 border-2 border-purple-200 text-purple-700 rounded-xl text-sm md:text-base font-black pastel-btn shadow-sm flex items-center justify-center gap-2 whitespace-nowrap"><span class="text-lg md:text-xl leading-none">←</span><span>Truyện trước</span></button><button onclick="openFairyCategory_('${String(cat.id).replace(/'/g,"\\'")}')" class="h-[44px] px-3 py-2 bg-gradient-to-br from-purple-50 to-pink-50 border-2 border-purple-200 text-purple-700 rounded-xl text-sm md:text-base font-black pastel-btn shadow-sm flex items-center justify-center whitespace-nowrap"><span>${pos+1} / ${groupItems.length}</span></button><button onclick="openThoNhacStory_('${String(nextStory.id).replace(/'/g,"\\'")}')" class="h-[44px] px-3 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-xl text-sm md:text-base font-black pastel-btn shadow-md flex items-center justify-center gap-2 whitespace-nowrap"><span>Truyện sau</span><span class="text-lg md:text-xl leading-none">→</span></button>`;}
+    speakVietnamese(`${story.title||''}. ${story.content||''}`,0.94);
+}
+
+async function speakActiveFairyStory_() {
+    if(!activeFairyLibraryKey_||!activeStoryId_)return; const data=await loadFairyLibrary_(activeFairyLibraryKey_), story=fairyStoryById_(data,activeStoryId_); if(!story)return; speakVietnamese(`${story.title||''}. ${story.content||''}`,0.94);
+}
+function getStoryQuestions_(story) { if(Array.isArray(story?.questions)) return story.questions; return Array.isArray(story?.questions_tv1)?story.questions_tv1:[]; }
+function renderStoryQuestions_(story) {
+    const qs=getStoryQuestions_(story); if(!qs.length)return'';
+    return `<div class="pt-2 border-t border-purple-100"><div class="font-black text-purple-700 text-base md:text-lg mb-1.5">Bé nghe hiểu · 3 câu</div>${qs.map((q,qi)=>`<div class="mb-1.5 p-2 rounded-xl bg-white border border-purple-100 shadow-sm"><div class="font-black text-slate-700 text-sm md:text-base mb-1.5 leading-snug">Câu ${qi+1}. ${escapeHtml(q.q||'')}</div><div class="grid grid-cols-1 sm:grid-cols-2 gap-1">${(q.o||[]).map((opt,oi)=>`<button id="story-q-${qi}-o-${oi}" onclick="answerStoryQuestion_(${qi},${oi})" class="story-answer-btn px-2.5 py-1.5 rounded-lg border border-slate-200 bg-slate-50 hover:bg-purple-50 text-slate-700 text-sm md:text-[15px] font-bold text-left leading-snug">${escapeHtml(opt)}</button>`).join('')}</div><div id="story-q-feedback-${qi}" class="hidden mt-1 text-sm font-black"></div></div>`).join('')}</div>`;
+}
+async function answerStoryQuestion_(qi,oi) {
+    if(!activeFairyLibraryKey_||!activeStoryId_)return; const data=await loadFairyLibrary_(activeFairyLibraryKey_), story=fairyStoryById_(data,activeStoryId_), q=getStoryQuestions_(story)?.[Number(qi)]; if(!q||activeStoryAnswers_[qi])return;
+    const opts=Array.isArray(q.o)?q.o:[], selected=opts[Number(oi)], correct=String(selected)===String(q.a); activeStoryAnswers_[qi]=true;
+    opts.forEach((opt,idx)=>{const btn=document.getElementById(`story-q-${qi}-o-${idx}`);if(!btn)return;btn.disabled=true;if(String(opt)===String(q.a))btn.className='story-answer-btn px-2.5 py-1.5 rounded-lg border-2 border-emerald-300 bg-emerald-50 text-emerald-700 text-sm md:text-[15px] font-black text-left leading-snug';else if(idx===Number(oi)&&!correct)btn.className='story-answer-btn px-2.5 py-1.5 rounded-lg border-2 border-rose-300 bg-rose-50 text-rose-700 text-sm md:text-[15px] font-black text-left leading-snug';else btn.classList.add('opacity-60');});
+    const fb=document.getElementById(`story-q-feedback-${qi}`);if(fb){fb.classList.remove('hidden');fb.className=`mt-1 text-sm font-black ${correct?'text-emerald-600':'text-rose-600'}`;fb.textContent=correct?`⭐ ${q.h||'Đúng rồi!'}`:`💡 Chưa đúng. Đáp án đúng là: ${q.a}`;}
+    speakVietnamese(correct?`Đúng rồi! ${q.h||''}`:`Chưa đúng. Đáp án đúng là ${q.a}.`,0.98);
+}
+
+// Tên hàm tương thích với phiên trước để link/cache cũ không gây lỗi.
+function openStoryHub(){ return openThoNhacMenu(); }
+function openFairyGroup_(groupName){ const key=/việt nam/i.test(String(groupName||''))?'vietnam':'world'; return openFairyLibrary_(key); }
+function openThoNhacSection_(){ return openThoNhacMenu(); }
+function openThoNhacPoem_(){ return openThoNhacMenu(); }
+
 
 document.addEventListener('visibilitychange', () => {
     if (document.hidden) stopAllAudio();
