@@ -3821,18 +3821,64 @@ function ensureStoryBreadcrumbStyle_() {
     const style = document.createElement('style');
     style.id = 'tv2-story-breadcrumb-style';
     style.textContent = `
-        #header-learning-tabs { min-width:0 !important; max-width:648px !important; flex:0 1 648px !important; overflow:hidden !important; }
-        #header-level2-tab,#header-level3-tab,#header-level4-tab,#header-level5-tab { width:158px !important; min-width:158px !important; max-width:158px !important; flex:0 0 158px !important; overflow:hidden !important; }
-        #header-level2-tab > button { width:100% !important; min-width:0 !important; max-width:100% !important; justify-content:flex-start !important; overflow:hidden !important; }
-        #header-level3-tab > div,#header-level4-tab > div,#header-level5-tab > div { flex:1 1 auto !important; width:auto !important; min-width:0 !important; max-width:none !important; overflow:hidden !important; }
-        #header-level2-title,#header-level3-title,#header-level4-title,#header-level5-title { display:block !important; min-width:0 !important; overflow:hidden !important; text-overflow:ellipsis !important; white-space:nowrap !important; }
-        @media (max-width:1050px) {
-            #header-learning-tabs { max-width:544px !important; flex-basis:544px !important; }
-            #header-level2-tab,#header-level3-tab,#header-level4-tab,#header-level5-tab { width:132px !important; min-width:132px !important; max-width:132px !important; flex-basis:132px !important; }
+        #header-learning-tabs {
+            width:100% !important;
+            min-width:0 !important;
+            max-width:none !important;
+            flex:1 1 auto !important;
+            overflow-x:auto !important;
+            overflow-y:hidden !important;
+            scrollbar-width:none !important;
         }
+        #header-learning-tabs::-webkit-scrollbar { display:none !important; }
+
+        #header-level2-tab,#header-level3-tab,#header-level4-tab,#header-level5-tab {
+            width:auto !important;
+            min-width:0 !important;
+            max-width:none !important;
+            flex:0 0 auto !important;
+            overflow:visible !important;
+        }
+
+        #header-level2-tab > button,
+        #header-level3-tab > div,
+        #header-level4-tab > div,
+        #header-level5-tab > div {
+            width:max-content !important;
+            min-width:max-content !important;
+            max-width:660px !important;
+            flex:0 0 auto !important;
+            overflow:hidden !important;
+        }
+
+        #header-level2-title,#header-level3-title,#header-level4-title,#header-level5-title {
+            display:block !important;
+            width:auto !important;
+            max-width:620px !important;
+            min-width:0 !important;
+            overflow:hidden !important;
+            text-overflow:ellipsis !important;
+            white-space:nowrap !important;
+        }
+
         @media (max-width:767px) {
-            #header-learning-tabs { max-width:100% !important; flex:1 1 auto !important; overflow-x:auto !important; overflow-y:hidden !important; }
-            #header-level2-tab,#header-level3-tab,#header-level4-tab,#header-level5-tab { width:112px !important; min-width:112px !important; max-width:112px !important; flex-basis:112px !important; }
+            #header-learning-tabs {
+                max-width:100% !important;
+                flex:1 1 auto !important;
+                overflow-x:auto !important;
+                overflow-y:hidden !important;
+            }
+            #header-level2-tab > button,
+            #header-level3-tab > div,
+            #header-level4-tab > div,
+            #header-level5-tab > div {
+                width:auto !important;
+                min-width:0 !important;
+                max-width:150px !important;
+            }
+            #header-level2-title,#header-level3-title,#header-level4-title,#header-level5-title {
+                max-width:130px !important;
+            }
         }
     `;
     document.head.appendChild(style);
