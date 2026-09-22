@@ -684,11 +684,15 @@
         #view-dashboard-grid .pastel-card:has(h3.text-teal-700)    { background: rgba(240,253,250,.88) !important; }
         #view-dashboard-grid .pastel-card:has(h3.text-yellow-700)  { background: rgba(254,252,232,.90) !important; }
 
-        /* Footer thu nghiem hien thi dung ti le 8:1 cua artwork. */
+        /* Footer 8:1 + rong bang CHINH XAC vung banner ben trong screen-dashboard.
+           screen-dashboard desktop co p-2 = 0.5rem moi ben, nen noi dung banner rong 72rem - 1rem. */
         #app-footer {
             aspect-ratio: 8 / 1 !important;
             min-height: 0 !important;
             height: auto !important;
+            width: calc(100% - 1rem) !important;
+            max-width: 71rem !important;
+            box-sizing: border-box !important;
         }
 
         @media (max-width: 767px) {
@@ -729,6 +733,9 @@
                 aspect-ratio: 8 / 1 !important;
                 min-height: 0 !important;
                 height: auto !important;
+                /* Mobile screen-dashboard co p-1 = 0.25rem moi ben. */
+                width: calc(100% - 0.5rem) !important;
+                max-width: none !important;
             }
             #app-footer .footer-title { font-size: 14px !important; }
             #app-footer .footer-sub { font-size: 12px !important; }
