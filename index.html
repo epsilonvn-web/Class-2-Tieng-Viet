@@ -684,12 +684,11 @@
         #view-dashboard-grid .pastel-card:has(h3.text-teal-700)    { background: rgba(240,253,250,.88) !important; }
         #view-dashboard-grid .pastel-card:has(h3.text-yellow-700)  { background: rgba(254,252,232,.90) !important; }
 
-        /* Footer TV1 khong ep aspect-ratio khi hien thi.
-           Anh goc van 8:1, nhung khung hien thi desktop 76px, mobile 64px. */
+        /* Footer thu nghiem hien thi dung ti le 8:1 cua artwork. */
         #app-footer {
-            aspect-ratio: auto !important;
-            min-height: 76px !important;
-            height: 76px !important;
+            aspect-ratio: 8 / 1 !important;
+            min-height: 0 !important;
+            height: auto !important;
         }
 
         @media (max-width: 767px) {
@@ -727,9 +726,9 @@
 
             #app-footer {
                 background-image: url('footer-bg.jpg') !important;
-                aspect-ratio: auto !important;
-                min-height: 64px !important;
-                height: 64px !important;
+                aspect-ratio: 8 / 1 !important;
+                min-height: 0 !important;
+                height: auto !important;
             }
             #app-footer .footer-title { font-size: 14px !important; }
             #app-footer .footer-sub { font-size: 12px !important; }
