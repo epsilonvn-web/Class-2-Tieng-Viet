@@ -1137,7 +1137,7 @@
                             <h2 class="font-extrabold text-amber-600 text-lg md:text-xl flex items-center justify-center space-x-2">
                                 <span>🏆</span><span>Đấu trường đề thi thử</span>
                             </h2>
-                            <p class="text-xs md:text-sm text-gray-500 font-bold mt-1">Thử sức các bộ đề 13 câu - 40 phút theo ma trận V6.1</p>
+                            <p class="text-xs md:text-sm text-gray-500 font-bold mt-1">Thử sức bộ đề 13 câu - 40 phút · 35 đề/HK · đánh giá đúng năng lực thực sự được kiểm tra</p>
                         </div>
                         <div id="exam-categories-grid" class="grid grid-cols-1 md:grid-cols-3 gap-4"></div>
                     </div>
@@ -1174,8 +1174,9 @@
                     <div class="bg-white rounded-3xl p-4 sm:p-5 border border-pink-100 soft-shadow-pink space-y-2.5">
                         <h3 class="text-sm sm:text-base font-black text-slate-800 tracking-tight flex items-center space-x-2">
                             <i class="fa-solid fa-chart-bar text-pink-600"></i>
-                            <span>Bóc tách điểm số & đánh giá 6 nhóm năng lực</span>
+                            <span>Khung 6 năng lực · chỉ đánh giá nhóm có đủ dữ liệu</span>
                         </h3>
+                        <p class="text-[11px] sm:text-xs font-bold text-slate-500 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2">Năng lực không có câu hỏi phù hợp sẽ hiển thị <strong>Chưa đánh giá</strong> và không bị quy thành 0%. Nếu số câu chưa đủ để kết luận, hệ thống hiển thị <strong>Chưa đủ dữ liệu</strong>.</p>
                         <div id="report-topics-list" class="grid grid-cols-1 sm:grid-cols-2 gap-2"></div>
                     </div>
 
@@ -1185,7 +1186,7 @@
                             <span>👉 Xem lại các câu làm sai</span>
                         </button>
 
-                        <button id="report-history-btn" onclick="openHistoryModal('LichSuBaiThi_HK1')" class="py-2.5 px-3 bg-pink-50 hover:bg-pink-100 text-pink-700 border border-pink-200 font-black text-xs rounded-2xl shadow-xs transition-all flex items-center justify-center space-x-1.5 pastel-btn">
+                        <button id="report-history-btn" onclick="openHistoryModal('LichSuBaiThiHK1')" class="py-2.5 px-3 bg-pink-50 hover:bg-pink-100 text-pink-700 border border-pink-200 font-black text-xs rounded-2xl shadow-xs transition-all flex items-center justify-center space-x-1.5 pastel-btn">
                             <i class="fa-solid fa-chart-line text-pink-600"></i>
                             <span>📊 Lịch sử & biểu đồ tiến trình</span>
                         </button>
@@ -1236,7 +1237,7 @@
                             </div>
                             <div>
                                 <h3 class="font-black text-base sm:text-lg text-pink-950" id="hist-modal-title">Kết quả tiến trình học tập</h3>
-                                <p class="text-xs font-bold text-pink-600 whitespace-nowrap">Phân tích chuyên sâu 6 chủ đề & nhận xét sư phạm chi tiết</p>
+                                <p class="text-xs font-bold text-pink-600 whitespace-nowrap">Phân tích theo khung 6 năng lực; chỉ kết luận ở nhóm có dữ liệu hợp lệ</p>
                             </div>
                         </div>
 
@@ -1276,11 +1277,12 @@
                         <div class="w-full md:w-[40%] bg-pink-50/40 border border-pink-100 rounded-2xl p-4 flex flex-col justify-between shadow-xs">
                             <h4 class="text-xs sm:text-sm font-black text-slate-800 mb-2 flex items-center space-x-1.5">
                                 <i class="fa-solid fa-chart-bar text-rose-600"></i>
-                                <span>Năng lực trung bình 6 chủ đề (%)</span>
+                                <span>Năng lực đã được đánh giá (%)</span>
                             </h4>
                             <div class="h-64 w-full relative">
                                 <canvas id="topicRadarChartCanvas"></canvas>
                             </div>
+                            <p class="mt-2 text-[10px] sm:text-[11px] font-bold text-slate-500">Ô trống = chưa đánh giá/chưa đủ dữ liệu; tuyệt đối không hiểu là 0%.</p>
                         </div>
                     </div>
                 </div>
@@ -1295,7 +1297,7 @@
                                 </div>
                                 <div class="min-w-0">
                                     <h4 class="text-base font-black text-amber-950 leading-tight">Nhận xét sư phạm & kế hoạch bồi dưỡng của giáo viên</h4>
-                                    <p class="text-xs font-bold text-amber-700">Đánh giá năng lực tư duy 6 chủ đề & lời khuyên phụ huynh đồng hành</p>
+                                    <p class="text-xs font-bold text-amber-700">Đánh giá các năng lực đã được đo & lời khuyên phụ huynh đồng hành</p>
                                 </div>
                             </div>
                             <button onclick="speakPedagogicalEvaluation()" class="shrink-0 no-print flex items-center gap-1.5 px-3 py-2 bg-amber-500 hover:bg-amber-600 text-white font-black text-xs rounded-xl shadow-xs transition-all whitespace-nowrap">
@@ -1310,7 +1312,7 @@
                 <div class="space-y-3 page-break-3">
                     <h4 class="text-base font-black text-slate-900 flex items-center space-x-2">
                         <i class="fa-solid fa-table text-pink-600"></i>
-                        <span>Bảng thống kê điểm số chi tiết từng bài thi</span>
+                        <span>Bảng thống kê từng bài thi · ô năng lực trống = chưa đánh giá</span>
                     </h4>
                     <div class="border border-pink-200 rounded-2xl overflow-hidden shadow-xs bg-white overflow-x-auto">
                         <table class="w-full text-center text-xs border-collapse">
@@ -1324,7 +1326,7 @@
                                     <th class="py-2 px-1 leading-tight">C3: Từ loại<br><span class="text-[10px] text-pink-700">(Sự vật/HĐ)</span></th>
                                     <th class="py-2 px-1 leading-tight">C4: Ngữ pháp<br><span class="text-[10px] text-pink-700">(Dấu câu)</span></th>
                                     <th class="py-2 px-1 leading-tight">C5: Đọc hiểu<br><span class="text-[10px] text-pink-700">(Văn bản)</span></th>
-                                    <th class="py-2 px-1 leading-tight">C6: Tư duy<br><span class="text-[10px] text-pink-700">(Logic IQ)</span></th>
+                                    <th class="py-2 px-1 leading-tight">C6: Tư duy<br><span class="text-[10px] text-pink-700">(Suy luận)</span></th>
                                     <th class="py-2.5 px-2 whitespace-nowrap">Ngày làm</th>
                                     <th class="py-2.5 px-2 whitespace-nowrap">Thời gian</th>
                                 </tr>
@@ -1419,7 +1421,7 @@
     </footer>
 
     <!-- NẠP ENGINE JAVASCRIPT ĐỒNG BỘ -->
-    <script src="assets/js/app.js?v=10.0-tv2-ui-safe2"></script>
+    <script src="assets/js/app.js?v=10.1-tv2-competency-null-safe"></script>
 
     <script>
         // UI shell observer: presentation only. Không can thiệp engine TV2.
